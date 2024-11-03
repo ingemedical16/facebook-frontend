@@ -1,10 +1,11 @@
-const { validateEmail, validateLength, validateUsername } = require("../../helpers/validate");
+const bcrypt = require("bcrypt");
+const { validateEmail, validateLength, validatePassword } = require("../../helpers/validate");
 const User = require("../../models/user/User");
+const { autoGenerateUsername } = require("../../helpers/generateUserName");
 exports.register = async (req, res) => {
   const {
     first_name,
     last_name,
-    username,
     email,
     password,
     gender,
@@ -28,16 +29,25 @@ exports.register = async (req, res) => {
   if(!validatePassword(password)){
     return res.status(400).json({ message: "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character" });
   }
-  if(!validateUsername(username)){
-    return res.status(400).json({ message: "Username must be between 3 and 30 characters and contain only alphanumeric characters and underscores" });
+
+  if(birth_year < 1900 || birth_year > new Date().getFullYear()){
+    return res.status(400).json({ message: "Invalid birth year" });
   }
+  if(birth_year_month < 1 || birth_year_month > 12){
+    return res.status(400).json({ message: "Invalid birth month" });
+  }
+  if(birth_year_day < 1 || birth_year_day > new Date(birth_year, birth_year_month, 0).getDate()){
+    return res.status(400).json({ message: "Invalid birth day" });
+  }
+  const username = await autoGenerateUsername(first_name, last_name);
+  const hashedPassword = await bcrypt.hash(password, 10);
   try {
     const user = new User({
         first_name,
         last_name,
         username,
         email,
-        password,
+        password:hashedPassword,
         gender,
         birth_year,
         birth_year_month,
