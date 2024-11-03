@@ -1,9 +1,14 @@
 const express = require("express");
 const cors = require("cors");
+const { readdirSync } = require("fs");
 const app = express();
-const options = { origin: "http://localhost:3000", useSuccessStatus: 200 };
+//const options = { origin: "http://localhost:3000", useSuccessStatus: 200 };
+app.use(cors());
 
-app.use(cors(options));
+// Read all files in the "routes" directory and add their routes to the app routes
+readdirSync("./routes").map((file) =>
+  app.use(`/api/${file.split(".")[0]}`, require(`./routes/${file}`))
+);
 app.get("/", (req, res) => {
   res.send("welcome from home");
 });
