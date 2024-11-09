@@ -1,0 +1,75 @@
+import express, { Application, Request, Response } from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import { readdirSync } from "fs";
+import { connectToDatabase } from "./config/db";
+import formidable from "formidable";
+import path from "path";
+
+import fileParser from "./middlewares/fileParser";
+import uploadCloud from "./utils/uploadCloud";
+
+const app: Application = express();
+dotenv.config();
+app.use(express.static(path.join(__dirname, "src", "public")));
+app.use(express.json());
+//const options = { origin: "http://localhost:3000", useSuccessStatus: 200 };
+app.use(cors());
+
+// Function to dynamically import routes as ES modules
+const loadRoutes = async () => {
+  const routeFiles = readdirSync(path.join(__dirname, "routes")).filter(
+    (file) => file.endsWith(".ts")
+  ); // Only load .ts files
+  if (!routeFiles.length) {
+    console.error("No routes found in the routes directory.");
+    process.exit(1);
+  }
+  await Promise.all(
+    routeFiles.map(async (file) => {
+      const routePath = `/api/${file.split(".")[0]}`;
+
+      const route = await import(`./routes/${file}`); // Dynamically import the route module
+
+      // Use the default export if available, or the entire module otherwise
+      app.use(routePath, route.default || route);
+    })
+  );
+};
+
+// Load routes and handle errors
+loadRoutes().catch((error: Error) => {
+  console.error("Error loading routes:", error.message);
+});
+app.get("/", (req: Request, res: Response) => {
+  res.send("<h1>Welcome Facebook API</h1>");
+});
+
+app.post("/upload-file", async (req, res) => {
+  const form = formidable({
+    uploadDir: path.join(__dirname, "public"),
+    filename(name, ext, part) {
+      const uniqueFileName =
+        Date.now() + "_" + (part.originalFilename ?? name + ".jpg");
+      return uniqueFileName;
+    },
+  });
+  await form.parse(req);
+  res.json({ ok: true });
+});
+
+app.post("/upload-file-to-cloud", fileParser, async (req, res) => {
+  // cloudinary
+  const { files } = req;
+  const image = files.image;
+  const result = await uploadCloud(image, "test");
+
+  res.json({ ...result });
+});
+
+// Connect to the database
+connectToDatabase();
+
+// Start the server on the specified port or 8000 if not provided as an environment variable
+const PORT = process.env.PORT ? parseInt(process.env.PORT) : 8000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -1,7 +1,43 @@
-const mongoose = require("mongoose");
-const { ObjectId } = mongoose.Schema.Types;
+import mongoose, { Schema, Document, Model } from "mongoose";
 
-const userSchema = mongoose.Schema(
+interface IUser extends Document {
+  _id: mongoose.Types.ObjectId;
+  first_name: string;
+  last_name: string;
+  username: string;
+  email: string;
+  password: string;
+  picture?: string;
+  cover?: string;
+  gender: "male" | "female" | "other";
+  birth_year: number;
+  birth_year_month: number;
+  birth_year_day: number;
+  verified?: boolean;
+  friends: string[];
+  following: string[];
+  followers: string[];
+  requests: string[];
+  search: mongoose.Types.ObjectId[];
+  details: {
+    biography?: string;
+    otherName?: string;
+    job?: string;
+    workPlace?: string;
+    highSchool?: string;
+    college?: string;
+    currentCity?: string;
+    homeTown?: string;
+    relationShip?: "single" | "married" | "divorced" | "widowed" | "other";
+    instagram?: string;
+  };
+  savedPosts: {
+    post: mongoose.Types.ObjectId;
+    savedAt?: Date;
+  }[];
+}
+
+const userSchema: Schema<IUser> = new Schema(
   {
     first_name: {
       type: String,
@@ -27,15 +63,13 @@ const userSchema = mongoose.Schema(
       required: [true, "Email is required"],
       unique: true,
       trim: true,
-      validate: [
-        {
-          validator: (value) => {
-            const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
-            return emailRegex.test(value);
-          },
-          message: "Invalid email format",
+      validate: {
+        validator: (value: string) => {
+          const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
+          return emailRegex.test(value);
         },
-      ],
+        message: "Invalid email format",
+      },
     },
     password: {
       type: String,
@@ -44,7 +78,8 @@ const userSchema = mongoose.Schema(
     },
     picture: {
       type: String,
-      default: "default.jpg",
+      default:
+        "https://res.cloudinary.com/dxos5na7j/image/upload/v1731177858/assets/images/hno2u07pzd3xh3pu5z3b.png",
     },
     cover: {
       type: String,
@@ -74,24 +109,24 @@ const userSchema = mongoose.Schema(
       default: false,
     },
     friends: {
-      type: Array,
+      type: [String],
       default: [],
     },
     following: {
-      type: Array,
+      type: [String],
       default: [],
     },
     followers: {
-      type: Array,
+      type: [String],
       default: [],
     },
     requests: {
-      type: Array,
+      type: [String],
       default: [],
     },
     search: [
       {
-        type: ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "User",
       },
     ],
@@ -147,7 +182,7 @@ const userSchema = mongoose.Schema(
     savedPosts: [
       {
         post: {
-          type: ObjectId,
+          type: Schema.Types.ObjectId,
           ref: "Post",
         },
         savedAt: {
@@ -157,7 +192,9 @@ const userSchema = mongoose.Schema(
       },
     ],
   },
-  { timestamp: true }
+  { timestamps: true }
 );
 
-module.exports = mongoose.model("User", userSchema);
+const User: Model<IUser> = mongoose.model("User", userSchema);
+
+export default User;
