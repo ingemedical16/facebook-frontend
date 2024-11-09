@@ -1,6 +1,7 @@
+import { ColorProps } from '@/types/types';
 import React from 'react';
 
-function Return({ color }) {
+function Return({ color }:ColorProps) {
     return (
         <svg width="20" height="20" viewBox="0 0 20 20" fill={color}>
             <g fillRule="nonzero">

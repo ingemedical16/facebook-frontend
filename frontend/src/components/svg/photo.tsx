@@ -1,4 +1,6 @@
-function Photo({ color }) {
+import { ColorProps } from "@/types/types";
+
+function Photo({ color }:ColorProps) {
     return (
         <svg width="25" height="25" fill={color} viewBox="0 0 24 24">
             <g fillRule="evenodd">

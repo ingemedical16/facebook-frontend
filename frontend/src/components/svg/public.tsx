@@ -1,4 +1,6 @@
-function Public({ color }) {
+import { ColorProps } from "@/types/types";
+
+function Public({ color }:ColorProps) {
     return (
         <svg width="1em" height="1em" fill={color} viewBox="0 0 16 16">
             <g fillRule="evenodd">

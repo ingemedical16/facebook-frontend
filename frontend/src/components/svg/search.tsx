@@ -1,6 +1,7 @@
+import { ColorProps } from '@/types/types';
 import React from 'react';
 
-function Search({ color }) {
+function Search({ color }:ColorProps) {
     return (
         <svg width="16" height="16" fill={color} viewBox="0 0 16 16">
             <g fillRule="nonzero">

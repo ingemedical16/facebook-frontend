@@ -1,4 +1,6 @@
-function Plus({ color }) {
+import { ColorProps } from "@/types/types";
+
+function Plus({ color }:ColorProps) {
     return (
         <svg width="1em" height="1em" fill={color} viewBox="0 0 20 20">
             <g fillRule="nonzero">

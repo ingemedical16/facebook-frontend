@@ -1,4 +1,6 @@
-function NewRoom({ color }) {
+import { ColorProps } from "@/types/types";
+
+function NewRoom({ color }:ColorProps) {
     return (
         <svg width="1em" height="1em" fill={color} viewBox="0 0 16 16">
             <path

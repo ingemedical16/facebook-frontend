@@ -1,4 +1,6 @@
-function ArrowRight({ color }) {
+import { ColorProps } from "@/types/types";
+
+function ArrowRight({ color }:ColorProps) {
     return (
         <svg width="20" height="20" fill={color} viewBox="0 0 20 20">
             <g fillRule="nonzero">
