@@ -176,7 +176,16 @@ export const login = async (
     }
 
     const token = generateToken({ id: user._id.toString() }, "7d"); //
-    return res.json({ token });
+    return res.json({ 
+      id: user._id,
+      username: user.username,
+      picture: user.picture,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      token: token,
+      verified: user.verified,
+      message: "Login successfully",
+    });
   } catch (error: any) {
     return res.status(500).json({ message: error.message });
   }
