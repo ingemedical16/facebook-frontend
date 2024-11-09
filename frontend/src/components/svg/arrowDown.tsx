@@ -1,4 +1,4 @@
-import { ColorProps } from "@/types/types";
+import { ColorProps } from "../../types/types";
 
 function ArrowDown({ color }: ColorProps) {
   return (
