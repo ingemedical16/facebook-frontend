@@ -1,15 +1,16 @@
-import { ArrowRight } from '../../components/svg';
-import { FC } from 'react';
+import { FC } from "react";
+import Login from "../../components/Auth/login/Login"; // Correct import statement
+import Footer from "../../components/Auth/footer/Footer";
+import Register from "../../components/Auth/register/Register";
 
-const Login: FC = () => {
-    return (
-        <div>
-            <h1>
-            <ArrowRight color="#4267B2" />
-                Login</h1>
-           
-        </div>
-    );
+const LoginPage: FC = () => {
+  return (
+    <div>
+      <Login />
+      <Register/>
+      <Footer />
+    </div>
+  )
 };
 
-export default Login;
+export default LoginPage;
