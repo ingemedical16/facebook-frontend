@@ -1,15 +1,20 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../api/axios";
+import { getUserFromCookies } from "../../utils/token/getUserFromCookies";
+import { clearUserFromCookies } from "../../utils/token";
+
 
 // Define types for user data
-interface User {
-  id: string;
-  username: string;
+export interface User {
+  email: string;
+  password: string;
   first_name: string;
   last_name: string;
-  picture?: string;
+  birth_year: number;
+  birth_year_month: number;
+  birth_year_day: number;
+  gender: string;
   verified: boolean;
-  token: string;
 }
 
 interface AuthState {
@@ -17,11 +22,15 @@ interface AuthState {
   loading: boolean;
   error: string | null;
   message: string | null;
+  token: string | null;
 }
 
-// Initial state
+// Initialize state based on cookies
+const persistedAuth = getUserFromCookies();
+
 const initialState: AuthState = {
-  user: null,
+  user: persistedAuth?.user || null,
+  token: persistedAuth?.token || null,
   loading: false,
   error: null,
   message: null,
@@ -30,7 +39,7 @@ const initialState: AuthState = {
 // Async thunk for registration
 export const register = createAsyncThunk(
   "auth/register",
-  async (userData: Omit<User, "id" | "verified" | "token">, { rejectWithValue }) => {
+  async (userData: Omit<User, "id" | "verified">, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post("/users/register", userData);
       return response.data;
@@ -43,9 +52,15 @@ export const register = createAsyncThunk(
 // Async thunk for email verification
 export const verifyEmail = createAsyncThunk(
   "auth/verifyEmail",
-  async (token: string, { rejectWithValue }) => {
+  async (userData:{token: string,verifyToken:string} ,{ rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post("/users/verify-email", { token });
+      const response = await axiosInstance.post("/users/verify-email", {
+       token: userData.verifyToken,
+      },{
+        headers: {
+          Authorization: `Bearer ${userData.token}`,
+        },
+      });
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data.message);
@@ -56,7 +71,10 @@ export const verifyEmail = createAsyncThunk(
 // Async thunk for login
 export const login = createAsyncThunk(
   "auth/login",
-  async (credentials: { email: string; password: string }, { rejectWithValue }) => {
+  async (
+    credentials: { email: string; password: string },
+    { rejectWithValue }
+  ) => {
     try {
       const response = await axiosInstance.post("/users/login", credentials);
       return response.data;
@@ -75,6 +93,7 @@ const authSlice = createSlice({
       state.user = null;
       state.message = null;
       state.error = null;
+      clearUserFromCookies()
     },
   },
   extraReducers: (builder) => {
@@ -88,6 +107,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.user = action.payload;
         state.message = action.payload.message;
+        state.token = action.payload.token;
       })
       .addCase(register.rejected, (state, action) => {
         state.loading = false;
@@ -115,6 +135,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.user = action.payload;
         state.message = action.payload.message;
+        state.token = action.payload.token;
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
