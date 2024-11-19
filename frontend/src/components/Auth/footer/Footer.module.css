@@ -3,6 +3,7 @@
     height: 22vh;
     background: var(--bg-primary);
     padding: 1.5rem;
+    margin-top: 5rem;
   }
   .footerWrap {
     display: flex;
