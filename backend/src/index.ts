@@ -13,8 +13,12 @@ const app: Application = express();
 dotenv.config();
 app.use(express.static(path.join(__dirname, "src", "public")));
 app.use(express.json());
-//const options = { origin: "http://localhost:3000", useSuccessStatus: 200 };
-app.use(cors());
+const corsOptions = {
+  origin: "http://localhost:3000", // Your frontend origin
+  credentials: true,              // Allow credentials (cookies, etc.)
+  optionsSuccessStatus: 200,      // Status for preflight responses
+};
+app.use(cors(corsOptions));
 
 // Function to dynamically import routes as ES modules
 const loadRoutes = async () => {
