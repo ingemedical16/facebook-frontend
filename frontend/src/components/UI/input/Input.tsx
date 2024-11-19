@@ -1,9 +1,9 @@
 // src/components/Input.tsx
 import React, { InputHTMLAttributes } from "react";
-import { useField, ErrorMessage } from "formik";
-import { useMediaQuery } from "react-responsive";
+import { useField } from "formik";
 import ErrorMessageComponent from "./ErrorMessageComponent"; // Import the new component
 import styles from "./Input.module.css";
+import { useIsTabletOrDesktop } from "../../../utils/functions/breakpoints";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -27,12 +27,8 @@ const Input: React.FC<InputProps> = ({
 }) => {
   // Extract the `field` and `meta` objects from Formik's `useField` hook
   const [field, meta] = useField(props.name!); // Non-null assertion because `name` is required for Formik
-  const desktopView = useMediaQuery({
-    query: "(min-width: 850px)",
-  });
-  const view1050 = useMediaQuery({
-    query: "(max-width: 1050px)",
-  });
+  const isTabletOrDesktop = useIsTabletOrDesktop()
+  
   
   const orderInputClass = isErrorButton ? styles.order2: styles.order3
 
@@ -47,8 +43,6 @@ const Input: React.FC<InputProps> = ({
         touched={meta.touched}
         error={meta.error}
         isErrorButton={isErrorButton}
-        desktopView={desktopView}
-        view1050={view1050}
       />
       <input
         autoComplete={autocomplete}
@@ -60,7 +54,7 @@ const Input: React.FC<InputProps> = ({
       />
       {meta.touched && meta.error && (
         <i
-          className={`error_icon ${!isErrorButton && !desktopView ? styles.errorIcon : styles.errorIconDesktop}`}
+          className={`error_icon ${!isErrorButton && !isTabletOrDesktop ? styles.errorIcon : styles.errorIconDesktop}`}
          
         ></i>
       )}
