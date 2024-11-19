@@ -26,6 +26,9 @@ interface RegisterRequestBody {
 interface VerifyEmailRequestBody {
   token: string;
 }
+interface VerifyEmailRequest extends Request {
+  user?: { id: string };
+}
 
 // Registration controller function
 export const register = async (
@@ -110,7 +113,7 @@ export const register = async (
     // Generate email verification token
     const emailVerificationToken = generateToken(
       { id: user._id.toString() },
-      "30m"
+      "2d"
     );
     const url = `${process.env.FRONTEND_URL}/verify-email/${emailVerificationToken}`;
     // Send email verification link to user
@@ -134,24 +137,51 @@ export const register = async (
 };
 
 export const verifyEmail = async (
-  req: Request<{}, {}, VerifyEmailRequestBody>,
+  req: VerifyEmailRequest,
   res: Response
-): Promise<Response> => {
-  const { token } = req.body;
-
+): Promise<void> => {
   try {
-    const user = jwt.verify(token, process.env.JWT_SECRET as string);
-    const userId = (user as JwtPayload).id;
-    const checkedUser = await User.findById(userId);
-    const isVerified = checkedUser?.verified;
-    if (isVerified) {
-      return res.status(400).json({ message: "Email already verified" });
-    } else {
-      await User.findByIdAndUpdate(userId, { verified: true });
-      return res.status(200).json({ message: "Email verified successfully" });
+    const validUserId = req.user?.id;
+    const { token } = req.body;
+    console.log('secret',process.env.JWT_SECRET );
+
+    if (!token) {
+      res.status(400).json({ message: "Activation token is missing." });
+      return;
     }
-  } catch (error: any) {
-    return res.status(500).json({ message: error.message });
+
+    const decodedToken = jwt.verify(
+      token,
+      process.env.JWT_SECRET  || ""
+    ) as JwtPayload;
+
+    const userId = decodedToken.id;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      res.status(404).json({ message: "User not found." });
+      return;
+    }
+
+    if (validUserId !== userId) {
+      res.status(403).json({
+        message: "You don't have authorization to complete this operation.",
+      });
+      return;
+    }
+
+    if (user.verified) {
+      res.status(400).json({ message: "This email is already activated." });
+      return;
+    }
+
+    user.verified = true;
+    await user.save();
+
+    res.status(200).json({ message: "Account has been activated successfully." });
+  } catch (error: unknown) {
+    const errorMessage = (error as Error).message || "Server Error";
+    res.status(500).json({ message: errorMessage });
   }
 };
 
