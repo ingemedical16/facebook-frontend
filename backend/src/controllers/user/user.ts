@@ -143,7 +143,7 @@ export const verifyEmail = async (
   try {
     const validUserId = req.user?.id;
     const { token } = req.body;
-    console.log('secret',process.env.JWT_SECRET );
+    console.log("secret", process.env.JWT_SECRET);
 
     if (!token) {
       res.status(400).json({ message: "Activation token is missing." });
@@ -152,7 +152,7 @@ export const verifyEmail = async (
 
     const decodedToken = jwt.verify(
       token,
-      process.env.JWT_SECRET  || ""
+      process.env.JWT_SECRET || ""
     ) as JwtPayload;
 
     const userId = decodedToken.id;
@@ -178,7 +178,37 @@ export const verifyEmail = async (
     user.verified = true;
     await user.save();
 
-    res.status(200).json({ message: "Account has been activated successfully." });
+    res
+      .status(200)
+      .json({ message: "Account has been activated successfully." });
+  } catch (error: unknown) {
+    const errorMessage = (error as Error).message || "Server Error";
+    res.status(500).json({ message: errorMessage });
+  }
+};
+export const sendVerification = async (
+  req: VerifyEmailRequest,
+  res: Response
+) => {
+  try {
+    const id = req.user?.id;
+    const user = await User.findById(id);
+    if(user) {
+    if (user.verified === true) {
+      return res.status(400).json({
+        message: "This account is already activated.",
+      });
+    }
+    
+     // Generate email verification token
+     const emailVerificationToken = generateToken(
+      { id: user._id.toString() },
+      "2d"
+    );
+    const url = `${process.env.FRONTEND_URL}/verify-email/${emailVerificationToken}`;
+    // Send email verification link to user
+    sendVerificationEmail(user.email, user.first_name, url);
+  }
   } catch (error: unknown) {
     const errorMessage = (error as Error).message || "Server Error";
     res.status(500).json({ message: errorMessage });
@@ -206,7 +236,7 @@ export const login = async (
     }
 
     const token = generateToken({ id: user._id.toString() }, "7d"); //
-    return res.json({ 
+    return res.json({
       id: user._id,
       username: user.username,
       picture: user.picture,
