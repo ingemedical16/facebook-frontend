@@ -218,7 +218,7 @@ export const sendVerification = async (
 export const login = async (
   req: Request<{}, {}, { email: string; password: string }>,
   res: Response
-): Promise<Response> => {
+) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email }).select("+password");
@@ -246,7 +246,32 @@ export const login = async (
       verified: user.verified,
       message: "Login successfully",
     });
-  } catch (error: any) {
-    return res.status(500).json({ message: error.message });
+  } catch (error: unknown) {
+    const errorMessage = (error as Error).message || "Server Error";
+    res.status(500).json({ message: errorMessage });
+  }
+};
+
+
+export const searchUserByEmail = async (
+  req: Request<{}, {}, { email: string; password: string }>,
+  res: Response
+) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email })
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+   
+    return res.json({
+      picture: user.picture,
+      first_name: user.first_name,
+    });
+  } catch (error: unknown) {
+    const errorMessage = (error as Error).message || "Server Error";
+    res.status(500).json({ message: errorMessage });
   }
 };
