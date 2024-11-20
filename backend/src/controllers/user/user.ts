@@ -7,9 +7,9 @@ import {
   validatePassword,
 } from "../../helpers/validate";
 import User from "../../models/user/User";
-import { autoGenerateUsername } from "../../helpers/generateUserName";
-import { generateToken } from "../../helpers/token";
-import { sendVerificationEmail } from "@/helpers/mailer";
+import { autoGenerateUsername,generateToken,sendVerificationEmail,generateCode,sendResetCode } from "../../helpers";
+import Code from "../../models/code/Code";
+
 
 // Define the expected request body type for registration
 interface RegisterRequestBody {
@@ -271,6 +271,32 @@ export const searchUserByEmail = async (
       first_name: user.first_name,
     });
   } catch (error: unknown) {
+    const errorMessage = (error as Error).message || "Server Error";
+    res.status(500).json({ message: errorMessage });
+  }
+};
+
+export const sendResetPasswordCode =async (
+  req: Request<{}, {}, { email: string; }>,
+  res: Response
+) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email })
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    await Code.findOneAndDelete({ user: user._id });
+    const code = generateCode(5);
+    const savedCode = await new Code({
+      code,
+      user: user._id,
+    }).save();
+    sendResetCode(user.email, user.first_name, code);
+    return res.status(200).json({
+      message: "Email reset code has been sent to your email",
+    });
+  }  catch (error: unknown) {
     const errorMessage = (error as Error).message || "Server Error";
     res.status(500).json({ message: errorMessage });
   }
