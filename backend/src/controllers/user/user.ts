@@ -7,9 +7,14 @@ import {
   validatePassword,
 } from "../../helpers/validate";
 import User from "../../models/user/User";
-import { autoGenerateUsername,generateToken,sendVerificationEmail,generateCode,sendResetCode } from "../../helpers";
+import {
+  autoGenerateUsername,
+  generateToken,
+  sendVerificationEmail,
+  generateCode,
+  sendResetCode,
+} from "../../helpers";
 import Code from "../../models/code/Code";
-
 
 // Define the expected request body type for registration
 interface RegisterRequestBody {
@@ -193,22 +198,22 @@ export const sendVerification = async (
   try {
     const id = req.user?.id;
     const user = await User.findById(id);
-    if(user) {
-    if (user.verified === true) {
-      return res.status(400).json({
-        message: "This account is already activated.",
-      });
+    if (user) {
+      if (user.verified === true) {
+        return res.status(400).json({
+          message: "This account is already activated.",
+        });
+      }
+
+      // Generate email verification token
+      const emailVerificationToken = generateToken(
+        { id: user._id.toString() },
+        "2d"
+      );
+      const url = `${process.env.FRONTEND_URL}/verify-email/${emailVerificationToken}`;
+      // Send email verification link to user
+      sendVerificationEmail(user.email, user.first_name, url);
     }
-    
-     // Generate email verification token
-     const emailVerificationToken = generateToken(
-      { id: user._id.toString() },
-      "2d"
-    );
-    const url = `${process.env.FRONTEND_URL}/verify-email/${emailVerificationToken}`;
-    // Send email verification link to user
-    sendVerificationEmail(user.email, user.first_name, url);
-  }
   } catch (error: unknown) {
     const errorMessage = (error as Error).message || "Server Error";
     res.status(500).json({ message: errorMessage });
@@ -252,20 +257,18 @@ export const login = async (
   }
 };
 
-
 export const searchUserByEmail = async (
   req: Request<{}, {}, { email: string; password: string }>,
   res: Response
 ) => {
   try {
     const { email } = req.body;
-    const user = await User.findOne({ email })
+    const user = await User.findOne({ email });
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-   
     return res.json({
       picture: user.picture,
       first_name: user.first_name,
@@ -276,13 +279,13 @@ export const searchUserByEmail = async (
   }
 };
 
-export const sendResetPasswordCode =async (
-  req: Request<{}, {}, { email: string; }>,
+export const sendResetPasswordCode = async (
+  req: Request<{}, {}, { email: string }>,
   res: Response
 ) => {
   try {
     const { email } = req.body;
-    const user = await User.findOne({ email })
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -296,7 +299,29 @@ export const sendResetPasswordCode =async (
     return res.status(200).json({
       message: "Email reset code has been sent to your email",
     });
-  }  catch (error: unknown) {
+  } catch (error: unknown) {
+    const errorMessage = (error as Error).message || "Server Error";
+    res.status(500).json({ message: errorMessage });
+  }
+};
+
+export const validateResetCode = async (
+  req: Request<{}, {}, { email: string, code:string }>,
+  res: Response
+) => {
+  try {
+    const { email,code } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    await Code.findOneAndDelete({ user: user._id });
+    const userCode = await Code.findOne({ user: user._id });
+    if (!userCode || userCode.code !== code) {
+      return res.status(401).json({ message: "Invalid code" });
+    }
+    return res.status(200).json({ message: "Code validated successfully" });
+  } catch (error: unknown) {
     const errorMessage = (error as Error).message || "Server Error";
     res.status(500).json({ message: errorMessage });
   }

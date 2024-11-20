@@ -1,5 +1,10 @@
 import User from "../models/user/User";
-
+/**
+ * 
+ * @param {string} firstName - First name
+ * @param {string} lastName - Last name
+ * @returns {string} username - User name
+ */
 export const autoGenerateUsername = async (firstName: string, lastName: string): Promise<string> => {
     // Remove spaces from firstName and lastName
     const cleanFirstName = firstName.replace(/\s/g, "");
