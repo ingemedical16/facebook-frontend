@@ -2,20 +2,10 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../api/axios";
 import { getUserFromCookies } from "../../utils/token/getUserFromCookies";
 import { clearUserFromCookies } from "../../utils/token";
-
+import User from "../../types/User";
 
 // Define types for user data
-export interface User {
-  email: string;
-  password: string;
-  first_name: string;
-  last_name: string;
-  birth_year: number;
-  birth_year_month: number;
-  birth_year_day: number;
-  gender: string;
-  verified: boolean;
-}
+type RegisterUser = User & { password: string };
 
 interface AuthState {
   user: User | null;
@@ -39,7 +29,10 @@ const initialState: AuthState = {
 // Async thunk for registration
 export const register = createAsyncThunk(
   "auth/register",
-  async (userData: Omit<User, "id" | "verified">, { rejectWithValue }) => {
+  async (
+    userData: Omit<RegisterUser, "id" | "verified" | "username">,
+    { rejectWithValue }
+  ) => {
     try {
       const response = await axiosInstance.post("/users/register", userData);
       return response.data;
@@ -52,15 +45,22 @@ export const register = createAsyncThunk(
 // Async thunk for email verification
 export const verifyEmail = createAsyncThunk(
   "auth/verifyEmail",
-  async (userData:{token: string,verifyToken:string} ,{ rejectWithValue }) => {
+  async (
+    userData: { token: string; verifyToken: string },
+    { rejectWithValue }
+  ) => {
     try {
-      const response = await axiosInstance.post("/users/verify-email", {
-       token: userData.verifyToken,
-      },{
-        headers: {
-          Authorization: `Bearer ${userData.token}`,
+      const response = await axiosInstance.post(
+        "/users/verify-email",
+        {
+          token: userData.verifyToken,
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${userData.token}`,
+          },
+        }
+      );
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data.message);
@@ -93,7 +93,7 @@ const authSlice = createSlice({
       state.user = null;
       state.message = null;
       state.error = null;
-      clearUserFromCookies()
+      clearUserFromCookies();
     },
   },
   extraReducers: (builder) => {
