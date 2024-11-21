@@ -1,12 +1,42 @@
-export interface IUser {
-    _id: string;
+export enum Gender {
+  Male = "male",
+  Female = "female",
+  Other = "other"
+}
+export enum Relationship{
+  Single = "single",
+  Married = "married",
+  Divorced = "divorced",
+  Widowed = "widowed",
+  Other = "other"
+}
+
+ export type UserDetails = {
+    biography?: string;
+    otherName?: string;
+    job?: string;
+    workPlace?: string;
+    highSchool?: string;
+    college?: string;
+    currentCity?: string;
+    homeTown?: string;
+    relationShip?: RelationshipShip;
+    instagram?: string;
+  }
+  export type savedPost = {
+    post: string;
+    savedAt: Date;
+  }
+
+ type User =  {
+    id: string;
     first_name: string;
     last_name: string;
     username: string;
     email: string;
     picture?: string;
     cover?: string;
-    gender: "male" | "female" | "other";
+    gender: Gender;
     birth_year: number;
     birth_year_month: number;
     birth_year_day: number;
@@ -15,18 +45,9 @@ export interface IUser {
     following?: string[];
     followers?: string[];
     requests?: string[];
-    details?: {
-      biography?: string;
-      otherName?: string;
-      job?: string;
-      workPlace?: string;
-      highSchool?: string;
-      college?: string;
-      currentCity?: string;
-      homeTown?: string;
-      relationShip?: "single" | "married" | "divorced" | "widowed" | "other";
-      instagram?: string;
-    };
-    savedPosts?: { post: string; savedAt: Date }[];
+    details?: UserDetails;
+    savedPosts?: savedPost[];
   }
+
+  export default User;
   
