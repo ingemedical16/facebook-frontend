@@ -7,10 +7,10 @@ import styles from "./Login.module.css";
 import Input from "../../UI/input/Input";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../app/store";
-import { login, User } from "../../../features/auth/authSlice";
+import { login } from "../../../features/auth/authSlice";
 import { storeTokenAndUser } from "../../../utils/token";
 import { showToast, ToastType } from "../../../utils/toast/showToast";
-
+import User from "../../../types/User";
 // Define form field values interface
 interface MyFormValues {
   email: string;
@@ -49,16 +49,26 @@ const Login: FC<LoginProps> = ({ setVisible }) => {
     if (login.fulfilled.match(result)) {
       showToast(result.payload.message, ToastType.SUCCESS);
       const user: Omit<User, "password"> = {
+        id: result.payload.user._id.toString(),
         email: result.payload.email,
         first_name: result.payload.first_name,
         last_name: result.payload.last_name,
+        username: result.payload.username,
         gender: result.payload.gender,
         birth_year: result.payload.birth_year,
         birth_year_month: result.payload.birth_year_month,
         birth_year_day: result.payload.birth_year_day,
         verified: result.payload.verified,
+        picture: result.payload.picture,
+        cover: result.payload.cover,
+        friends: result.payload.friends,
+        following: result.payload.following,
+        followers: result.payload.followers,
+        requests: result.payload.requests,
+        details: result.payload.details,
       };
       storeTokenAndUser(result.payload.token, user);
+      showToast(message, ToastType.ERROR);
     } else {
       if (typeof result.payload === "string") {
         showToast(result.payload, ToastType.ERROR);

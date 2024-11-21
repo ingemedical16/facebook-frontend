@@ -2,7 +2,7 @@ import { FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DotLoader from "react-spinners/DotLoader";
 import { AppDispatch, RootState } from "../../../app/store";
-import { register, User } from "../../../features/auth/authSlice";
+import { register } from "../../../features/auth/authSlice";
 import * as Yup from "yup";
 import { Formik, Form, FormikHelpers } from "formik";
 import styles from "./Register.module.css";
@@ -11,7 +11,7 @@ import DateOfBirthSelect from "../../dateOfBirthSelect/DateOfBirthSelect";
 import RadioInput, { Option } from "../../UI/radioInput/RadioInput";
 import { storeTokenAndUser } from "../../../utils/token";
 import { showToast, ToastType } from "../../../utils/toast/showToast";
-import { hasMessageProperty } from "../../../utils/functions";
+import User, { Gender } from "../../../types/User";
 
 interface MyFormValues {
   email: string;
@@ -21,7 +21,7 @@ interface MyFormValues {
   birth_year: number;
   birth_year_month: number;
   birth_year_day: number;
-  gender: string;
+  gender: Gender;
 }
 
 interface RegisterProps {
@@ -59,22 +59,25 @@ const RegisterSchema = Yup.object().shape({
     .max(36, "Password can't be more than 36 characters."),
   gender: Yup.string().required("Select your gender."),
   birth_year: Yup.number()
-  .required("Select your birth year.")
-  .min(1900, "You must be younger than this year.")
-  .max(new Date().getFullYear() - 5, "You must be older than 5 years."),
+    .required("Select your birth year.")
+    .min(1900, "You must be younger than this year.")
+    .max(new Date().getFullYear() - 5, "You must be older than 5 years."),
   birth_year_month: Yup.number()
-  .required("Select your birth month.")
-  .min(1, "Select your birth month.")
-  .max(12, "Select your birth month."),
+    .required("Select your birth month.")
+    .min(1, "Select your birth month.")
+    .max(12, "Select your birth month."),
   birth_year_day: Yup.number()
-  .required("Select your birth day.")
-  .min(1, "Select your birth day.")
-  .max(
-    new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate(),
-    "Select your birth day."
-  ),
+    .required("Select your birth day.")
+    .min(1, "Select your birth day.")
+    .max(
+      new Date(
+        new Date().getFullYear(),
+        new Date().getMonth() + 1,
+        0
+      ).getDate(),
+      "Select your birth day."
+    ),
 });
-
 
 const Register: FC<RegisterProps> = ({ setVisible }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -90,13 +93,13 @@ const Register: FC<RegisterProps> = ({ setVisible }) => {
     birth_year: new Date().getFullYear(),
     birth_year_month: new Date().getMonth() + 1,
     birth_year_day: new Date().getDate(),
-    gender: "",
+    gender: Gender.Other,
   };
 
   const genderOptions: Option[] = [
-    { value: "male", label: "Male" },
-    { value: "female", label: "Female" },
-    { value: "other", label: "Other" },
+    { value: Gender.Male, label: "Male" },
+    { value: Gender.Female, label: "Female" },
+    { value: Gender.Other, label: "Other" },
   ];
 
   const handleSubmit = async (
@@ -129,26 +132,35 @@ const Register: FC<RegisterProps> = ({ setVisible }) => {
     );
     // Handle success or error
     if (register.fulfilled.match(result)) {
-      
       showToast(result.payload.message, ToastType.SUCCESS);
       const user: Omit<User, "password"> = {
-        email,
-        first_name,
-        last_name,
-        gender,
-        birth_year,
-        birth_year_month,
-        birth_year_day,
-        verified: false,
+        id: result.payload.user._id.toString(),
+        email: result.payload.email,
+        first_name: result.payload.first_name,
+        last_name: result.payload.last_name,
+        username: result.payload.username,
+        gender: result.payload.gender,
+        birth_year: result.payload.birth_year,
+        birth_year_month: result.payload.birth_year_month,
+        birth_year_day: result.payload.birth_year_day,
+        verified: result.payload.verified,
+        picture: result.payload.picture,
+        cover: result.payload.cover,
+        friends: result.payload.friends,
+        following: result.payload.following,
+        followers: result.payload.followers,
+        requests: result.payload.requests,
+        details: result.payload.details,
       };
       storeTokenAndUser(result.payload.token, user);
       setVisible(false); // Hide the registration modal on success
     } else {
       if (typeof result.payload === "string") {
         showToast(result.payload, ToastType.ERROR);
-      } else {//+
+      } else {
+        //+
         showToast("An error occurred", ToastType.ERROR);
-      }//+
+      } //+
       console.error(result.payload); // Log error message
     }
 
@@ -215,7 +227,7 @@ const Register: FC<RegisterProps> = ({ setVisible }) => {
                   Gender <i className="info_icon"></i>
                 </div>
                 <RadioInput
-                isErrorButton={true}
+                  isErrorButton={true}
                   options={genderOptions}
                   {...formik.getFieldProps("gender")}
                 />
