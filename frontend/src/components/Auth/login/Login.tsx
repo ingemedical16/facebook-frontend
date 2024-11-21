@@ -10,7 +10,7 @@ import { AppDispatch, RootState } from "../../../app/store";
 import { login } from "../../../features/auth/authSlice";
 import { storeTokenAndUser } from "../../../utils/token";
 import { showToast, ToastType } from "../../../utils/toast/showToast";
-import User from "../../../types/User";
+import {User} from "../../../types/User";
 // Define form field values interface
 interface MyFormValues {
   email: string;

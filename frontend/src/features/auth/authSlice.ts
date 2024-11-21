@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../api/axios";
 import { getUserFromCookies } from "../../utils/token/getUserFromCookies";
 import { clearUserFromCookies } from "../../utils/token";
-import User from "../../types/User";
+import {User} from "../../types/User";
 
 // Define types for user data
 type RegisterUser = User & { password: string };

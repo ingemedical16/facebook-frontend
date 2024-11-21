@@ -20,7 +20,7 @@ export enum Relationship{
     college?: string;
     currentCity?: string;
     homeTown?: string;
-    relationShip?: RelationshipShip;
+    relationShip?: Relationship;
     instagram?: string;
   }
   export type savedPost = {
@@ -28,7 +28,7 @@ export enum Relationship{
     savedAt: Date;
   }
 
- type User =  {
+ export type User =  {
     id: string;
     first_name: string;
     last_name: string;
@@ -49,5 +49,4 @@ export enum Relationship{
     savedPosts?: savedPost[];
   }
 
-  export default User;
   

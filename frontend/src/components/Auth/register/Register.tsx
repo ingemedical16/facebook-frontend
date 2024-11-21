@@ -11,7 +11,7 @@ import DateOfBirthSelect from "../../dateOfBirthSelect/DateOfBirthSelect";
 import RadioInput, { Option } from "../../UI/radioInput/RadioInput";
 import { storeTokenAndUser } from "../../../utils/token";
 import { showToast, ToastType } from "../../../utils/toast/showToast";
-import User, { Gender } from "../../../types/User";
+import { User,Gender } from "../../../types/User";
 
 interface MyFormValues {
   email: string;
