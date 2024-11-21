@@ -35,7 +35,7 @@ const Login: FC<LoginProps> = ({ setVisible }) => {
     password: "",
   };
   const dispatch = useDispatch<AppDispatch>();
-  const { loading, error, message } = useSelector(
+  const { message } = useSelector(
     (state: RootState) => state.auth
   );
   // Form submission handler
