@@ -2,6 +2,7 @@ import { FC, useEffect, useRef, useState } from "react";
 import styles from "./Home.module.css";
 import Header from "../header/Header";
 import LeftHome from "./left";
+import Stories from "./stories";
 
 const Home: FC = () => {
   const middle = useRef<HTMLDivElement>(null);
@@ -16,7 +17,7 @@ const Home: FC = () => {
       <Header page="home"/>
       <LeftHome/>
       <div className={styles.home_middle} ref={middle}>
-        middle
+      <Stories />
       </div>
     </div>
   );
