@@ -33,8 +33,8 @@ const Header: FC<HeaderProps> = ({ page }) => {
   const [showSearchMenu, setShowSearchMenu] = useState(false);
   const [showAllMenu, setShowAllMenu] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const allMenu = useRef(null);
-  const userMenu = useRef(null);
+  const allMenu = useRef<HTMLDivElement>(null);
+  const userMenu = useRef<HTMLDivElement>(null);
   useClickOutside(allMenu, () => {
     setShowAllMenu(false);
   });
