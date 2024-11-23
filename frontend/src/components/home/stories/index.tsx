@@ -3,8 +3,10 @@ import styles from "./Stories.module.css";
 import { stories } from "../../../data/home";
 import { ArrowRight, Plus } from "../../svg";
 import Story from "./story";
-const max = 5;
+import { useMaxStories } from "../../../hooks/useMaxStories";
+
 const Stories:FC = () => {
+    const max = useMaxStories(stories.length);
     return (
         <div className={styles.stories}>
           <div className={styles.create_story_card}>
