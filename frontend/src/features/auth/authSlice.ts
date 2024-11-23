@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../api/axios";
 import { getUserFromCookies } from "../../utils/token/getUserFromCookies";
-import { clearUserFromCookies } from "../../utils/token";
+import { clearUserFromCookies, storeTokenAndUser } from "../../utils/token";
 import {User} from "../../types/User";
 
 // Define types for user data
@@ -115,6 +115,8 @@ const authSlice = createSlice({
         state.user = action.payload;
         state.message = action.payload.message;
         state.token = action.payload.token;
+        storeTokenAndUser(action.payload.token, state.user || action.payload);
+
       })
       .addCase(register.rejected, (state, action) => {
         restState(state);
@@ -149,6 +151,7 @@ const authSlice = createSlice({
         state.user = action.payload;
         state.message = action.payload.message;
         state.token = action.payload.token;
+        storeTokenAndUser(action.payload.token,  state.user || action.payload);
       })
       .addCase(login.rejected, (state, action) => {
         restState(state);
