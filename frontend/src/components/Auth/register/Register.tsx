@@ -133,26 +133,6 @@ const Register: FC<RegisterProps> = ({ setVisible }) => {
     // Handle success or error
     if (register.fulfilled.match(result)) {
       showToast(result.payload.message, ToastType.SUCCESS);
-      const user: Omit<User, "password"> = {
-        id: result.payload.user._id.toString(),
-        email: result.payload.email,
-        first_name: result.payload.first_name,
-        last_name: result.payload.last_name,
-        username: result.payload.username,
-        gender: result.payload.gender,
-        birth_year: result.payload.birth_year,
-        birth_year_month: result.payload.birth_year_month,
-        birth_year_day: result.payload.birth_year_day,
-        verified: result.payload.verified,
-        picture: result.payload.picture,
-        cover: result.payload.cover,
-        friends: result.payload.friends,
-        following: result.payload.following,
-        followers: result.payload.followers,
-        requests: result.payload.requests,
-        details: result.payload.details,
-      };
-      storeTokenAndUser(result.payload.token, user);
       setVisible(false); // Hide the registration modal on success
     } else {
       if (typeof result.payload === "string") {
