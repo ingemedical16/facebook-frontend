@@ -59,6 +59,7 @@ const SearchMenu: FC<SearchMenuProps> = ({ color, setShowSearchMenu }) => {
           <input
             type="text"
             placeholder="Search Facebook"
+            className={styles.searchInput}
             ref={input}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}

@@ -14,6 +14,7 @@ import {
   ArrowDown,
   ArrowDown1,
   Search,
+  Messenger,
 } from "../svg";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -21,6 +22,8 @@ import { RootState } from "../../app/store";
 import useClickOutside from "../../hooks/useClickOutside";
 import SearchMenu from "./searchMenu/SearchMenu";
 import AllMenu from "./allMenu/AllMenu";
+import { useDesktop } from "../../utils/functions/breakpoints";
+import UserMenu from "./userMenu";
 
 type HeaderProps = {
   page?: string;
@@ -32,16 +35,17 @@ const Header: FC<HeaderProps> = ({ page }) => {
   const user = useSelector((state: RootState) => state.auth.user);
   const [showSearchMenu, setShowSearchMenu] = useState(false);
   const [showAllMenu, setShowAllMenu] = useState(false);
-  const [showUserMenu, setShowUserMenu] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(true);
   const allMenu = useRef<HTMLDivElement>(null);
   const userMenu = useRef<HTMLDivElement>(null);
+  const isDesktop = useDesktop();
   useClickOutside(allMenu, () => {
     setShowAllMenu(false);
   });
   useClickOutside(userMenu, () => {
     setShowUserMenu(false);
   });
-  
+
   return (
     <header className={styles.header}>
       <div className={styles.headerLeft}>
@@ -51,24 +55,23 @@ const Header: FC<HeaderProps> = ({ page }) => {
           </div>
         </Link>
         <div
-          className={styles.search}
+          className={isDesktop ? styles.search : styles.circle_icon}
           onClick={() => {
             setShowSearchMenu(true);
           }}
         >
           <Search color={color} />
-          <input
-            type="text"
-            placeholder="Search Facebook"
-            className={styles.searchInput}
-          />
+          {isDesktop && (
+            <input
+              type="text"
+              placeholder="Search Facebook"
+              className={styles.searchInput}
+            />
+          )}
         </div>
       </div>
       {showSearchMenu && (
-        <SearchMenu
-          color={color}
-          setShowSearchMenu={setShowSearchMenu}
-        />
+        <SearchMenu color={color} setShowSearchMenu={setShowSearchMenu} />
       )}
       <div className={styles.headerCenter}>
         <Link
@@ -100,15 +103,6 @@ const Header: FC<HeaderProps> = ({ page }) => {
         </Link>
       </div>
       <div className={styles.headerRight}>
-        <Link
-          to="/profile"
-          className={`${styles.profile_link} hover1  ${
-            page === "profile" ? styles.activeLink : ""
-          }`}
-        >
-          <img src={user?.picture} alt="" />
-          <span>{user?.first_name}</span>
-        </Link>
         <div
           className={`${styles.circle_icon} hover1 ${
             showAllMenu && styles.active_header
@@ -126,7 +120,9 @@ const Header: FC<HeaderProps> = ({ page }) => {
           </div>
           {showAllMenu && <AllMenu />}
         </div>
-        <div className={`${styles.circle_icon} hover1`}>m</div>
+        <div className={`${styles.circle_icon} hover1`}>
+          <Messenger />
+        </div>
         <div className={`${styles.circle_icon} hover1`}>
           <Notifications />
           <div className={styles.right_notification}>5</div>
@@ -142,10 +138,12 @@ const Header: FC<HeaderProps> = ({ page }) => {
               setShowUserMenu((prev) => !prev);
             }}
           >
-            <div style={{ transform: "translateY(2px)" }}>
+            <img src={user?.picture} alt="" className={styles.profile_Image} />
+            <div style={{ transform: "translate(20px,-6px)" }}>
               <ArrowDown color={color} />
             </div>
           </div>
+          {showUserMenu && <UserMenu />}
         </div>
       </div>
     </header>
