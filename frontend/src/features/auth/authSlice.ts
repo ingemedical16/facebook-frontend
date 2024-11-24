@@ -3,6 +3,7 @@ import { axiosInstance } from "../../api/axios";
 import { getUserFromCookies } from "../../utils/token/getUserFromCookies";
 import { clearUserFromCookies, storeTokenAndUser } from "../../utils/token";
 import {User} from "../../types/User";
+import { resetMessageAndError } from "../resteMessageAndError";
 
 // Define types for user data
 type RegisterUser = User & { password: string };
@@ -84,10 +85,8 @@ export const login = createAsyncThunk(
   }
 );
 
-const restState = (state:AuthState) => {
-  state.message = null;
-  state.error = null;
-}
+ 
+
 
 // Slice
 const authSlice = createSlice({
@@ -105,12 +104,12 @@ const authSlice = createSlice({
     builder
       // Register cases
       .addCase(register.pending, (state) => {
-        restState(state);
+        resetMessageAndError(state);
         state.loading = true;
         state.error = null;
       })
       .addCase(register.fulfilled, (state, action) => {
-        restState(state);
+        resetMessageAndError(state);
         state.loading = false;
         state.user = action.payload;
         state.message = action.payload.message;
@@ -119,34 +118,34 @@ const authSlice = createSlice({
 
       })
       .addCase(register.rejected, (state, action) => {
-        restState(state);
+        resetMessageAndError(state);
         state.loading = false;
         state.error = action.payload as string;
       })
       // Verify email cases
       .addCase(verifyEmail.pending, (state) => {
-        restState(state);
+        resetMessageAndError(state);
         state.loading = true;
         state.error = null;
       })
       .addCase(verifyEmail.fulfilled, (state, action) => {
-        restState(state);
+        resetMessageAndError(state);
         state.loading = false;
         state.message = action.payload.message;
       })
       .addCase(verifyEmail.rejected, (state, action) => {
-        restState(state);
+        resetMessageAndError(state);
         state.loading = false;
         state.error = action.payload as string;
       })
       // Login cases
       .addCase(login.pending, (state) => {
-        restState(state);
+        resetMessageAndError(state);
         state.loading = true;
         state.error = null;
       })
       .addCase(login.fulfilled, (state, action) => {
-        restState(state);
+        resetMessageAndError(state);
         state.loading = false;
         state.user = action.payload;
         state.message = action.payload.message;
@@ -154,7 +153,7 @@ const authSlice = createSlice({
         storeTokenAndUser(action.payload.token,  state.user || action.payload);
       })
       .addCase(login.rejected, (state, action) => {
-        restState(state);
+        resetMessageAndError(state);
         state.loading = false;
         state.error = action.payload as string;
       });
