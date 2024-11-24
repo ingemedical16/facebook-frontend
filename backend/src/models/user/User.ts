@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 
-interface IUser extends Document {
+export interface IUser extends Document {
   _id: mongoose.Types.ObjectId;
   first_name: string;
   last_name: string;
@@ -43,20 +43,17 @@ const userSchema: Schema<IUser> = new Schema(
       type: String,
       required: [true, "First name is required"],
       trim: true,
-      text: true,
     },
     last_name: {
       type: String,
       required: [true, "Last name is required"],
       trim: true,
-      text: true,
     },
     username: {
       type: String,
       required: [true, "Username is required"],
       unique: true,
       trim: true,
-      text: true,
     },
     email: {
       type: String,
@@ -92,17 +89,14 @@ const userSchema: Schema<IUser> = new Schema(
     birth_year: {
       type: Number,
       required: [true, "Year of birth is required"],
-      trim: true,
     },
     birth_year_month: {
       type: Number,
       required: [true, "Month of birth is required"],
-      trim: true,
     },
     birth_year_day: {
       type: Number,
       required: [true, "Day of birth is required"],
-      trim: true,
     },
     verified: {
       type: Boolean,
@@ -134,42 +128,34 @@ const userSchema: Schema<IUser> = new Schema(
       biography: {
         type: String,
         trim: true,
-        text: true,
       },
       otherName: {
         type: String,
         trim: true,
-        text: true,
       },
       job: {
         type: String,
         trim: true,
-        text: true,
       },
       workPlace: {
         type: String,
         trim: true,
-        text: true,
       },
       highSchool: {
         type: String,
         trim: true,
-        text: true,
       },
       college: {
         type: String,
         trim: true,
-        text: true,
       },
       currentCity: {
         type: String,
         trim: true,
-        text: true,
       },
       homeTown: {
         type: String,
         trim: true,
-        text: true,
       },
       relationShip: {
         type: String,
@@ -195,6 +181,24 @@ const userSchema: Schema<IUser> = new Schema(
   { timestamps: true }
 );
 
-const User: Model<IUser> = mongoose.model("User", userSchema);
+// Create a single compound text index for searchable fields
+userSchema.index(
+  {
+    first_name: "text",
+    last_name: "text",
+    username: "text",
+    "details.biography": "text",
+    "details.otherName": "text",
+    "details.job": "text",
+    "details.workPlace": "text",
+    "details.highSchool": "text",
+    "details.college": "text",
+    "details.currentCity": "text",
+    "details.homeTown": "text",
+  },
+  { name: "UserTextIndex" }
+);
+
+const User: Model<IUser> = mongoose.model<IUser>("User", userSchema);
 
 export default User;

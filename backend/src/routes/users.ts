@@ -10,6 +10,10 @@ import {
   sendResetPasswordCode,
   validateResetCode,
   changePassword,
+  search,
+  addToSearchHistory,
+  getSearchHistory,
+  removeFromSearch,
 } from "../controllers/user/user";
 import { isAuthenticated } from "../middlewares/authenticate";
 
@@ -23,5 +27,9 @@ router.post("/login", login);
 router.post("/sendResetPasswordCode", sendResetPasswordCode);
 router.post("/validateResetCode", validateResetCode);
 router.post("/changePassword", changePassword);
+router.post("/search/:searchTerm",isAuthenticated, search);
+router.put("/addToSearchHistory", isAuthenticated, addToSearchHistory);
+router.get("/getSearchHistory", isAuthenticated, getSearchHistory);
+router.put("/removeFromSearch", isAuthenticated, removeFromSearch);
 
 export default router;

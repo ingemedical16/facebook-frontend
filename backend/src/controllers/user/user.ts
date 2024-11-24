@@ -6,7 +6,7 @@ import {
   validateLength,
   validatePassword,
 } from "../../helpers/validate";
-import User from "../../models/user/User";
+import User, { IUser } from "../../models/user/User";
 import {
   autoGenerateUsername,
   generateToken,
@@ -15,6 +15,7 @@ import {
   sendResetCode,
 } from "../../helpers";
 import Code from "../../models/code/Code";
+import mongoose from "mongoose";
 
 // Define the expected request body type for registration
 interface RegisterRequestBody {
@@ -31,9 +32,10 @@ interface RegisterRequestBody {
 interface VerifyEmailRequestBody {
   token: string;
 }
-interface VerifyEmailRequest extends Request {
+interface RequestWithUserId extends Request {
   user?: { id: string };
 }
+
 
 // Registration controller function
 export const register = async (
@@ -142,7 +144,7 @@ export const register = async (
 };
 
 export const verifyEmail = async (
-  req: VerifyEmailRequest,
+  req: RequestWithUserId,
   res: Response
 ): Promise<void> => {
   try {
@@ -192,7 +194,7 @@ export const verifyEmail = async (
   }
 };
 export const sendVerification = async (
-  req: VerifyEmailRequest,
+  req: RequestWithUserId,
   res: Response
 ) => {
   try {
@@ -348,6 +350,146 @@ export const changePassword = async (
     return res.status(200).json({ message: "Password changed successfully" });
   } catch (error: unknown) {
     const errorMessage = (error as Error).message || "Server Error";
+    res.status(500).json({ message: errorMessage });
+  }
+};
+
+export const search = async (
+  req: Request<{ searchTerm: string }, {}, {}>,
+  res: Response
+) => {
+  try {
+    const searchTerm = req.params.searchTerm;
+
+    if (!searchTerm) {
+      return res.status(400).json({ message: "Search term is required" });
+    }
+
+    // Search across relevant fields using regex
+    const results = await User.find(
+      {
+        $or: [
+          { first_name: { $regex: searchTerm, $options: "i" } }, // Case-insensitive match
+          { last_name: { $regex: searchTerm, $options: "i" } },
+          { username: { $regex: searchTerm, $options: "i" } },
+          { "details.biography": { $regex: searchTerm, $options: "i" } },
+          { "details.otherName": { $regex: searchTerm, $options: "i" } },
+          { "details.job": { $regex: searchTerm, $options: "i" } },
+          { "details.workPlace": { $regex: searchTerm, $options: "i" } },
+          { "details.highSchool": { $regex: searchTerm, $options: "i" } },
+          { "details.college": { $regex: searchTerm, $options: "i" } },
+          { "details.currentCity": { $regex: searchTerm, $options: "i" } },
+          { "details.homeTown": { $regex: searchTerm, $options: "i" } },
+        ],
+      },
+      { first_name: 1, last_name: 1, username: 1, picture: 1 }
+    );
+
+    return res.status(200).json(results);
+  } catch (error: unknown) {
+    const errorMessage = (error as Error).message || "Server Error";
+    res.status(500).json({ message: errorMessage });
+  }
+};
+
+
+export const addToSearchHistory = async (req: RequestWithUserId, res: Response): Promise<void> => {
+  try {
+    // Extract searchUser from the request body
+    const { searchUser }: { searchUser: string } = req.body;
+    console.log("searchUser",searchUser)
+
+    if (!searchUser) {
+      res.status(400).json({ message: "Search user is required" });
+      return;
+    }
+
+    // Ensure the searchUser is a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(searchUser)) {
+      res.status(400).json({ message: "Invalid user ID provided for search" });
+      return;
+    }
+
+    // Fetch the current user's document
+    const user: IUser | null = await User.findById(req.user?.id);
+
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
+
+    // Check if the searchUser already exists in the search history
+    const existingIndex = user.search.findIndex(
+      (id) => id.toString() === searchUser
+    );
+
+    if (existingIndex !== -1) {
+      // If the user is already in the search history, move it to the end of the array
+      user.search.splice(existingIndex, 1); // Remove the existing entry
+    }
+
+    // Add the searchUser to the search history and ensure the array doesn't grow indefinitely
+    user.search.push(new mongoose.Types.ObjectId(searchUser));
+
+    // Save the updated user document
+    await user.save();
+
+    res.status(200).json({ message: "Search history updated successfully" });
+  } catch (error: unknown) {
+    const errorMessage = (error as Error).message || "An unexpected error occurred";
+    res.status(500).json({ message: errorMessage });
+  }
+};
+
+export const getSearchHistory = async (req: RequestWithUserId, res: Response): Promise<void> => {
+  try {
+    // Fetch the user by ID and populate the `search` array with selected fields
+    const user = await User.findById(req.user?.id)
+      .select("search")
+      .populate("search", "first_name last_name username picture");
+
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
+
+    // Return the populated search history
+    res.status(200).json(user.search);
+  } catch (error: unknown) {
+    const errorMessage = (error as Error).message || "An unexpected error occurred";
+    res.status(500).json({ message: errorMessage });
+  }
+};
+
+export const removeFromSearch = async (req: RequestWithUserId, res: Response): Promise<void> => {
+  try {
+    const { searchUserId } = req.body; // Extract userId from the request body
+
+    if (!searchUserId) {
+      res.status(400).json({ message: "User ID is required in the request body" });
+      return;
+    }
+
+    // Remove the userId from the authenticated user's search history
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user?.id,
+      { $pull: { search: searchUserId } }, // Pull the userId from the search array
+      { new: true } // Return the updated document
+    )
+      .select("search") // Select only the search field
+      .populate("search", "first_name last_name username picture"); // Populate user details in the search field
+
+    if (!updatedUser) {
+      res.status(404).json({ message: "User not found or not authenticated" });
+      return;
+    }
+
+    res.status(200).json({
+      message: "User successfully removed from search history",
+      search: updatedUser.search,
+    });
+  } catch (error: unknown) {
+    const errorMessage = (error as Error).message || "An unexpected error occurred";
     res.status(500).json({ message: errorMessage });
   }
 };
