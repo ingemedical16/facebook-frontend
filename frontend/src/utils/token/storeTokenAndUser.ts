@@ -8,7 +8,6 @@ import { getTokenExpiry } from "./getTokenExpiry";
  * @returns
  */
 export const storeTokenAndUser = (token: string, user: object): void => {
-  console.log("storeTokenAndUser user", user);
   const expiresIn = getTokenExpiry(token);
   if (expiresIn === null) {
     return; // Token is invalid
@@ -16,7 +15,7 @@ export const storeTokenAndUser = (token: string, user: object): void => {
   // Store the token in the local storage
   // Store the token with an expiration time
   Cookies.set("token", token, { expires: expiresIn / 86400 }); // `expiresIn` is in seconds, convert to days
-  console.log("storeTokenAndUser user", user);
+
   // Store the user as a JSON string
   Cookies.set("user", JSON.stringify(user), { expires: expiresIn / 86400 });
 };

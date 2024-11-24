@@ -1,10 +1,13 @@
 import { FC, useEffect, useRef, useState } from "react";
 import styles from "../Header.module.css";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../app/store";
+import { AppDispatch, RootState } from "../../../app/store";
 import useClickOutside from "../../../hooks/useClickOutside";
 import { Return, Search } from "../../svg";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addToSearchHistory, clearSearchResult, getSearchHistory, removeFromSearchHistory, search as searchFun } from "../../../features/search/searchSlice";
+import { showToast, ToastType } from "../../../utils/toast/showToast";
 
 export type SearchMenuProps = {
   color: string;
@@ -13,6 +16,9 @@ export type SearchMenuProps = {
 
 const SearchMenu: FC<SearchMenuProps> = ({ color, setShowSearchMenu }) => {
   const token = useSelector((state: RootState) => state.auth.token);
+  const dispatch = useDispatch<AppDispatch>();
+  const {search,searchResult} = useSelector((state: RootState) => state.search);
+  
   const [iconVisible, setIconVisible] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState([]);
@@ -22,13 +28,30 @@ const SearchMenu: FC<SearchMenuProps> = ({ color, setShowSearchMenu }) => {
   useClickOutside(menu, () => {
     setShowSearchMenu(false);
   });
-  const getHistory = async () => {};
+  useEffect(() => {
+   token && dispatch(getSearchHistory({token}))
+  }, [dispatch, token]);
   useEffect(() => {
     input.current?.focus();
   }, []);
-  const searchHandler = async () => {};
-  const addToSearchHistoryHandler = async (searchUser: string) => {};
-  const handleRemove = async (searchUser: string) => {};
+  const searchHandler = async () => {
+    if (searchTerm === "") {
+      dispatch(clearSearchResult())
+    } else {
+    token &&  dispatch(searchFun({searchTerm,token}))
+    }
+  };
+  const addToSearchHistoryHandler = async (searchUser: string) => {
+    token && await dispatch(addToSearchHistory({searchUser, token}))
+    dispatch(clearSearchResult())
+    setSearchTerm("")
+    setIconVisible(true)
+  
+  };
+  const handleRemove = async (searchUserId: string) => {
+    token && await dispatch(removeFromSearchHistory({searchUserId, token}))
+    
+  };
   return (
     <div
       className={`${styles.headerLeft} ${styles.search_area} ${styles.scrollbar}`}
@@ -73,46 +96,43 @@ const SearchMenu: FC<SearchMenuProps> = ({ color, setShowSearchMenu }) => {
           />
         </div>
       </div>
-      {results.length === 0 && (
+      {searchResult.length === 0 && (
         <div className={styles.search_history_header}>
           <span>Recent searches</span>
           <a>Edit</a>
         </div>
       )}
       <div className={`${styles.search_history} ${styles.scrollbar}`}>
-        {/* {searchHistory &&
-          results.length === 0 &&
-          searchHistory
-            .sort((a, b) => {
-              return new Date(b.createdAt) - new Date(a.createdAt);
-            })
+        {search &&
+          searchResult.length === 0 &&
+          search
             .map((user) => (
-              <div className="search_user_item hover1" key={user._id}>
+              <div className={`${styles.search_user_item} hover1`} key={user._id}>
                 <Link
-                  className="flex"
-                  to={`/profile/${user.user.username}`}
-                  onClick={() => addToSearchHistoryHandler(user.user._id)}
+                  className={styles.flex}
+                  to={`/profile/${user.username}`}
+                  onClick={() => addToSearchHistoryHandler(user._id)}
                 >
-                  <img src={user.user.picture} alt="" />
+                  <img src={user.picture} alt="" className={styles.circle_icon}/>
                   <span>
-                    {user.user.first_name} {user.user.last_name}
+                    {user.first_name} {user.last_name}
                   </span>
                 </Link>
                 <i
                   className="exit_icon"
                   onClick={() => {
-                    handleRemove(user?.user._id);
+                    handleRemove(user._id);
                   }}
                 ></i>
               </div>
-            ))} */}
+            ))}
       </div>
       <div className={`${styles.search_results} ${styles.scrollbar}`}>
-        {/* {results &&
-          results.map((user) => (
+        {searchResult &&
+          searchResult.map((user) => (
             <Link
               to={`/profile/${user.username}`}
-              className="search_user_item hover1"
+              className={`${styles.search_user_item} hover1`}
               onClick={() => addToSearchHistoryHandler(user._id)}
               key={user._id}
             >
@@ -121,7 +141,7 @@ const SearchMenu: FC<SearchMenuProps> = ({ color, setShowSearchMenu }) => {
                 {user.first_name} {user.last_name}
               </span>
             </Link>
-          ))} */}
+          ))}
       </div>
     </div>
   );

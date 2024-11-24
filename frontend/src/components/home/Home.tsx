@@ -11,7 +11,7 @@ const Home: FC = () => {
     if (middle.current) {
       setHeight(middle.current.clientHeight);
     }
-  }, [height]);
+  }, []);
   return (
     <div className={styles.home} style={{ height: `${height + 150}px` }}>
       <Header page="home"/>
