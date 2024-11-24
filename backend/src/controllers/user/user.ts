@@ -385,7 +385,7 @@ export const search = async (
       { first_name: 1, last_name: 1, username: 1, picture: 1 }
     );
 
-    return res.status(200).json(results);
+    return res.status(200).json({searchResult:results});
   } catch (error: unknown) {
     const errorMessage = (error as Error).message || "Server Error";
     res.status(500).json({ message: errorMessage });
@@ -433,8 +433,11 @@ export const addToSearchHistory = async (req: RequestWithUserId, res: Response):
 
     // Save the updated user document
     await user.save();
+    const searchResult = await User.findById(req.user?.id)
+      .select("search")
+      .populate("search", "first_name last_name username picture");
 
-    res.status(200).json({ message: "Search history updated successfully" });
+    res.status(200).json({ message: "Search history updated successfully",search: searchResult?.search });
   } catch (error: unknown) {
     const errorMessage = (error as Error).message || "An unexpected error occurred";
     res.status(500).json({ message: errorMessage });
@@ -454,14 +457,14 @@ export const getSearchHistory = async (req: RequestWithUserId, res: Response): P
     }
 
     // Return the populated search history
-    res.status(200).json(user.search);
+    res.status(200).json({search :user.search});
   } catch (error: unknown) {
     const errorMessage = (error as Error).message || "An unexpected error occurred";
     res.status(500).json({ message: errorMessage });
   }
 };
 
-export const removeFromSearch = async (req: RequestWithUserId, res: Response): Promise<void> => {
+export const removeFromSearchHistory = async (req: RequestWithUserId, res: Response): Promise<void> => {
   try {
     const { searchUserId } = req.body; // Extract userId from the request body
 

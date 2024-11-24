@@ -13,7 +13,7 @@ import {
   search,
   addToSearchHistory,
   getSearchHistory,
-  removeFromSearch,
+  removeFromSearchHistory,
 } from "../controllers/user/user";
 import { isAuthenticated } from "../middlewares/authenticate";
 
@@ -30,6 +30,6 @@ router.post("/changePassword", changePassword);
 router.post("/search/:searchTerm",isAuthenticated, search);
 router.put("/addToSearchHistory", isAuthenticated, addToSearchHistory);
 router.get("/getSearchHistory", isAuthenticated, getSearchHistory);
-router.put("/removeFromSearch", isAuthenticated, removeFromSearch);
+router.put("/removeFromSearchHistory", isAuthenticated, removeFromSearchHistory);
 
 export default router;
