@@ -14,6 +14,17 @@ import {
   addToSearchHistory,
   getSearchHistory,
   removeFromSearchHistory,
+  getProfile,
+  updateProfilePicture,
+  updateCover,
+  updateDetails,
+  addFriend,
+  cancelRequest,
+  follow,
+  unfollow,
+  unfriend,
+  deleteRequest,
+  getFriendsPageInfos,
 } from "../controllers/user/user";
 import { isAuthenticated } from "../middlewares/authenticate";
 
@@ -31,5 +42,16 @@ router.post("/search/:searchTerm",isAuthenticated, search);
 router.put("/addToSearchHistory", isAuthenticated, addToSearchHistory);
 router.get("/getSearchHistory", isAuthenticated, getSearchHistory);
 router.put("/removeFromSearchHistory", isAuthenticated, removeFromSearchHistory);
+router.get("/getProfile/:username", isAuthenticated, getProfile);
+router.put("/updateProfilePicture", isAuthenticated, updateProfilePicture);
+router.put("/updateCover", isAuthenticated, updateCover);
+router.put("/updateDetails", isAuthenticated, updateDetails);
+router.put("/addFriend/:id", isAuthenticated, addFriend);
+router.put("/cancelRequest/:id", isAuthenticated, cancelRequest);
+router.put("/follow/:id", isAuthenticated, follow);
+router.put("/unfollow/:id", isAuthenticated, unfollow);
+router.put("/unfriend/:id", isAuthenticated, unfriend);
+router.put("/deleteRequest/:id", isAuthenticated, deleteRequest);
+router.get("/getFriendsPageInfos", isAuthenticated, getFriendsPageInfos);
 
 export default router;
