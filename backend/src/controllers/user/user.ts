@@ -1,310 +1,9 @@
-
 import { Request, Response } from "express";
-import bcrypt from "bcrypt";
-import jwt, { JwtPayload } from "jsonwebtoken";
-import {
-  validateEmail,
-  validateLength,
-  validatePassword,
-} from "../../helpers/validate";
-import User, { IUser } from "../../models/user/User";
-import {
-  autoGenerateUsername,
-  generateToken,
-  sendVerificationEmail,
-  generateCode,
-  sendResetCode,
-  validateBirthDate,
-  createErrorResponse,
-} from "../../helpers";
-import Code from "../../models/code/Code";
+import User, { IUser } from "@/models/user/User";
+import { createErrorResponse, createSuccussResponse } from "@/helpers";
 import mongoose from "mongoose";
-import {
-  FriendshipStatus,
-  RegisterRequestBody,
-  RequestWithUserId,
-} from "../../types/types";
-import { Post } from "../../models/post/Post";
-export const register = async (
-  req: Request<{}, {}, RegisterRequestBody>,
-  res: Response
-): Promise<Response> => {
-  const {
-    first_name,
-    last_name,
-    email,
-    password,
-    gender,
-    birth_year,
-    birth_year_month,
-    birth_year_day,
-  } = req.body;
-
-  try {
-    if (!validateEmail(email)) {
-      return createErrorResponse(
-        res,
-        400,
-        "INVALID_EMAIL",
-        "Invalid email format."
-      );
-    }
-
-    const existingUser = await User.findOne({ email }).exec();
-    if (existingUser) {
-      return createErrorResponse(
-        res,
-        400,
-        "EMAIL_EXISTS",
-        "Registration failed."
-      );
-    }
-
-    if (!validateLength(first_name, 2, 30)) {
-      return createErrorResponse(
-        res,
-        400,
-        "INVALID_FIRST_NAME",
-        "First name must be between 2 and 30 characters."
-      );
-    }
-    if (!validateLength(last_name, 2, 30)) {
-      return createErrorResponse(
-        res,
-        400,
-        "INVALID_LAST_NAME",
-        "Last name must be between 2 and 30 characters."
-      );
-    }
-
-    if (!validatePassword(password)) {
-      return createErrorResponse(
-        res,
-        400,
-        "WEAK_PASSWORD",
-        "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character."
-      );
-    }
-
-    if (!validateBirthDate(birth_year, birth_year_month, birth_year_day)) {
-      return createErrorResponse(
-        res,
-        400,
-        "INVALID_BIRTH_DATE",
-        "Invalid birth date provided."
-      );
-    }
-
-    const saltRounds = 12;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-    const username = autoGenerateUsername(first_name, last_name);
-
-    // Create new user and save
-    const user = new User({
-      first_name,
-      last_name,
-      username,
-      email,
-      password: hashedPassword,
-      gender,
-      birth_year,
-      birth_year_month,
-      birth_year_day,
-    });
-    await user.save();
-
-    // Generate email verification token
-    const emailVerificationToken = generateToken(
-      { id: user._id.toString() },
-      "2d"
-    );
-    const url = `${process.env.FRONTEND_URL}/verify-email/${emailVerificationToken}`;
-    // Send email verification link to user
-    sendVerificationEmail(user.email, user.first_name, url);
-
-    // Generate JWT token and return user data
-    const token = generateToken({ id: user._id.toString() }, "7d");
-    return res.status(201).json({
-      token: token,
-      user: {
-        id: user._id,
-        username: user.username,
-        picture: user.picture,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        verified: user.verified,
-      },
-      message: "User registered successfully. Please verify your email.",
-    });
-  } catch (error: unknown) {
-    const errorMessage =
-      (error as Error).message ||
-      "An unexpected error occurred. Please try again later.";
-    return createErrorResponse(res, 500, "SERVER_ERROR", errorMessage);
-  }
-};
-
-export const verifyEmail = async (
-  req: RequestWithUserId,
-  res: Response
-): Promise<Response> => {
-  try {
-    const validUserId = req.user?.id;
-    const { token } = req.body;
-
-    if (!token) {
-      return createErrorResponse(
-        res,
-        400,
-        "INVALID_ACCESS_TOKEN",
-        " Activation token is missing."
-      );
-    }
-
-    const decodedToken = jwt.verify(
-      token,
-      process.env.JWT_SECRET || ""
-    ) as JwtPayload;
-
-    const userId = decodedToken.id;
-    const user = await User.findById(userId);
-
-    if (!user) {
-      return createErrorResponse(
-        res,
-        404,
-        "USER_NOT_FOUND",
-        "Authenticated user not found."
-      );
-    }
-
-    if (validUserId !== userId) {
-      return createErrorResponse(
-        res,
-        403,
-        "INVALID_ACCESS_TOKEN",
-        "You don't have authorization to complete this operation."
-      );
-    }
-
-    if (user.verified) {
-      return createErrorResponse(
-        res,
-        400,
-        "EMAIL_ALREADY_ACTIVATED",
-        "This email is already activated."
-      );
-    }
-
-    user.verified = true;
-    await user.save();
-
-    return res
-      .status(200)
-      .json({ message: "Account has been activated successfully." });
-  } catch (error: unknown) {
-    const errorMessage =
-      (error as Error).message ||
-      "An unexpected error occurred. Please try again later.";
-    return createErrorResponse(res, 500, "SERVER_ERROR", errorMessage);
-  }
-};
-export const sendVerification = async (
-  req: RequestWithUserId,
-  res: Response
-): Promise<Response> => {
-  try {
-    const id = req.user?.id;
-    const user = await User.findById(id);
-    if (!user) {
-      return createErrorResponse(
-        res,
-        404,
-        "USER_NOT_FOUND",
-        "Authenticated user not found."
-      );
-    }
-
-    if (user.verified === true) {
-      return createErrorResponse(
-        res,
-        400,
-        "EMAIL_ALREADY_ACTIVATED",
-        "This email is already activated."
-      );
-    }
-
-    // Generate email verification token
-    const emailVerificationToken = generateToken(
-      { id: user._id.toString() },
-      "2d"
-    );
-    const url = `${process.env.FRONTEND_URL}/verify-email/${emailVerificationToken}`;
-    // Send email verification link to user
-    sendVerificationEmail(user.email, user.first_name, url);
-
-    return res.status(200).json({
-      message: "Verification email sent successfully.",
-    });
-  } catch (error: unknown) {
-    const errorMessage =
-      (error as Error).message ||
-      "An unexpected error occurred. Please try again later.";
-    return createErrorResponse(res, 500, "SERVER_ERROR", errorMessage);
-  }
-};
-
-export const login = async (
-  req: Request<{}, {}, { email: string; password: string }>,
-  res: Response
-): Promise<Response> => {
-  try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email }).select("+password").exec();
-    const hashedPassword = (user && user.password) || "";
-    const passwordMatch = bcrypt.compareSync(password, hashedPassword);
-
-    if (!user || !passwordMatch) {
-      return createErrorResponse(
-        res,
-        401,
-        "INVALID_CREDENTIALS",
-        "Invalid email or password."
-      );
-    }
-
-    const isVerified = user?.verified;
-
-    if (!isVerified) {
-      return createErrorResponse(
-        res,
-        403,
-        "EMAIL_NOT_VERIFIED",
-        "Email address is not verified. Please check your email for the verification link."
-      );
-    }
-
-    const token = generateToken({ id: user._id.toString() }, "7d"); //
-    return res.json({
-      token: token,
-      user: {
-        id: user._id,
-        username: user.username,
-        picture: user.picture,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        verified: user.verified,
-      },
-      message: "Login successfully",
-    });
-  } catch (error: unknown) {
-    const errorMessage =
-      (error as Error).message ||
-      "An unexpected error occurred. Please try again later.";
-    return createErrorResponse(res, 500, "SERVER_ERROR", errorMessage);
-  }
-};
+import { FriendshipStatus, RequestWithUserId } from "@/types/types";
+import { Post } from "@/models/post/Post";
 
 export const searchUserByEmail = async (
   req: Request<{}, {}, { email: string; password: string }>,
@@ -322,114 +21,18 @@ export const searchUserByEmail = async (
         "User not found with this email address."
       );
     }
-
-    return res.json({
+    const data = {
       picture: user.picture,
       first_name: user.first_name,
-    });
-  } catch (error: unknown) {
-    const errorMessage =
-      (error as Error).message ||
-      "An unexpected error occurred. Please try again later.";
-    return createErrorResponse(res, 500, "SERVER_ERROR", errorMessage);
-  }
-};
+    };
 
-export const sendResetPasswordCode = async (
-  req: Request<{}, {}, { email: string }>,
-  res: Response
-): Promise<Response> => {
-  const { email } = req.body;
-  try {
-    const user = await User.findOne({ email }).exec();
-    if (!user) {
-      return createErrorResponse(
-        res,
-        404,
-        "USER_NOT_FOUND",
-        "User not found with this email address."
-      );
-    }
-    await Code.findOneAndDelete({ user: user._id });
-    const code = generateCode(5);
-    const savedCode = await new Code({
-      code,
-      user: user._id,
-    });
-    savedCode.save();
-    sendResetCode(user.email, user.first_name, code);
-    return res.status(200).json({
-      message: "Reset code sent successfully. Please check your email.",
-    });
-  } catch (error: unknown) {
-    const errorMessage =
-      (error as Error).message ||
-      "An unexpected error occurred. Please try again later.";
-    return createErrorResponse(res, 500, "SERVER_ERROR", errorMessage);
-  }
-};
-
-export const validateResetCode = async (
-  req: Request<{}, {}, { email: string; code: string }>,
-  res: Response
-): Promise<Response> => {
-  try {
-    const { email, code } = req.body;
-    const user = await User.findOne({ email });
-    if (!user) {
-      return createErrorResponse(
-        res,
-        404,
-        "USER_NOT_FOUND",
-        "User not found with this email address."
-      );
-    }
-
-    const userCode = await Code.findOne({ user: user._id });
-    if (!userCode || userCode.code !== code) {
-      return createErrorResponse(
-        res,
-        401,
-        "INVALID_RESET_CODE",
-        "Invalid reset code. Please check the code and try again."
-      );
-    }
-    await Code.findOneAndDelete({ user: user._id });
-    return res
-      .status(200)
-      .json({ message: "Reset code validated successfully" });
-  } catch (error: unknown) {
-    const errorMessage =
-      (error as Error).message ||
-      "An unexpected error occurred. Please try again later.";
-    return createErrorResponse(res, 500, "SERVER_ERROR", errorMessage);
-  }
-};
-
-export const changePassword = async (
-  req: Request<{}, {}, { email: string; password: string }>,
-  res: Response
-): Promise<Response> => {
-  try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email }).select("+password");
-
-    if (!user) {
-      return createErrorResponse(
-        res,
-        404,
-        "USER_NOT_FOUND",
-        "User not found with this email address."
-      );
-    }
-    const hashedPassword = await bcrypt.hash(password, 10);
-    await User.findOneAndUpdate(
-      { email },
-      {
-        password: hashedPassword,
-      }
+    return createSuccussResponse(
+      res,
+      200,
+      "USER_FOUND",
+      "user found Successfully.",
+      data
     );
-    return res.status(200).json({ message: "Password changed successfully" });
   } catch (error: unknown) {
     const errorMessage =
       (error as Error).message ||
@@ -473,11 +76,16 @@ export const search = async (
       },
       { first_name: 1, last_name: 1, username: 1, picture: 1 }
     );
-    return res.status(200).json({
-      code: "SEARCH_SUCCESS",
-      message: "Search completed successfully.",
+    const data = {
       searchResult: results,
-    });
+    };
+    return createSuccussResponse(
+      res,
+      200,
+      "SEARCH_RESULTS",
+      "Search completed successfully.",
+      data
+    );
   } catch (error: unknown) {
     const errorMessage =
       (error as Error).message ||
@@ -544,12 +152,16 @@ export const addToSearchHistory = async (
     const searchResult = await User.findById(req.user?.id)
       .select("search")
       .populate("search", "first_name last_name username picture");
-
-    return res.status(200).json({
-      code: "SEARCH_HISTORY_UPDATED",
-      message: "Search history updated successfully.",
+    const data = {
       search: searchResult?.search,
-    });
+    };
+    return createSuccussResponse(
+      res,
+      200,
+      "SEARCH_HISTORY_UPDATED",
+      "Search history updated successfully.",
+      data
+    );
   } catch (error: unknown) {
     const errorMessage =
       (error as Error).message ||
@@ -576,13 +188,16 @@ export const getSearchHistory = async (
         "You are not authorized to perform this action."
       );
     }
-
-    // Return the populated search history
-    return res.status(200).json({
-      code: "SEARCH_HISTORY_RETRIEVED",
-      message: "Search history retrieved successfully.",
+    const data = {
       search: user.search,
-    });
+    };
+    return createSuccussResponse(
+      res,
+      200,
+      "SEARCH_HISTORY_RETRIEVED",
+      "Search history retrieved successfully.",
+      data
+    );
   } catch (error: unknown) {
     const errorMessage =
       (error as Error).message ||
@@ -624,11 +239,16 @@ export const removeFromSearchHistory = async (
         "You are not authorized to perform this action."
       );
     }
-    return res.status(200).json({
-      code: "SEARCH_USER_REMOVED",
-      message: "User successfully removed from search history.",
+    const data ={
       search: updatedUser.search,
-    });
+    }
+    return createSuccussResponse(
+      res,
+      200,
+      "SEARCH_USER_REMOVED",
+      "User successfully removed from search history.",
+      data
+    );
   } catch (error: unknown) {
     const errorMessage =
       (error as Error).message ||
@@ -686,13 +306,19 @@ export const getProfile = async (
 
     // Populate the friends field in the profile
     await profile.populate("friends", "first_name last_name username picture");
-
-    // Return the profile with posts and friendship status
-    return res.json({
+    const data = {
       ...profile.toObject(),
       posts,
       friendship,
-    });
+    }
+    // Return the profile with posts and friendship status
+    return createSuccussResponse(
+      res,
+      200,
+      "PROFILE_RETRIEVED",
+      "Profile retrieved successfully.",
+      data
+    );
   } catch (error: unknown) {
     const errorMessage =
       (error as Error).message ||
@@ -715,10 +341,10 @@ export const updateProfilePicture = async (
     if (!updatedUser) {
       return createErrorResponse(res, 404, "USER_NOT_FOUND", "User not found.");
     }
-    return res.json({
-      message: "Profile picture updated successfully.",
+    const data = {
       picture: url,
-    });
+    };
+  return createSuccussResponse(res,200,"PROFILE_PICTURE_UPDATE","Profile picture updated successfully.",data);
   } catch (error: unknown) {
     const errorMessage =
       (error as Error).message ||
@@ -741,7 +367,10 @@ export const updateCover = async (
     if (!updatedUser) {
       return createErrorResponse(res, 404, "USER_NOT_FOUND", "User not found.");
     }
-    return res.json({ message: "Cover updated successfully.", cover: url });
+    const data = {
+      cover: url,
+    };
+    return createSuccussResponse(res,200,"COVER_UPDATE","Cover updated successfully.",data);
   } catch (error: unknown) {
     const errorMessage =
       (error as Error).message ||
@@ -764,10 +393,10 @@ export const updateDetails = async (
     if (!updated) {
       return createErrorResponse(res, 404, "USER_NOT_FOUND", "User not found.");
     }
-    return res.json({
-      message: "Details updated successfully.",
+    const data = {
       details: updated?.details,
-    });
+    }
+    return createSuccussResponse(res,200,"DETAILS_UPDATE","Details updated successfully.",data);
   } catch (error: unknown) {
     const errorMessage =
       (error as Error).message ||
@@ -809,7 +438,7 @@ export const addFriend = async (
       $push: { requests: sender._id, followers: sender._id },
     });
     await sender.updateOne({ $push: { following: receiver._id } });
-    return res.json({ message: "Friend request sent successfully." });
+    return createSuccussResponse(res,200,"FRIEND_REQUEST_SUCCESS","Friend request sent successfully.")
   } catch (error: unknown) {
     const errorMessage =
       (error as Error).message ||
@@ -857,7 +486,7 @@ export const cancelRequest = async (
       $pull: { requests: sender._id, followers: sender._id },
     });
     await sender.updateOne({ $pull: { following: sender._id } });
-    return res.json({ message: "Friend request canceled successfully." });
+    return createSuccussResponse(res,200,"FRIEND_REQUEST_CANCELED","Friend request canceled successfully.");
   } catch (error: unknown) {
     const errorMessage =
       (error as Error).message ||
@@ -904,11 +533,8 @@ export const follow = async (
 
     await receiver.updateOne({ $push: { followers: sender._id } });
     await sender.updateOne({ $push: { following: receiver._id } });
+    return createSuccussResponse(res,200,"FOLLOW_SUCCESS","You successfully followed the user.");
 
-    return res.json({
-      code: "FOLLOW_SUCCESS",
-      message: "You successfully followed the user.",
-    });
   } catch (error: unknown) {
     const errorMessage =
       (error as Error).message ||
@@ -955,11 +581,7 @@ export const unfollow = async (
 
     await receiver.updateOne({ $pull: { followers: sender._id } });
     await sender.updateOne({ $pull: { following: receiver._id } });
-
-    return res.json({
-      code: "UNFOLLOW_SUCCESS",
-      message: "You successfully unfollowed the user.",
-    });
+    return createSuccussResponse(res,200,"UNFOLLOW_SUCCESS","You successfully unfollowed the user.");
   } catch (error: unknown) {
     const errorMessage =
       (error as Error).message ||
@@ -1007,11 +629,8 @@ export const acceptRequest = async (
     await sender.updateOne({
       $push: { friends: receiver._id, followers: receiver._id },
     });
+    return createSuccussResponse(res,200,"FRIEND_REQUEST_ACCEPTED","Friend request successfully accepted.");
 
-    return res.json({
-      code: "REQUEST_ACCEPTED",
-      message: "Friend request successfully accepted.",
-    });
   } catch (error: unknown) {
     const errorMessage =
       (error as Error).message ||
@@ -1069,11 +688,7 @@ export const unfriend = async (
         followers: receiver._id,
       },
     });
-
-    return res.json({
-      code: "UNFRIEND_SUCCESS",
-      message: "Successfully unfriended.",
-    });
+    return createSuccussResponse(res,200,"FRIEND_UNFRIEND","Friendship successfully unfriended.");
   } catch (error: unknown) {
     const errorMessage =
       (error as Error).message ||
@@ -1122,11 +737,8 @@ export const deleteRequest = async (
     await sender.updateOne({
       $pull: { following: receiver._id },
     });
+    return createSuccussResponse(res,200,"REQUEST_DELETED","Request successfully deleted.");
 
-    return res.json({
-      code: "REQUEST_DELETED",
-      message: "Request successfully deleted.",
-    });
   } catch (error: unknown) {
     const errorMessage =
       (error as Error).message ||
@@ -1158,14 +770,12 @@ export const getFriendsPageInfos = async (
     const sentRequests = await User.find({
       requests: new mongoose.Types.ObjectId(userId),
     }).select("first_name last_name picture username");
-
-    return res.json({
-      code: "FRIENDS_PAGE_INFO",
-      message: "Friends page information retrieved successfully.",
+    const data = {
       friends: user.friends,
       requests: user.requests,
       sentRequests,
-    });
+    }
+    return createSuccussResponse(res,200, "FRIENDS_PAGE_INFO","Friends page information retrieved successfully.",data);
   } catch (error: unknown) {
     const errorMessage =
       (error as Error).message ||
