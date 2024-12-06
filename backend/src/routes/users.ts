@@ -6,20 +6,29 @@ import { isAuthenticated } from "../middlewares/authenticate";
 
 const router: Router = express.Router();
 
-router.post("/register", userController.register);
-router.post("/verify-email", isAuthenticated, userController.verifyEmail);
-router.post("/sendVerification", isAuthenticated, userController.sendVerification);
 router.post("/search-user", userController.searchUserByEmail);
-router.post("/login", userController.login);
-router.post("/sendResetPasswordCode", userController.sendResetPasswordCode);
-router.post("/validateResetCode", userController.validateResetCode);
-router.post("/changePassword", userController.changePassword);
-router.post("/search/:searchTerm",isAuthenticated, userController.search);
-router.put("/addToSearchHistory", isAuthenticated, userController.addToSearchHistory);
-router.get("/getSearchHistory", isAuthenticated, userController.getSearchHistory);
-router.put("/removeFromSearchHistory", isAuthenticated, userController.removeFromSearchHistory);
+router.post("/search/:searchTerm", isAuthenticated, userController.search);
+router.put(
+  "/addToSearchHistory",
+  isAuthenticated,
+  userController.addToSearchHistory
+);
+router.get(
+  "/getSearchHistory",
+  isAuthenticated,
+  userController.getSearchHistory
+);
+router.put(
+  "/removeFromSearchHistory",
+  isAuthenticated,
+  userController.removeFromSearchHistory
+);
 router.get("/getProfile/:username", isAuthenticated, userController.getProfile);
-router.put("/updateProfilePicture", isAuthenticated, userController.updateProfilePicture);
+router.put(
+  "/updateProfilePicture",
+  isAuthenticated,
+  userController.updateProfilePicture
+);
 router.put("/updateCover", isAuthenticated, userController.updateCover);
 router.put("/updateDetails", isAuthenticated, userController.updateDetails);
 router.put("/addFriend/:id", isAuthenticated, userController.addFriend);
@@ -28,6 +37,10 @@ router.put("/follow/:id", isAuthenticated, userController.follow);
 router.put("/unfollow/:id", isAuthenticated, userController.unfollow);
 router.put("/unfriend/:id", isAuthenticated, userController.unfriend);
 router.put("/deleteRequest/:id", isAuthenticated, userController.deleteRequest);
-router.get("/getFriendsPageInfos", isAuthenticated, userController.getFriendsPageInfos);
+router.get(
+  "/getFriendsPageInfos",
+  isAuthenticated,
+  userController.getFriendsPageInfos
+);
 
 export default router;

@@ -239,9 +239,9 @@ export const removeFromSearchHistory = async (
         "You are not authorized to perform this action."
       );
     }
-    const data ={
+    const data = {
       search: updatedUser.search,
-    }
+    };
     return createSuccussResponse(
       res,
       200,
@@ -310,7 +310,7 @@ export const getProfile = async (
       ...profile.toObject(),
       posts,
       friendship,
-    }
+    };
     // Return the profile with posts and friendship status
     return createSuccussResponse(
       res,
@@ -344,7 +344,13 @@ export const updateProfilePicture = async (
     const data = {
       picture: url,
     };
-  return createSuccussResponse(res,200,"PROFILE_PICTURE_UPDATE","Profile picture updated successfully.",data);
+    return createSuccussResponse(
+      res,
+      200,
+      "PROFILE_PICTURE_UPDATE",
+      "Profile picture updated successfully.",
+      data
+    );
   } catch (error: unknown) {
     const errorMessage =
       (error as Error).message ||
@@ -370,7 +376,13 @@ export const updateCover = async (
     const data = {
       cover: url,
     };
-    return createSuccussResponse(res,200,"COVER_UPDATE","Cover updated successfully.",data);
+    return createSuccussResponse(
+      res,
+      200,
+      "COVER_UPDATE",
+      "Cover updated successfully.",
+      data
+    );
   } catch (error: unknown) {
     const errorMessage =
       (error as Error).message ||
@@ -395,8 +407,14 @@ export const updateDetails = async (
     }
     const data = {
       details: updated?.details,
-    }
-    return createSuccussResponse(res,200,"DETAILS_UPDATE","Details updated successfully.",data);
+    };
+    return createSuccussResponse(
+      res,
+      200,
+      "DETAILS_UPDATE",
+      "Details updated successfully.",
+      data
+    );
   } catch (error: unknown) {
     const errorMessage =
       (error as Error).message ||
@@ -438,7 +456,12 @@ export const addFriend = async (
       $push: { requests: sender._id, followers: sender._id },
     });
     await sender.updateOne({ $push: { following: receiver._id } });
-    return createSuccussResponse(res,200,"FRIEND_REQUEST_SUCCESS","Friend request sent successfully.")
+    return createSuccussResponse(
+      res,
+      200,
+      "FRIEND_REQUEST_SUCCESS",
+      "Friend request sent successfully."
+    );
   } catch (error: unknown) {
     const errorMessage =
       (error as Error).message ||
@@ -486,7 +509,12 @@ export const cancelRequest = async (
       $pull: { requests: sender._id, followers: sender._id },
     });
     await sender.updateOne({ $pull: { following: sender._id } });
-    return createSuccussResponse(res,200,"FRIEND_REQUEST_CANCELED","Friend request canceled successfully.");
+    return createSuccussResponse(
+      res,
+      200,
+      "FRIEND_REQUEST_CANCELED",
+      "Friend request canceled successfully."
+    );
   } catch (error: unknown) {
     const errorMessage =
       (error as Error).message ||
@@ -533,8 +561,12 @@ export const follow = async (
 
     await receiver.updateOne({ $push: { followers: sender._id } });
     await sender.updateOne({ $push: { following: receiver._id } });
-    return createSuccussResponse(res,200,"FOLLOW_SUCCESS","You successfully followed the user.");
-
+    return createSuccussResponse(
+      res,
+      200,
+      "FOLLOW_SUCCESS",
+      "You successfully followed the user."
+    );
   } catch (error: unknown) {
     const errorMessage =
       (error as Error).message ||
@@ -581,7 +613,12 @@ export const unfollow = async (
 
     await receiver.updateOne({ $pull: { followers: sender._id } });
     await sender.updateOne({ $pull: { following: receiver._id } });
-    return createSuccussResponse(res,200,"UNFOLLOW_SUCCESS","You successfully unfollowed the user.");
+    return createSuccussResponse(
+      res,
+      200,
+      "UNFOLLOW_SUCCESS",
+      "You successfully unfollowed the user."
+    );
   } catch (error: unknown) {
     const errorMessage =
       (error as Error).message ||
@@ -629,8 +666,12 @@ export const acceptRequest = async (
     await sender.updateOne({
       $push: { friends: receiver._id, followers: receiver._id },
     });
-    return createSuccussResponse(res,200,"FRIEND_REQUEST_ACCEPTED","Friend request successfully accepted.");
-
+    return createSuccussResponse(
+      res,
+      200,
+      "FRIEND_REQUEST_ACCEPTED",
+      "Friend request successfully accepted."
+    );
   } catch (error: unknown) {
     const errorMessage =
       (error as Error).message ||
@@ -688,7 +729,12 @@ export const unfriend = async (
         followers: receiver._id,
       },
     });
-    return createSuccussResponse(res,200,"FRIEND_UNFRIEND","Friendship successfully unfriended.");
+    return createSuccussResponse(
+      res,
+      200,
+      "FRIEND_UNFRIEND",
+      "Friendship successfully unfriended."
+    );
   } catch (error: unknown) {
     const errorMessage =
       (error as Error).message ||
@@ -737,8 +783,12 @@ export const deleteRequest = async (
     await sender.updateOne({
       $pull: { following: receiver._id },
     });
-    return createSuccussResponse(res,200,"REQUEST_DELETED","Request successfully deleted.");
-
+    return createSuccussResponse(
+      res,
+      200,
+      "REQUEST_DELETED",
+      "Request successfully deleted."
+    );
   } catch (error: unknown) {
     const errorMessage =
       (error as Error).message ||
@@ -774,8 +824,14 @@ export const getFriendsPageInfos = async (
       friends: user.friends,
       requests: user.requests,
       sentRequests,
-    }
-    return createSuccussResponse(res,200, "FRIENDS_PAGE_INFO","Friends page information retrieved successfully.",data);
+    };
+    return createSuccussResponse(
+      res,
+      200,
+      "FRIENDS_PAGE_INFO",
+      "Friends page information retrieved successfully.",
+      data
+    );
   } catch (error: unknown) {
     const errorMessage =
       (error as Error).message ||
