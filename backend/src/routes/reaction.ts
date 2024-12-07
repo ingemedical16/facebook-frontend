@@ -1,6 +1,6 @@
 import express, { Router } from "express";
-import * as reactionController from '../controllers/reaction/reaction';
-import { isAuthenticated } from "../middlewares/authenticate";
+import * as reactionController from '@/controllers/reaction/reaction';
+import { isAuthenticated } from "@/middlewares/authenticate";
 
 
 const router: Router = express.Router();

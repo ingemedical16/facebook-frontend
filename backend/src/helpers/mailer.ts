@@ -1,6 +1,7 @@
 import nodemailer, { SendMailOptions } from "nodemailer";
 import { google, Auth } from "googleapis";
-
+import dotenv from "dotenv";
+dotenv.config();
 const OAuth2 = google.auth.OAuth2;
 const {
   MAILING_EMAIL,

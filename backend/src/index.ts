@@ -15,8 +15,8 @@ app.use(express.static(path.join(__dirname, "src", "public")));
 app.use(express.json());
 const corsOptions = {
   origin: "http://localhost:3000", // Your frontend origin
-  credentials: true,              // Allow credentials (cookies, etc.)
-  optionsSuccessStatus: 200,      // Status for preflight responses
+  credentials: true, // Allow credentials (cookies, etc.)
+  optionsSuccessStatus: 200, // Status for preflight responses
 };
 app.use(cors(corsOptions));
 
@@ -47,28 +47,6 @@ loadRoutes().catch((error: Error) => {
 });
 app.get("/", (req: Request, res: Response) => {
   res.send("<h1>Welcome Facebook API</h1>");
-});
-
-app.post("/upload-file", async (req, res) => {
-  const form = formidable({
-    uploadDir: path.join(__dirname, "public"),
-    filename(name, ext, part) {
-      const uniqueFileName =
-        Date.now() + "_" + (part.originalFilename ?? name + ".jpg");
-      return uniqueFileName;
-    },
-  });
-  await form.parse(req);
-  res.json({ ok: true });
-});
-
-app.post("/upload-file-to-cloud", fileParser, async (req, res) => {
-  // cloudinary
-  const { files } = req;
-  const image = files.image;
-  const result = await uploadCloud(image, "test");
-
-  res.json({ ...result });
 });
 
 // Connect to the database

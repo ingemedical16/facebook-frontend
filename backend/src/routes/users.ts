@@ -1,8 +1,8 @@
 // src/routes/user.ts
 
 import express, { Router } from "express";
-import * as userController from "../controllers/user/user";
-import { isAuthenticated } from "../middlewares/authenticate";
+import * as userController from "@/controllers/user/user";
+import { isAuthenticated } from "@/middlewares/authenticate";
 
 const router: Router = express.Router();
 

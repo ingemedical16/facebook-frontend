@@ -1,6 +1,6 @@
 import express, { Router } from "express";
-import * as postController from '../controllers/post/post';
-import { isAuthenticated } from "../middlewares/authenticate";
+import * as postController from '@/controllers/post/post';
+import { isAuthenticated } from "@/middlewares/authenticate";
 
 const router: Router = express.Router();
 
