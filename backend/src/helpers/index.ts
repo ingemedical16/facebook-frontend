@@ -2,7 +2,8 @@ import { generateCode } from "./generateCode";
 import { autoGenerateUsername } from "./generateUserName";
 import { sendVerificationEmail, sendResetCode } from "./mailer";
 import { generateToken } from "./token";
-import { createErrorResponse,createSuccussResponse } from "./createResponse";
+import { createErrorResponse, createSuccussResponse } from "./createResponse";
+import { uploadsFilesToCloud, searchImages } from "./uploadCloud";
 import {
   validateEmail,
   validateLength,
@@ -24,4 +25,6 @@ export {
   validateBirthDate,
   createErrorResponse,
   createSuccussResponse,
+  uploadsFilesToCloud,
+  searchImages,
 };
