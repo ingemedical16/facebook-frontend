@@ -626,59 +626,7 @@ export const unfollow = async (
     return createErrorResponse(res, 500, "SERVER_ERROR", errorMessage);
   }
 };
-export const acceptRequest = async (
-  req: RequestWithUserId,
-  res: Response
-): Promise<Response> => {
-  try {
-    const userId = req.user?.id;
-    const senderId = req.params.id;
 
-    if (userId === senderId) {
-      return createErrorResponse(
-        res,
-        400,
-        "INVALID_ACTION",
-        "You can't accept a request from yourself."
-      );
-    }
-
-    const receiver = await User.findById(userId);
-    const sender = await User.findById(senderId);
-
-    if (!receiver || !sender) {
-      return createErrorResponse(res, 404, "USER_NOT_FOUND", "User not found.");
-    }
-
-    if (!receiver.requests.includes(sender._id.toString())) {
-      return createErrorResponse(
-        res,
-        400,
-        "REQUEST_NOT_FOUND",
-        "Friend request not found."
-      );
-    }
-
-    await receiver.updateOne({
-      $push: { friends: sender._id, following: sender._id },
-      $pull: { requests: sender._id },
-    });
-    await sender.updateOne({
-      $push: { friends: receiver._id, followers: receiver._id },
-    });
-    return createSuccussResponse(
-      res,
-      200,
-      "FRIEND_REQUEST_ACCEPTED",
-      "Friend request successfully accepted."
-    );
-  } catch (error: unknown) {
-    const errorMessage =
-      (error as Error).message ||
-      "An unexpected error occurred. Please try again later.";
-    return createErrorResponse(res, 500, "SERVER_ERROR", errorMessage);
-  }
-};
 export const unfriend = async (
   req: RequestWithUserId,
   res: Response
@@ -742,7 +690,59 @@ export const unfriend = async (
     return createErrorResponse(res, 500, "SERVER_ERROR", errorMessage);
   }
 };
+export const acceptRequest = async (
+  req: RequestWithUserId,
+  res: Response
+): Promise<Response> => {
+  try {
+    const userId = req.user?.id;
+    const senderId = req.params.id;
 
+    if (userId === senderId) {
+      return createErrorResponse(
+        res,
+        400,
+        "INVALID_ACTION",
+        "You can't accept a request from yourself."
+      );
+    }
+
+    const receiver = await User.findById(userId);
+    const sender = await User.findById(senderId);
+
+    if (!receiver || !sender) {
+      return createErrorResponse(res, 404, "USER_NOT_FOUND", "User not found.");
+    }
+
+    if (!receiver.requests.includes(sender._id.toString())) {
+      return createErrorResponse(
+        res,
+        400,
+        "REQUEST_NOT_FOUND",
+        "Friend request not found."
+      );
+    }
+
+    await receiver.updateOne({
+      $push: { friends: sender._id, following: sender._id },
+      $pull: { requests: sender._id },
+    });
+    await sender.updateOne({
+      $push: { friends: receiver._id, followers: receiver._id },
+    });
+    return createSuccussResponse(
+      res,
+      200,
+      "FRIEND_REQUEST_ACCEPTED",
+      "Friend request successfully accepted."
+    );
+  } catch (error: unknown) {
+    const errorMessage =
+      (error as Error).message ||
+      "An unexpected error occurred. Please try again later.";
+    return createErrorResponse(res, 500, "SERVER_ERROR", errorMessage);
+  }
+};
 export const deleteRequest = async (
   req: RequestWithUserId,
   res: Response

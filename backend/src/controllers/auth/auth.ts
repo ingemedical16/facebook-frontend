@@ -219,6 +219,14 @@ export const login = async (
 ): Promise<Response> => {
   try {
     const { email, password } = req.body;
+    if (!validateEmail(email) || !password) {
+      return createErrorResponse(
+        res,
+        400,
+        "INVALID_CREDENTIALS",
+        "Invalid email or password."
+      );
+    }
     const user = await User.findOne({ email }).select("+password").exec();
     const hashedPassword = (user && user.password) || "";
     const passwordMatch = bcrypt.compareSync(password, hashedPassword);
@@ -321,6 +329,14 @@ export const sendResetPasswordCode = async (
   res: Response
 ): Promise<Response> => {
   const { email } = req.body;
+  if (!validateEmail(email)) {
+    return createErrorResponse(
+      res,
+      400,
+      "INVALID_EMAIL",
+      "Invalid email address."
+    );
+  }
   try {
     const user = await User.findOne({ email }).exec();
     if (!user) {

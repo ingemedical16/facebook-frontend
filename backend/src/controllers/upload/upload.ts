@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { createErrorResponse, createSuccussResponse, searchImages, uploadsFilesToCloud } from "../../helpers";
-import { RequestWithUserId } from "../../types/types";
 import formidable from "formidable";
 import path from "path";
 
