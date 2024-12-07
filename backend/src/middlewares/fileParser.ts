@@ -1,35 +1,45 @@
-import {RequestHandler} from 'express'
-import formidable,{File} from 'formidable';
+import formidable, { File, Fields } from "formidable";
+import { Request, Response, NextFunction, RequestHandler } from "express";
+import { createErrorResponse } from "@/helpers";
+
+// Extend Request type to include files
 declare global {
-    namespace Express{
-        interface Request {
-            files:{[key:string]:File|File[]}
-        }
+  namespace Express {
+    interface Request {
+      files?: Record<string, File | File[]>;
     }
-    
+  }
 }
 
+const fileParser: RequestHandler = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const form = formidable();
 
-const fileParser:RequestHandler = async (req,res,next)=>{
-    const form = formidable();
-    const [fields,files] = await form.parse(req)
-    if(!req.body) req.body ={}
-    for(let key in fields){
-        const value = fields[key]
-        if(value) req.body[key]= value[0];
+  form.parse(req, (err, fields: formidable.Fields, files: formidable.Files) => {
+    if (err) {
+      console.error("Error parsing form:", err);
+      return createErrorResponse(
+        res,
+        400,
+        "FORM_PARSE_ERROR",
+        "Failure parsing form"
+      );
     }
-    if(!req.files) req.files ={}
-    for(let key in files){
-        const value = files[key]
-        if(value) {
-            if(value.length > 1){
-                req.files[key] = value
-            }else{
-                req.files[key] = value[0]
-            }
-        }
-    }
-    next()
-}
+
+    // Assign fields to req.body
+    if (!req.body) req.body = {};
+    Object.entries(fields).forEach(([key, value]) => {
+      req.body[key] = Array.isArray(value) ? value[0] : value;
+    });
+
+    // Assign files to req.files
+    req.files = files as Record<string, File | File[]>;
+
+    next();
+  });
+};
 
 export default fileParser;
