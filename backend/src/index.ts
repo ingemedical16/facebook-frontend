@@ -11,7 +11,7 @@ const app: Application = express();
 app.use(express.static(path.join(__dirname, "src", "public")));
 app.use(express.json());
 const corsOptions = {
-  origin: "http://localhost:3000", // Your frontend origin
+  origin: process.env.FRONTEND_URL || "http://localhost:3000", // Your frontend origin
   credentials: true, // Allow credentials (cookies, etc.)
   optionsSuccessStatus: 200, // Status for preflight responses
 };
