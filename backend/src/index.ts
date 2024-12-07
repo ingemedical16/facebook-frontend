@@ -1,16 +1,13 @@
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import { readdirSync } from "fs";
 import { connectToDatabase } from "./config/db";
-import formidable from "formidable";
 import path from "path";
-
-import fileParser from "./middlewares/fileParser";
-import uploadCloud from "./utils/uploadCloud";
+import dotenv from "dotenv";
+dotenv.config();
 
 const app: Application = express();
-dotenv.config();
+
 app.use(express.static(path.join(__dirname, "src", "public")));
 app.use(express.json());
 const corsOptions = {
