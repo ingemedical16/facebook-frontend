@@ -3,42 +3,81 @@ import { Post } from "../../models/post/Post";
 import User from "../../models/user/User";
 import { createErrorResponse, createSuccussResponse } from "../../helpers";
 import { RequestWithUserId } from "@/types/types";
+import mongoose from "mongoose";
 
 export const createPost = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
-    const postData = req.body;
+    const { type, background, text, images, user,isProfile } = req.body;
 
-    // Ensure the body has necessary data
-    if (!postData || !postData.content || !postData.user) {
+    // Validate required fields
+    if (!user) {
       return createErrorResponse(
         res,
         400,
         "MISSING_REQUIRED_FIELDS",
-        "Content or user is missing."
+        "User ID is required."
       );
     }
 
-    const post = await new Post(postData).save();
-    await post.populate("user", "first_name last_name cover picture username");
-    const data = {
-      post: post,
+    if (!mongoose.isValidObjectId(user)) {
+      return createErrorResponse(
+        res,
+        400,
+        "INVALID_USER",
+        "Invalid user ID provided."
+      );
+    }
+
+    // Validate optional fields
+    if (type && !["profilePicture", "coverPicture", null].includes(type)) {
+      return createErrorResponse(
+        res,
+        400,
+        "INVALID_TYPE",
+        "Type must be 'profilePicture', 'coverPicture', or null."
+      );
+    }
+
+    if (images && !Array.isArray(images)) {
+      return createErrorResponse(
+        res,
+        400,
+        "INVALID_IMAGES",
+        "Images must be an array of strings."
+      );
+    }
+
+    // Construct the post object
+    const postData = {
+      type: type || null, 
+      background,
+      text,
+      images: images || [], // Default to an empty array
+      user,
     };
 
-    // Successful response
+    // Create and save the post
+    const post = await new Post(postData).save();
+
+    // Populate user details
+    await post.populate("user", "first_name last_name cover picture username");
+
+    // Send success response
     return createSuccussResponse(
       res,
       200,
       "POST_CREATED",
       "Post created successfully.",
-      data
+      {post, isProfile:isProfile as boolean}
     );
   } catch (error: unknown) {
+    console.error("Error creating post:", error);
+
     const errorMessage =
-      (error as Error).message ||
-      "An unexpected error occurred. Please try again later.";
+      (error as Error).message || "An unexpected error occurred.";
     return createErrorResponse(res, 500, "SERVER_ERROR", errorMessage);
   }
 };
@@ -82,7 +121,7 @@ export const getAllPosts = async (
 
     // Fetch the current user's own posts
     const userPosts = await Post.find({ user: userId })
-      .populate("user", "first_name last_name picture username cover")
+      .populate("user", "first_name last_name picture username cover gender")
       .populate("comments.commentBy", "first_name last_name picture username")
       .sort({ createdAt: -1 })
       .limit(10);
@@ -153,6 +192,7 @@ export const comment = async (
     }
     const data = {
       comments: newComments.comments,
+      postId
     };
     return createSuccussResponse(
       res,

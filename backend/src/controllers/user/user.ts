@@ -6,7 +6,7 @@ import { FriendshipStatus, RequestWithUserId } from "@/types/types";
 import { Post } from "@/models/post/Post";
 
 export const searchUserByEmail = async (
-  req: Request<{}, {}, { email: string; password: string }>,
+  req: Request<{}, {}, { email: string; }>,
   res: Response
 ): Promise<Response> => {
   try {
