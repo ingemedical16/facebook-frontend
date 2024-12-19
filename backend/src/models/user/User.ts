@@ -11,8 +11,8 @@ export interface IUser extends Document {
   cover?: string;
   gender: "male" | "female" | "other";
   birth_year: number;
-  birth_year_month: number;
-  birth_year_day: number;
+  birth_month: number;
+  birth_day: number;
   verified?: boolean;
   friends: string[];
   following: string[];
@@ -90,11 +90,11 @@ const userSchema: Schema<IUser> = new Schema(
       type: Number,
       required: [true, "Year of birth is required"],
     },
-    birth_year_month: {
+    birth_month: {
       type: Number,
       required: [true, "Month of birth is required"],
     },
-    birth_year_day: {
+    birth_day: {
       type: Number,
       required: [true, "Day of birth is required"],
     },
