@@ -4,6 +4,7 @@ import { readdirSync } from "fs";
 import { connectToDatabase } from "./config/db";
 import path from "path";
 import dotenv from "dotenv";
+import homeRouter from "./home";
 dotenv.config();
 
 const app: Application = express();
@@ -17,7 +18,8 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-// Function to dynamically import routes as ES modules
+app.use("/", homeRouter);
+
 const loadRoutes = async () => {
   const routeFiles = readdirSync(path.join(__dirname, "routes")).filter(
     (file) => file.endsWith(".ts")
@@ -30,25 +32,18 @@ const loadRoutes = async () => {
     routeFiles.map(async (file) => {
       const routePath = `/api/${file.split(".")[0]}`;
 
-      const route = await import(`./routes/${file}`); // Dynamically import the route module
-
-      // Use the default export if available, or the entire module otherwise
+      const route = await import(`./routes/${file}`);
       app.use(routePath, route.default || route);
     })
   );
 };
 
-// Load routes and handle errors
 loadRoutes().catch((error: Error) => {
   console.error("Error loading routes:", error.message);
-});
-app.get("/", (req: Request, res: Response) => {
-  res.send("<h1>Welcome Facebook API</h1>");
 });
 
 // Connect to the database
 connectToDatabase();
 
-// Start the server on the specified port or 8000 if not provided as an environment variable
 const PORT = process.env.PORT ? parseInt(process.env.PORT) : 8000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => `Server running on port ${PORT}`);
