@@ -12,7 +12,6 @@ import {
   Menu,
   Notifications,
   ArrowDown,
-  ArrowDown1,
   Search,
   Messenger,
 } from "../svg";

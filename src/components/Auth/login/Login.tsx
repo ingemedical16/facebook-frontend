@@ -5,9 +5,9 @@ import { Formik, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import styles from "./Login.module.css";
 import Input from "../../UI/input/Input";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../app/store";
-import { login } from "../../../features/function"
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../app/store";
+import { login } from "../../../features/function";
 import { showToast, ToastType } from "../../../utils/toast/showToast";
 
 // Define form field values interface
@@ -34,7 +34,7 @@ const Login: FC<LoginProps> = ({ setVisible }) => {
     password: "",
   };
   const dispatch = useDispatch<AppDispatch>();
-  const { message } = useSelector((state: RootState) => state.auth);
+
   // Form submission handler
   const handleSubmit = async (
     values: MyFormValues,

@@ -7,7 +7,6 @@ import { Return, Search } from "../../svg";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addToSearchHistory, getSearchHistory, removeFromSearchHistory, search as searchFun } from "../../../features/function";
-import { showToast, ToastType } from "../../../utils/toast/showToast";
 import { clearSearchResult } from "../../../features/slices/search/searchSlice";
 
 export type SearchMenuProps = {
@@ -22,8 +21,6 @@ const SearchMenu: FC<SearchMenuProps> = ({ color, setShowSearchMenu }) => {
   
   const [iconVisible, setIconVisible] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [results, setResults] = useState([]);
-  const [searchHistory, setSearchHistory] = useState([]);
   const menu = useRef(null);
   const input = useRef<HTMLInputElement>(null);
   useClickOutside(menu, () => {
@@ -100,7 +97,7 @@ const SearchMenu: FC<SearchMenuProps> = ({ color, setShowSearchMenu }) => {
       {searchResult.length === 0 && (
         <div className={styles.search_history_header}>
           <span>Recent searches</span>
-          <a>Edit</a>
+          <span>Edit</span>
         </div>
       )}
       <div className={`${styles.search_history} ${styles.scrollbar}`}>

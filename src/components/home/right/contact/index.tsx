@@ -6,7 +6,7 @@ import styles from "../RightHome.module.css"
 
 const Contact: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.user);
-  const color = "#65676b";
+ 
   return (
     <div className={`${styles.contact} hover3`}>
       <div className={styles.contact_img}>

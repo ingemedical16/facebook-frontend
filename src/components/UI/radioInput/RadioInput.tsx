@@ -3,7 +3,6 @@ import { FieldHookConfig, useField } from "formik";
 
 import styles from "./RadioInput.module.css";
 import ErrorMessageComponent from "../input/ErrorMessageComponent";
-import { useIsTabletOrDesktop } from "../../../utils/functions/breakpoints";
 
 export type Option = {
   label: string;
@@ -22,7 +21,6 @@ const RadioInput: React.FC<RadioInputProps> = ({
   isErrorButton = false,
   ...props
 }) => {
-  const isTabletOrDesktop = useIsTabletOrDesktop();
   const [field, meta] = useField(props);
   const orderClass = isErrorButton ? styles.order2 : styles.order3;
 
