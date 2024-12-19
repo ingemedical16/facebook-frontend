@@ -4,7 +4,7 @@ import { Outlet, Navigate } from "react-router-dom";
 import { FC } from "react";
 
 const NotLoggedInRoutes: FC = () => {
-  const user = useSelector((state: RootState) => state.auth.user);
+  const user = useSelector((state: RootState) => state.user.user);
 
   return user ? <Navigate to="/" /> : <Outlet />;
 };
