@@ -1,6 +1,7 @@
-import { v2 as cloudinary, UploadApiResponse } from "cloudinary";
+import { v2 as cloudinary, UploadApiResponse  } from "cloudinary";
 import { File } from "formidable";
 import dotenv from "dotenv";
+import { SearchApiResponse } from "@/types/types";
 dotenv.config();
 
 cloudinary.config({
@@ -32,7 +33,7 @@ export const uploadsFilesToCloud = async (files: File | File[], folder: string) 
     const result = await cloudinary.uploader.upload(files.filepath, {
       folder: folder,
     });
-    return { ...result };
+    return [result];
   }
 };
 
@@ -40,7 +41,7 @@ export const searchImages = async (
   path: string,
   sort: "asc" | "desc",
   max: number
-) => {
+): Promise<SearchApiResponse> => {
   const result = await cloudinary.search
     .expression(path)
     .sort_by("created_at", sort)
