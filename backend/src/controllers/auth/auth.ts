@@ -29,8 +29,8 @@ export const register = async (
     password,
     gender,
     birth_year,
-    birth_year_month,
-    birth_year_day,
+    birth_month,
+    birth_day,
   } = req.body;
 
   try {
@@ -79,7 +79,7 @@ export const register = async (
       );
     }
 
-    if (!validateBirthDate(birth_year, birth_year_month, birth_year_day)) {
+    if (!validateBirthDate(birth_year, birth_month, birth_day)) {
       return createErrorResponse(
         res,
         400,
@@ -102,8 +102,8 @@ export const register = async (
       password: hashedPassword,
       gender,
       birth_year,
-      birth_year_month,
-      birth_year_day,
+      birth_month,
+      birth_day,
     });
     await user.save();
 
@@ -126,7 +126,10 @@ export const register = async (
         picture: user.picture,
         first_name: user.first_name,
         last_name: user.last_name,
-        verified: user.verified,
+        verified: user.verified || false,
+        birth_year: user.birth_year,
+        birth_month: user.birth_month,
+        birth_day: user.birth_day
       },
     };
     return createSuccussResponse(
@@ -260,7 +263,10 @@ export const login = async (
         picture: user.picture,
         first_name: user.first_name,
         last_name: user.last_name,
-        verified: user.verified,
+        verified: user.verified || false,
+        birth_year: user.birth_year,
+        birth_month: user.birth_month,
+        birth_day: user.birth_day
       },
     };
     return createSuccussResponse(
