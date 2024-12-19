@@ -1,31 +1,31 @@
 import { FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../app/store";
-import {toggleTheme } from "../../../../features/theme/themeSlice"
+import { toggleTheme } from "../../../../features/slices/theme/themeSlice";
 
 import styles from "../../Header.module.css";
 export type DisplayAccessibilityProps = {
-    setVisible: (visible: number) => void;  
-  };
+  setVisible: (visible: number) => void;
+};
 
-const DisplayAccessibility:FC<DisplayAccessibilityProps> = ({ setVisible })=>{
-    const { isDarkTheme } = useSelector(
-        (state: RootState) => state.theme
-      );
-      const dispatch = useDispatch<AppDispatch>();
-    return (
-        <div className={styles.absolute_wrap}>
-          <div className={styles.absolute_wrap_header}>
-            <div
-              className={`${styles.circle} hover1`}
-              onClick={() => {
-                setVisible(0);
-              }}
-            >
-              <i className={styles.arrow_back_icon}></i>
-            </div>
-            Display & Accessibility
-          </div>
+const DisplayAccessibility: FC<DisplayAccessibilityProps> = ({
+  setVisible,
+}) => {
+  const { isDarkTheme } = useSelector((state: RootState) => state.theme);
+  const dispatch = useDispatch<AppDispatch>();
+  return (
+    <div className={styles.absolute_wrap}>
+      <div className={styles.absolute_wrap_header}>
+        <div
+          className={`${styles.circle} hover1`}
+          onClick={() => {
+            setVisible(0);
+          }}
+        >
+          <i className={styles.arrow_back_icon}></i>
+        </div>
+        Display & Accessibility
+      </div>
       <div className={styles.mmenu_main}>
         <div className={styles.small_circle} style={{ width: "50px" }}>
           <i className="dark_filled_icon"></i>
@@ -42,7 +42,6 @@ const DisplayAccessibility:FC<DisplayAccessibilityProps> = ({ setVisible })=>{
         htmlFor="darkOff"
         className="hover1"
         onClick={() => {
-        
           dispatch(toggleTheme());
         }}
       >
@@ -57,7 +56,7 @@ const DisplayAccessibility:FC<DisplayAccessibilityProps> = ({ setVisible })=>{
         htmlFor="darkOn"
         className="hover1"
         onClick={() => {
-            dispatch(toggleTheme());
+          dispatch(toggleTheme());
         }}
       >
         <span>On</span>
@@ -95,8 +94,8 @@ const DisplayAccessibility:FC<DisplayAccessibilityProps> = ({ setVisible })=>{
           <i className="right_icon"></i>
         </div>
       </div>
-        </div>
-      );
+    </div>
+  );
 };
 
 export default DisplayAccessibility;

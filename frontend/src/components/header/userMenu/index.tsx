@@ -2,7 +2,7 @@ import { FC, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "../Header.module.css";
-import { logout } from "../../../features/auth/authSlice";
+import { logout } from "../../../features/slices/auth/authSlice";
 import { AppDispatch, RootState } from "../../../app/store";
 import SettingsPrivacy from "./settingsPrivacy";
 import HelpSupport from "./helpSupport";
@@ -10,7 +10,7 @@ import DisplayAccessibility from "./displayAccessibility";
 
 const UserMenu:FC = () => {
     const { user } = useSelector(
-        (state: RootState) => state.auth
+        (state: RootState) => state.user
       );
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();

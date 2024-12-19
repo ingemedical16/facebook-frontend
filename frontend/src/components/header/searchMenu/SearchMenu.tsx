@@ -6,8 +6,9 @@ import useClickOutside from "../../../hooks/useClickOutside";
 import { Return, Search } from "../../svg";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { addToSearchHistory, clearSearchResult, getSearchHistory, removeFromSearchHistory, search as searchFun } from "../../../features/search/searchSlice";
+import { addToSearchHistory, getSearchHistory, removeFromSearchHistory, search as searchFun } from "../../../features/function";
 import { showToast, ToastType } from "../../../utils/toast/showToast";
+import { clearSearchResult } from "../../../features/slices/search/searchSlice";
 
 export type SearchMenuProps = {
   color: string;
@@ -42,7 +43,7 @@ const SearchMenu: FC<SearchMenuProps> = ({ color, setShowSearchMenu }) => {
     }
   };
   const addToSearchHistoryHandler = async (searchUser: string) => {
-    token && await dispatch(addToSearchHistory({searchUser, token}))
+    token && await dispatch(addToSearchHistory({searchTerm:searchUser, token}))
     dispatch(clearSearchResult())
     setSearchTerm("")
     setIconVisible(true)

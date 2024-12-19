@@ -2,7 +2,7 @@ import { FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DotLoader from "react-spinners/DotLoader";
 import { AppDispatch, RootState } from "../../../app/store";
-import { register } from "../../../features/auth/authSlice";
+import { register } from "../../../features/function";
 import * as Yup from "yup";
 import { Formik, Form, FormikHelpers } from "formik";
 import styles from "./Register.module.css";
@@ -11,7 +11,7 @@ import DateOfBirthSelect from "../../dateOfBirthSelect/DateOfBirthSelect";
 import RadioInput, { Option } from "../../UI/radioInput/RadioInput";
 import { storeTokenAndUser } from "../../../utils/token";
 import { showToast, ToastType } from "../../../utils/toast/showToast";
-import { User,Gender } from "../../../types/User";
+import { User, Gender } from "../../../types/User";
 
 interface MyFormValues {
   email: string;
@@ -19,8 +19,8 @@ interface MyFormValues {
   first_name: string;
   last_name: string;
   birth_year: number;
-  birth_year_month: number;
-  birth_year_day: number;
+  birth_month: number;
+  birth_day: number;
   gender: Gender;
 }
 
@@ -62,11 +62,11 @@ const RegisterSchema = Yup.object().shape({
     .required("Select your birth year.")
     .min(1900, "You must be younger than this year.")
     .max(new Date().getFullYear() - 5, "You must be older than 5 years."),
-  birth_year_month: Yup.number()
+  birth_month: Yup.number()
     .required("Select your birth month.")
     .min(1, "Select your birth month.")
     .max(12, "Select your birth month."),
-  birth_year_day: Yup.number()
+  birth_day: Yup.number()
     .required("Select your birth day.")
     .min(1, "Select your birth day.")
     .max(
@@ -91,8 +91,8 @@ const Register: FC<RegisterProps> = ({ setVisible }) => {
     email: "",
     password: "",
     birth_year: new Date().getFullYear(),
-    birth_year_month: new Date().getMonth() + 1,
-    birth_year_day: new Date().getDate(),
+    birth_month: new Date().getMonth() + 1,
+    birth_day: new Date().getDate(),
     gender: Gender.Other,
   };
 
@@ -113,8 +113,8 @@ const Register: FC<RegisterProps> = ({ setVisible }) => {
       password,
       gender,
       birth_year,
-      birth_year_day,
-      birth_year_month,
+      birth_day,
+      birth_month,
     } = values;
 
     // Dispatch register action
@@ -126,8 +126,8 @@ const Register: FC<RegisterProps> = ({ setVisible }) => {
         password,
         gender,
         birth_year,
-        birth_year_day,
-        birth_year_month,
+        birth_day,
+        birth_month,
       })
     );
     // Handle success or error

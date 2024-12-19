@@ -32,10 +32,10 @@ type HeaderProps = {
 
 const color = "#65676b";
 const Header: FC<HeaderProps> = ({ page }) => {
-  const user = useSelector((state: RootState) => state.auth.user);
+  const user = useSelector((state: RootState) => state.user.user);
   const [showSearchMenu, setShowSearchMenu] = useState(false);
   const [showAllMenu, setShowAllMenu] = useState(false);
-  const [showUserMenu, setShowUserMenu] = useState(true);
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const allMenu = useRef<HTMLDivElement>(null);
   const userMenu = useRef<HTMLDivElement>(null);
   const isDesktop = useDesktop();

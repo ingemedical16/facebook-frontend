@@ -10,7 +10,7 @@ import Shortcut from "./shortcut";
 
 const LeftHome:FC = () => {
     const user = useSelector(
-        (state: RootState) => state.auth.user
+        (state: RootState) => state.user.user
       );
     const [visible, setVisible] = useState(false);
     return (

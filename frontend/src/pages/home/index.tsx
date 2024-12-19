@@ -1,9 +1,9 @@
 import { FC } from "react";
-import Home from "../../components/home/Home";
+import Home,{HomeProps} from "../../components/home/Home";
 
-const HomePage: FC = () => {
+const HomePage: FC<HomeProps> = ({setCreatePostPopupVisible}) => {
   return (
-    <Home/>
+    <Home setCreatePostPopupVisible={setCreatePostPopupVisible}/>
   );
 };
 

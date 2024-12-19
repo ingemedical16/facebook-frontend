@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom"; 
 import { useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../app/store";
-import { verifyEmail } from "../../../features/auth/authSlice"; // Adjust the path to your authSlice
+import { verifyEmail } from "../../../features/function"; // Adjust the path to your authSlice
 import styles from "./verifyEmail.module.css";
 import { useDispatch } from "react-redux";
 import { useDesktop, useMobile } from "../../../utils/functions/breakpoints";
@@ -51,7 +51,7 @@ const VerifyEmail: React.FC = () => {
             // .then((data) => {
             //   showToast("Your account has been successfully verified!", ToastType.SUCCESS);
             //   //navigate("/login");
-            //   console.log("data",data)
+            //   ("data",data)
             // })
             // .catch((err) => {
             //   showToast(err, ToastType.ERROR);
