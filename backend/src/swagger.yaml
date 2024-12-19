@@ -1,0 +1,19 @@
+openapi: 3.0.0
+info:
+  title: Facebook Clone API
+  version: 1.0.0
+  description: API documentation for the Facebook Clone project.
+servers:
+  - url: http://localhost:3000
+    description: Local development server
+paths:
+  /api/auth:
+    $ref: './docs/auth/auth.yaml'
+  /api/users:
+    $ref: './docs/users/users.yaml'
+  /api/posts:
+    $ref: './docs/posts/posts.yaml'
+  /api/reactions:
+    $ref: './docs/reactions/reactions.yaml'
+  /api/uploads:
+    $ref: './docs/uploads/uploads.yaml'

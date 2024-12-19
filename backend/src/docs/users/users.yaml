@@ -1,0 +1,51 @@
+/search-user:
+  post:
+    $ref: './search-user.yaml'
+/search/{searchTerm}:
+  post:
+    $ref: './search.yaml'
+/addToSearchHistory:
+  put:
+    $ref: './addToSearchHistory.yaml'
+/getSearchHistory:
+  get:
+    $ref: './getSearchHistory.yaml'
+/removeFromSearchHistory:
+  put:
+    $ref: './removeFromSearchHistory.yaml'
+/getProfile/{username}:
+  get:
+    $ref: './getProfile.yaml'
+/updateProfilePicture:
+  put:
+    $ref: './updateProfilePicture.yaml'
+/updateCover:
+  put:
+   $ref: './updateCover.yaml'
+/updateDetails:
+  put:
+    $ref: './updateDetails.yaml'
+/addFriend/{id}:
+  put:
+   $ref: './addFriend.yaml'
+/acceptRequest/{id}:
+  put:
+    $ref: './acceptRequest.yaml'
+/cancelRequest/{id}:
+  put:
+    $ref: './cancelRequest.yaml'
+/follow/{id}:
+  put:
+    $ref: './follow.yaml'
+/unfollow/:id:
+  put:
+   $ref: './unfollow-route.yaml'
+/unfriend/{id}:
+  put:
+    $ref: './unfriend-route.yaml'
+/deleteRequest/{id}:
+  put:
+    $ref: './deleteRequest-route.yaml'
+/getFriendsPageInfos:
+  get:
+    $ref: './getFriendsPageInfos-route.yaml'

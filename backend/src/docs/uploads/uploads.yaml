@@ -1,0 +1,9 @@
+/uploadFile:
+  post:
+    $ref: './uploadFile.yaml'
+/uploadFilesToCloud:
+  post:
+    $ref: './uploadFilesToCloud.yaml'
+/listImages:
+  post:
+    $ref: './listImages.yaml'

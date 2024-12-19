@@ -1,0 +1,6 @@
+/getPostReactions/{id}:
+  get:
+    $ref: './get-post-reactions.yaml'
+/put-reaction:
+  put:
+    $ref: './put-reaction.yaml'
