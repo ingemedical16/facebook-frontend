@@ -18,7 +18,7 @@ const UserMenu:FC = () => {
 
   const handleLogout = () => {
     dispatch(logout());
-    navigate("/");
+    navigate("/login");
   };
     return (
         <div className= {styles.mmenu}>
