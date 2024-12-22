@@ -50,15 +50,15 @@ const EmojiPickerBackgrounds: FC<EmojiPickerBackgroundsProps> = ({
   };
 
   const postBackgrounds = [
-    "images/postbackgrounds/1.jpg",
-    "images/postbackgrounds/2.jpg",
-    "images/postbackgrounds/3.jpg",
-    "images/postbackgrounds/4.jpg",
-    "images/postbackgrounds/5.jpg",
-    "images/postbackgrounds/6.jpg",
-    "images/postbackgrounds/7.jpg",
-    "images/postbackgrounds/8.jpg",
-    "images/postbackgrounds/9.jpg",
+    "images/backgrounds/1.jpg",
+    "images/backgrounds/2.jpg",
+    "images/backgrounds/3.jpg",
+    "images/backgrounds/4.jpg",
+    "images/backgrounds/5.jpg",
+    "images/backgrounds/6.jpg",
+    "images/backgrounds/7.jpg",
+    "images/backgrounds/8.jpg",
+    "images/backgrounds/9.jpg",
   ];
 
   const backgroundHandler = (i: number): void => {
