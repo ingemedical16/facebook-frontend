@@ -9,6 +9,7 @@ import {
   useTabletLandscape,
 } from "./breakpoints";
 import {isValidImageType, isValidImageSize , fileToBase64} from "./imageHelpersFunction"
+import { handleFileUpload } from './handleFileUpload';
 
 export {
   hasMessageProperty,
@@ -21,5 +22,6 @@ export {
   useTabletLandscape,
   isValidImageType,
   isValidImageSize,
-  fileToBase64
+  fileToBase64,
+  handleFileUpload,
 };
