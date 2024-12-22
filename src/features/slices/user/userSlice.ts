@@ -7,6 +7,7 @@ import {
   resetMessageAndError,
   pendingResponse,
   rejectedResponse,
+  updateCover,
 } from "../../function";
 import { User } from "../../../types/User";
 
@@ -65,7 +66,19 @@ const userSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         rejectedResponse(state, action);
-      });
+      })
+      .addCase(updateCover.pending, (state) => {
+        pendingResponse(state);
+      })
+      .addCase(updateCover.fulfilled, (state, action) => {
+        resetMessageAndError(state);
+        state.loading = false;
+        state.user = state.user ? { ...state.user, cover: action.payload.data?.cover } : null;
+        state.message = action.payload.message;
+      })
+      .addCase(updateCover.rejected, (state, action) => {
+        rejectedResponse(state, action);
+      })
   },
 });
 

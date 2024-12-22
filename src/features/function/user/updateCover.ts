@@ -8,7 +8,7 @@ type UserData = { token: string; url: string };
 
 // Async thunk for email verification
 const updateCover = createAsyncThunk<
-  ResponseActionPayload,
+  ResponseActionPayload<{cover:string;}>,
   UserData,
   { rejectValue: ResponseActionPayload }
 >("users/updateCover", async (userData: UserData, { rejectWithValue }) => {
