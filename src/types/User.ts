@@ -1,5 +1,4 @@
-import { Post } from "./Post";
-import { FriendshipStatus } from "./types";
+
 
 export enum Gender {
   Male = "male",
@@ -31,7 +30,7 @@ export type savedPost = {
   savedAt: Date;
 };
 
-export type User = {
+export type User<T=string[]> = {
   id: string;
   first_name: string;
   last_name: string;
@@ -44,7 +43,7 @@ export type User = {
   birth_month: number;
   birth_day: number;
   verified?: boolean;
-  friends?: string[];
+  friends?:T ;
   following?: string[];
   followers?: string[];
   requests?: string[];
@@ -52,7 +51,4 @@ export type User = {
   savedPosts?: savedPost[];
 };
 
-export type Profile =  User & {
-  posts : Post[];
-  friendship:FriendshipStatus
-}
+
