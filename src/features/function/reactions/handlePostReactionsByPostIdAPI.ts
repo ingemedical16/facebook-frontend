@@ -9,7 +9,8 @@ const handlePostReactionsByPostIdAPI = async (
   userData: UserData
 ): Promise<ResponseActionPayload<ReactionsData>> => {
   try {
-    const response: AxiosResponse<ResponseActionPayload<ReactionsData>> = await axiosInstance.put(
+    const response: AxiosResponse<ResponseActionPayload<ReactionsData>> =
+      await axiosInstance.put(
         "/reactions/put-reaction",
         {
           postId: userData.postRef,
@@ -21,11 +22,12 @@ const handlePostReactionsByPostIdAPI = async (
           },
         }
       );
-      return response.data;
+    return { ...response.data, status: response.status };
   } catch (error) {
     console.error("Error uploading files to cloud:", error);
     throw new Error(
-      (error as any)?.response?.data?.message || "An unexpected error occurred while uploading files."
+      (error as any)?.response?.data?.message ||
+        "An unexpected error occurred while uploading files."
     );
   }
 };

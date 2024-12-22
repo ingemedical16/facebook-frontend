@@ -13,7 +13,7 @@ const updateCover = createAsyncThunk<
   { rejectValue: ResponseActionPayload }
 >("users/updateCover", async (userData: UserData, { rejectWithValue }) => {
   try {
-    const response: AxiosResponse = await axiosInstance.put(
+    const response: AxiosResponse<ResponseActionPayload<{ cover: string }>>  = await axiosInstance.put(
       "/users/updateCover",
       {
         url: userData.url,
@@ -24,7 +24,7 @@ const updateCover = createAsyncThunk<
         },
       }
     );
-    return response.data;
+    return {...response.data, status:response.status};
   } catch (error: any) {
     return rejectWithValue(
       error.response?.data ?? { message: "Unknown error" }

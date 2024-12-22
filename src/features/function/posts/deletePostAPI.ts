@@ -10,14 +10,14 @@ const deletePostAPI = async (
 ): Promise<AxiosResponse<ResponseActionPayload>> => {
   try {
     const response: AxiosResponse = await axiosInstance.delete(
-        `/posts/deletePost/${userData.id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${userData.token}`,
-          },
-        }
-      );
-      return response.data;
+      `/posts/deletePost/${userData.id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${userData.token}`,
+        },
+      }
+    );
+    return { ...response.data, status: response.status };
   } catch (error) {
     console.error("Error toggling save post:", error);
     throw new Error(

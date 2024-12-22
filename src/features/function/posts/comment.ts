@@ -11,10 +11,10 @@ type UserData = {
   image: string;
   postId: string;
 };
-type ResponseData =  {
-  comments: CommentType[]; 
-  postId: string 
-}
+type ResponseData = {
+  comments: CommentType[];
+  postId: string;
+};
 
 // Async thunk for email verification
 const comment = createAsyncThunk<
@@ -36,7 +36,7 @@ const comment = createAsyncThunk<
         },
       }
     );
-    return response.data;
+    return { ...response.data, status: response.status };
   } catch (error: any) {
     return rejectWithValue(
       error.response?.data ?? { message: "Unknown error" }

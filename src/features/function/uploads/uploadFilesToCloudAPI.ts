@@ -20,7 +20,8 @@ const uploadFilesToCloudAPI = async (
         },
       }
     );
-    return response.data;
+  
+    return {...response.data, status:response.status};
   } catch (error) {
     console.error("Error uploading files to cloud:", error);
     throw new Error(

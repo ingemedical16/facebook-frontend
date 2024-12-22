@@ -25,7 +25,7 @@ const uploadFile = createAsyncThunk<
         },
       }
     );
-    return response.data;
+    return {...response.data, status:response.status};
   } catch (error: any) {
     return rejectWithValue(
       error.response?.data ?? { message: "Unknown error" }

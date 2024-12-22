@@ -18,7 +18,7 @@ const toggleSavePostAPI = async (
         },
       }
     );
-    return response.data;
+    return { ...response.data, status: response.status };
   } catch (error) {
     console.error("Error toggling save post:", error);
     throw new Error(

@@ -5,11 +5,14 @@ import { AxiosResponse } from "axios";
 import { Post } from "../../../types/Post";
 import { ResponseActionPayload } from "../../../types/types";
 
-type UserData = Omit<Post<string> & { token: string, isProfile:boolean }, "_id">;
+type UserData = Omit<
+  Post<string> & { token: string; isProfile: boolean },
+  "_id"
+>;
 type ResponseData = {
   post: Post;
   isProfile: boolean;
-}
+};
 
 // Async thunk for email verification
 const createPost = createAsyncThunk<
@@ -34,7 +37,7 @@ const createPost = createAsyncThunk<
         },
       }
     );
-    return response.data;
+    return { ...response.data, status: response.status };
   } catch (error: any) {
     return rejectWithValue(
       error.response?.data ?? { message: "Unknown error" }

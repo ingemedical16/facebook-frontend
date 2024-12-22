@@ -9,7 +9,7 @@ type UserData = { token: string };
 
 // Async thunk for email verification
 const getAllPosts = createAsyncThunk<
-  ResponseActionPayload<{posts:Post[]}>,
+  ResponseActionPayload<{ posts: Post[] }>,
   UserData,
   { rejectValue: ResponseActionPayload }
 >("posts/getAllPosts", async (userData: UserData, { rejectWithValue }) => {
@@ -22,7 +22,7 @@ const getAllPosts = createAsyncThunk<
         },
       }
     );
-    return response.data;
+    return { ...response.data, status: response.status };
   } catch (error: any) {
     return rejectWithValue(
       error.response?.data ?? { message: "Unknown error" }

@@ -6,6 +6,7 @@ export interface ResponseActionPayload<T = any> {
   message: string;
   code: string;
   data?: T;
+  status:number;
 }
 
 export interface FriendshipStatus {
