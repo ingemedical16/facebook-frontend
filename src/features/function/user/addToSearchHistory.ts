@@ -16,8 +16,10 @@ const addToSearchHistory = createAsyncThunk<
   async (userData: UserData, { rejectWithValue }) => {
     try {
       const response: AxiosResponse = await axiosInstance.put(
-        `/users/search/${userData.searchTerm}`,
-        {},
+        `/users/addToSearchHistory`,
+        {
+          searchUser: userData.searchTerm,
+        },
         {
           headers: {
             Authorization: `Bearer ${userData.token}`,
