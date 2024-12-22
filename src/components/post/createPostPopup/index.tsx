@@ -75,7 +75,7 @@ const CreatePostPopup: FC<CreatePostPopupProps> = ({
           formData,
           token,
         });
-console.log("image url",response)
+
         const res = await dispatch(
           createPost({
             type: null,
@@ -112,8 +112,7 @@ console.log("image url",response)
   };
 
   const handleResponse = (result: any) => {
-    if (result.payload) {
-      console.log(result.payload);
+    if (result.payload.status === 200) {
       resetForm();
     } else {
       setError("An error occurred while creating the post.");
