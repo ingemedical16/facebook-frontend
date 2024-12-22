@@ -30,3 +30,10 @@ export interface FriendshipStatus {
     total_count: number;
     time: number;
   };
+
+
+export interface Photo {
+  folder: string;
+  secure_url: string;
+  public_id: string;
+}
