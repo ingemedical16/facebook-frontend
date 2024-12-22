@@ -18,4 +18,35 @@ export const isValidImageType = (type: string): boolean => {
       reader.onerror = (error) => reject(error);
     });
   };
+
+  export const createImage = (url: string): Promise<HTMLImageElement> =>
+    new Promise((resolve, reject) => {
+      const image = new Image();
+      image.addEventListener("load", () => resolve(image));
+      image.addEventListener("error", (error) => reject(error));
+      image.setAttribute("crossOrigin", "anonymous"); // Avoid cross-origin issues
+      image.src = url;
+    });
+  
+  export function getRadianAngle(degreeValue: number): number {
+    return (degreeValue * Math.PI) / 180;
+  }
+  
+  /**
+   * Returns the new bounding area of a rotated rectangle.
+   */
+  export function rotateSize(
+    width: number,
+    height: number,
+    rotation: number
+  ): { width: number; height: number } {
+    const rotRad = getRadianAngle(rotation);
+  
+    return {
+      width:
+        Math.abs(Math.cos(rotRad) * width) + Math.abs(Math.sin(rotRad) * height),
+      height:
+        Math.abs(Math.sin(rotRad) * width) + Math.abs(Math.cos(rotRad) * height),
+    };
+  }
   

@@ -37,3 +37,15 @@ export interface Photo {
   secure_url: string;
   public_id: string;
 }
+
+export interface PixelCrop {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+export interface Flip {
+  horizontal: boolean;
+  vertical: boolean;
+}

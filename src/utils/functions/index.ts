@@ -10,7 +10,7 @@ import {
 } from "./breakpoints";
 import {isValidImageType, isValidImageSize , fileToBase64} from "./imageHelpersFunction"
 import { handleFileUpload } from './handleFileUpload';
-
+import getCroppedImg from "./getCroppedImg"
 export {
   hasMessageProperty,
   dataURItoBlob,
@@ -24,4 +24,5 @@ export {
   isValidImageSize,
   fileToBase64,
   handleFileUpload,
+  getCroppedImg
 };
