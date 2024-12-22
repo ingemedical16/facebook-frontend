@@ -1,8 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
 import { axiosInstance } from "../../../api/axios";
-import { Profile } from "../../../types/User";
 import { ResponseActionPayload } from "../../../types/types";
+import { Profile } from "../../../types/Profile";
 
 type UserData = { token: string; username: string };
 
