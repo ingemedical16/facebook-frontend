@@ -1,6 +1,7 @@
 import { FC, useRef } from "react";
 import styles from "../CreatePostPopup.module.css";
 import EmojiPickerBackgrounds from "../emojiPickerBackgrounds";
+import { handleFileUpload } from "../../../../utils/functions";
 
 export type ImagePreviewProps = {
   text: string;
@@ -22,35 +23,12 @@ const ImagePreview: FC<ImagePreviewProps> = ({
   const imageInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleImages = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files ? Array.from(e.target.files) : [];
-    files.forEach((img) => {
-      if (
-        img.type !== "image/jpeg" &&
-        img.type !== "image/png" &&
-        img.type !== "image/webp" &&
-        img.type !== "image/gif"
-      ) {
-        setError(
-          `${img.name} format is unsupported! Only Jpeg, Png, Webp, and Gif are allowed.`
-        );
-        return;
-      }
-
-      if (img.size > 1024 * 1024 * 5) {
-        setError(`${img.name} size is too large. Maximum 5MB allowed.`);
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.readAsDataURL(img);
-
-      reader.onload = (readerEvent) => {
-        const result = readerEvent.target?.result as string;
-        if (result) {
-          setImages((prevImages) => [...prevImages, result]);
-        }
-      };
-    });
+    handleFileUpload(
+      e,
+      (errorMessage) => setError(errorMessage), // Error handler
+      (base64Image) => setImages((prev) => [...prev, base64Image]), // Success handler
+      { maxSizeMB: 5 } // Optional max size
+    );
   };
 
   return (
