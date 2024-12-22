@@ -8,6 +8,7 @@ import {
   useTablet,
   useTabletLandscape,
 } from "./breakpoints";
+import {isValidImageType, isValidImageSize , fileToBase64} from "./imageHelpersFunction"
 
 export {
   hasMessageProperty,
@@ -18,4 +19,7 @@ export {
   useIsTabletOrDesktop,
   useTablet,
   useTabletLandscape,
+  isValidImageType,
+  isValidImageSize,
+  fileToBase64
 };
