@@ -8,8 +8,10 @@ import {
   createPost,
   searchImagesInCloud,
 } from "../../function";
-import { Profile } from "../../../types/User";
-import { SearchApiResource } from "../../../types/types";
+
+import { FriendshipStatus, SearchApiResource } from "../../../types/types";
+import { Profile } from "../../../types/Profile";
+import { Gender } from "../../../types/User";
 
 interface profileState {
   profile: Profile | null;
@@ -46,10 +48,31 @@ const profileSlice = createSlice({
         pendingResponse(state);
       })
       .addCase(getProfileByUsername.fulfilled, (state, action) => {
-     
+
         resetMessageAndError(state);
         state.loading = false;
-        state.profile = action.payload.data || null;
+        state.profile = {
+          ...action.payload.data,
+          _id: action.payload.data?._id ?? "",
+          first_name: action.payload.data?.first_name ?? "",
+          last_name: action.payload.data?.last_name?? "",
+          username: action.payload.data?.username??"",
+          email: action.payload.data?.email?? "",
+          gender: action.payload.data?.gender ?? Gender.Other,
+          birth_day: action.payload.data?.birth_day ?? 1,
+          birth_month: action.payload.data?.birth_month?? 1,
+          birth_year: action.payload.data?.birth_year?? new Date().getFullYear(),
+          picture: action.payload.data?.picture?? "",
+          posts: action.payload.data?.posts?? [],
+          friendship: action.payload.data?.friendship?? {
+            friends: action.payload.data?.friendship?.friends?? false,
+            following: action.payload.data?.friendship?.following?? false,
+            requestSent: action.payload.data?.friendship?.requestSent?? false,
+            requestReceived: action.payload.data?.friendship?.requestReceived?? false,
+          } as FriendshipStatus,
+          
+          
+        } ;
         state.message = action.payload.message;
       })
       .addCase(getProfileByUsername.rejected, (state, action) => {

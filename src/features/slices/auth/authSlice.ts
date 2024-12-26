@@ -24,7 +24,7 @@ interface AuthState {
 const persistedAuth = getUserFromCookies();
 
 const initialState: AuthState = {
-  isAuthenticated: persistedAuth?.user ? true : false,
+  isAuthenticated: persistedAuth?.token ? true : false,
   token: persistedAuth?.token || null,
   loading: false,
   error: null,
