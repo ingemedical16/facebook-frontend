@@ -10,6 +10,7 @@ import NotLoggedInRoutes from "./routes/NotLoggedInRoutes";
 import { useSelector } from "react-redux";
 import { RootState } from "./app/store";
 import CreatePostPopup from "./components/post/createPostPopup";
+import ProfilePage from "./pages/profile";
 
 const App: React.FC = () => {
   const [createPostPopupVisible, setCreatePostPopupVisible] = useState(false);
@@ -31,6 +32,8 @@ const App: React.FC = () => {
               path="/verify-email/:verifyToken"
               element={<VerifyEmail />}
             />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/profile/:username" element={<ProfilePage />} />
             <Route
               path="/"
               element={
