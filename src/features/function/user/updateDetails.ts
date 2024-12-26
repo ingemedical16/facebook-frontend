@@ -9,7 +9,7 @@ type UserData = { token: string; infos: UserDetails };
 
 // Async thunk for email verification
 const updateDetails = createAsyncThunk<
-  ResponseActionPayload,
+  ResponseActionPayload<{details:UserDetails}>,
   UserData,
   { rejectValue: ResponseActionPayload }
 >("users/updateDetails", async (userData: UserData, { rejectWithValue }) => {

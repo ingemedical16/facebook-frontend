@@ -7,7 +7,7 @@ import { ResponseActionPayload } from "../../../types/types";
 // Define types for user data
 type UserData = Omit<
   User & { password: string },
-  "id" | "verified" | "username"
+  "_id" | "verified" | "username"
 >;
 type ResponseData = {
   token: string

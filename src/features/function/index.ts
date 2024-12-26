@@ -50,6 +50,7 @@ import {
   uploadFilesToCloud,
   searchImagesInCloud,
   uploadFilesToCloudAPI,
+  searchImagesInCloudAPI
 } from "./uploads";
 
 // Export all modules for easy importing in other parts of your application that require
@@ -97,4 +98,5 @@ export {
   deletePostAPI,
   getReactionsAPI,
   handlePostReactionsByPostIdAPI,
+  searchImagesInCloudAPI,
 };
