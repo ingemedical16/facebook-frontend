@@ -182,20 +182,23 @@
 .bottom_container {
   padding: 10px 2.2rem;
 }
-.pplumayknow_list {
+.discoverPeople_list {
   display: flex;
+  justify-content: center;
   gap: 5px;
   align-items: center;
   height: 240px;
 }
-.pplumayknow {
+.discoverPeople {
+  margin-top: 20px;
+  margin-bottom: 10px;
   width: 100%;
   height: 100%;
   border-radius: 10px;
   border: 3px solid var(--blue-color);
   padding: 10px 15px;
 }
-.pplumayknow_header {
+.discoverPeople_header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -233,7 +236,7 @@
 .light_blue_btn img {
   width: 20px;
 }
-.pplumayknow_list .light_blue_btn {
+.discoverPeople_list {
   color: var(--blue-color);
 }
 .profile_grid {
@@ -241,6 +244,12 @@
   display: grid;
   grid-template-columns: 1fr 1.4fr;
   gap: 10px;
+}
+.posts {
+  margin-top: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  justify-self: center;
 }
 /*------ppl u may know------*/
 .left_header_grid {
@@ -306,6 +315,18 @@
 }
 .profile_header_link:hover {
   background: var(--bg-secondary);
+}
+.createPost_header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 17px 5px 15px;
+}
+.createPost_header img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 .profile_card_count {
   color: var(--color-secondary);
@@ -425,6 +446,17 @@
   color: var(--blue-color);
   border-bottom: 3px solid var(--blue-color);
 }
+.create_splitter {
+  height: 1px;
+  width: 95%;
+  background: var(--bg-third);
+  margin: 7px 10px;
+}
+.createPost_body {
+  padding: 0 10px 8px 10px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
 
 /*-----profile card--------*/
 @media (max-width: 900px) {
@@ -449,7 +481,7 @@
     padding-bottom: 10px;
     flex-direction: column;
   }
-  .pplumayknow {
+  .discoverPeople {
     display: none;
   }
   .profile_grid {

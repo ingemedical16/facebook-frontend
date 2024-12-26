@@ -38,7 +38,7 @@ const OldCovers: React.FC<OldCoversProps> = ({ photos, setCoverPicture, setShow 
         <div className={`${styles.old_pictures_wrap} ${styles.scrollbar}`}>
           <div className={styles.old_pictures}>
             {photos
-              .filter((img) => img.folder === `${user?.username}/cover_pictures`)
+              .filter((img) => img.asset_folder === `${user?.username}/cover_pictures`)
               .map((photo) => (
                 <img
                   src={photo.secure_url}
@@ -53,7 +53,7 @@ const OldCovers: React.FC<OldCoversProps> = ({ photos, setCoverPicture, setShow 
           </div>
           <div className={styles.old_pictures}>
             {photos
-              .filter((img) => img.folder !== `${user?.username}/post_images`)
+              .filter((img) => img.asset_folder !== `${user?.username}/post_images`)
               .map((photo) => (
                 <img
                   src={photo.secure_url}

@@ -1,11 +1,9 @@
 import React from "react";
 import styles from "../Profile.module.css"
+import { Story } from "../../../types/types";
 
 interface AddFriendSmallCardProps {
-  item: {
-    profile_picture: string;
-    profile_name: string;
-  };
+  item:Story;
 }
 
 const AddFriendSmallCard: React.FC<AddFriendSmallCardProps> = ({ item }) => {
@@ -15,13 +13,13 @@ const AddFriendSmallCard: React.FC<AddFriendSmallCardProps> = ({ item }) => {
   return (
     <div className={ styles.addfriendCard}>
       <div className={ styles.addfriend_imgsmall}>
-        <img src={item.profile_picture} alt={`${item.profile_name}'s profile`} />
+        <img src={`/${item.profile_picture}`} alt={`${item.profile_name}'s profile`} />
         <div className={ styles.addfriend_infos}>
           <div className={ styles.addfriend_name}>
             {truncateName(item.profile_name, 11)}
           </div>
           <div className={ `btn btn-primary ${styles.light_blue_btn}`}>
-            <img src="icons/addFriend.png" alt="Add friend icon" className={ styles.filter_blue} />
+            <img src="/icons/addFriend.png" alt="Add friend icon" className={ styles.filter_blue} />
             Add Friend
           </div>
         </div>

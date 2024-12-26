@@ -115,7 +115,7 @@ const Cover: React.FC<CoverProps> = ({ cover, visitor, photos }) => {
         const newPost = await dispatch(createPost({
           type: "coverPicture",
           images: [coverImageUrl],
-          user: user?.id as string,
+          user: user?._id as string,
           token: token as string,
           comments: [],
           isProfile: false,
