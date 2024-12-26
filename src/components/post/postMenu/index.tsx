@@ -25,7 +25,7 @@ export default function PostMenu({
 }: PostMenuProps) {
   const user = useSelector((state: RootState) => state.user.user);
   const token = useSelector((state: RootState) => state.auth.token);
-  const [test] = useState(post._id === user?.id);
+  const [test] = useState(post._id === user?._id);
 
   const menu = useRef<HTMLUListElement>(null);
   useClickOutside(menu, () => setShowMenu(false));
@@ -83,7 +83,7 @@ export default function PostMenu({
       {post.images?.length && (
         <PostMenuItem icon="fullscreen_icon" title="Enter Fullscreen" />
       )}
-      {test && <PostMenuItem img="icons/lock.png" title="Edit audience" />}
+      {test && <PostMenuItem img="/icons/lock.png" title="Edit audience" />}
       {test && (
         <PostMenuItem
           icon="turnOffNotifications_icon"
@@ -110,7 +110,7 @@ export default function PostMenu({
       {!test && <div className={styles.line}></div>}
       {!test && (
         <PostMenuItem
-          img="icons/report.png"
+          img="/icons/report.png"
           title="Report post"
           subtitle="I'm concerned about this post."
         />

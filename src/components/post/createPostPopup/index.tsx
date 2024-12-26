@@ -42,7 +42,7 @@ const CreatePostPopup: FC<CreatePostPopupProps> = ({
   });
 
   const postSubmit = async () => {
-    if (!user?.id || !token) {
+    if (!user?._id || !token) {
       setError("User is not authenticated.");
       return;
     }
@@ -57,7 +57,7 @@ const CreatePostPopup: FC<CreatePostPopupProps> = ({
             type: null,
             background,
             text,
-            user: user.id,
+            user: user._id,
             comments: [],
             isProfile,
             token,
@@ -81,7 +81,7 @@ const CreatePostPopup: FC<CreatePostPopupProps> = ({
             type: null,
             text,
             images: getImagesUrl({ files: response.data?.files }),
-            user: user.id,
+            user: user._id,
             comments: [],
             isProfile,
             token,
@@ -93,7 +93,7 @@ const CreatePostPopup: FC<CreatePostPopupProps> = ({
           createPost({
             type: null,
             text,
-            user: user.id,
+            user: user._id,
             comments: [],
             isProfile,
             token,
@@ -147,7 +147,7 @@ const CreatePostPopup: FC<CreatePostPopupProps> = ({
               {user?.first_name} {user?.last_name}
             </div>
             <div className={styles.box_privacy}>
-              <img src="icons/public.png" alt="" />
+              <img src="/icons/public.png" alt="" />
               <span>Public</span>
               <i className="arrowDown_icon"></i>
             </div>

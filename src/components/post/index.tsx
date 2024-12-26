@@ -124,7 +124,7 @@ const Post: React.FC<PostProps> = ({ post, isProfile }) => {
         >
           {check ? (
             <img
-              src={`reacts/${check}.svg`}
+              src={`/reacts/${check}.svg`}
               alt=""
               className={styles.small_react}
               style={{ width: "18px" }}

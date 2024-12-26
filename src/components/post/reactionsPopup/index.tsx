@@ -8,27 +8,27 @@ type ReactType = {
 const reactsArray: ReactType[] = [
   {
     name: ReactionEnum.like,
-    image: "reacts/like.gif",
+    image: "/reacts/like.gif",
   },
   {
     name: ReactionEnum.love,
-    image: "reacts/love.gif",
+    image: "/reacts/love.gif",
   },
   {
     name: ReactionEnum.haha,
-    image: "reacts/haha.gif",
+    image: "/reacts/haha.gif",
   },
   {
     name: ReactionEnum.wow,
-    image: "reacts/wow.gif",
+    image: "/reacts/wow.gif",
   },
   {
     name: ReactionEnum.sad,
-    image: "reacts/sad.gif",
+    image: "/reacts/sad.gif",
   },
   {
     name: ReactionEnum.angry,
-    image: "reacts/angry.gif",
+    image: "/reacts/angry.gif",
   },
 ];
 type ReactsPopupProps = {

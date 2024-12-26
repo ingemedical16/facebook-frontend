@@ -50,21 +50,24 @@ const EmojiPickerBackgrounds: FC<EmojiPickerBackgroundsProps> = ({
   };
 
   const postBackgrounds = [
-    "images/backgrounds/1.jpg",
-    "images/backgrounds/2.jpg",
-    "images/backgrounds/3.jpg",
-    "images/backgrounds/4.jpg",
-    "images/backgrounds/5.jpg",
-    "images/backgrounds/6.jpg",
-    "images/backgrounds/7.jpg",
-    "images/backgrounds/8.jpg",
-    "images/backgrounds/9.jpg",
+    { bg : "/images/backgrounds/1.jpg", color: "#FFF" },
+    { bg : "/images/backgrounds/2.jpg", color: "#FFF" },
+    { bg : "/images/backgrounds/3.jpg", color: "#FFF" },
+    { bg : "/images/backgrounds/4.jpg", color: "#FFF" },
+    { bg : "/images/backgrounds/5.jpg", color: "#FFF" },
+    { bg : "/images/backgrounds/6.jpg", color: "#FFF" },
+    { bg : "/images/backgrounds/7.jpg", color: "#FFF" },
+    { bg : "/images/backgrounds/8.jpg", color: "#FFF" },
+    { bg : "/images/backgrounds/9.jpg", color: "#FFF" },
   ];
 
   const backgroundHandler = (i: number): void => {
     if (bgRef.current) {
-      bgRef.current.style.backgroundImage = `url(${postBackgrounds[i]})`;
-      setBackground && setBackground(postBackgrounds[i]);
+      bgRef.current.style.backgroundImage = `url(${postBackgrounds[i].bg})`;
+      if (textRef.current) {
+        textRef.current.style.color = postBackgrounds[i].color;
+      }
+      setBackground && setBackground(postBackgrounds[i].bg);
       bgRef.current.classList.add("bgHandler");
     }
   };
@@ -108,7 +111,7 @@ const EmojiPickerBackgrounds: FC<EmojiPickerBackgroundsProps> = ({
         )}
         {!isType2 && (
           <img
-            src="icons/colorful.png"
+            src="/icons/colorful.png"
             alt="Background Options"
             onClick={() => setShowBgs((prev) => !prev)}
           />
@@ -118,7 +121,7 @@ const EmojiPickerBackgrounds: FC<EmojiPickerBackgroundsProps> = ({
             <div className={styles.no_bg} onClick={removeBackground}></div>
             {postBackgrounds.map((bg, i) => (
               <img
-                src={bg}
+                src={bg.bg}
                 key={i}
                 alt={`Background ${i + 1}`}
                 onClick={() => backgroundHandler(i)}

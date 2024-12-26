@@ -84,7 +84,7 @@ const ImagePreview: FC<ImagePreviewProps> = ({
               }
             >
               {images.map((img, i) => (
-                <img src={img} key={i} alt="" />
+                <img src={`/${img}`} key={i} alt="" />
               ))}
             </div>
           </div>

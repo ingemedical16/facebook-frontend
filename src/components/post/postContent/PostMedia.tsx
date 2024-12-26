@@ -51,7 +51,7 @@ const PostMedia: React.FC<PostMediaProps> = ({ post }) => {
           }
         >
           {post.images?.slice(0, 5).map((image, i) => (
-            <img src={image} key={i} alt="" className={styles[`img-${i}`]} />
+            <img src={`${image}`} key={i} alt="" className={styles[`img-${i}`]} />
           ))}
           {post.images && post.images.length > 5 && (
             <div className={styles.more_pics_shadow}>
