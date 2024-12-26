@@ -60,7 +60,7 @@ const Login: FC<LoginProps> = ({ setVisible }) => {
     <div className={styles.login}>
       <div className={styles.wrapper}>
         <div className={styles.iconContainer}>
-          <img src="icons/facebook.svg" alt="Facebook" />
+          <img src="/icons/facebook.svg" alt="Facebook" />
           <span>
             Facebook helps you connect and share with the people in your life.
           </span>

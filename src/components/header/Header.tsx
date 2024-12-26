@@ -26,7 +26,6 @@ import UserMenu from "./userMenu";
 
 type HeaderProps = {
   page?: string;
-  getAllPosts?: () => void;
 };
 
 const color = "#65676b";

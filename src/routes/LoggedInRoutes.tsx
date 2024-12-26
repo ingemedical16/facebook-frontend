@@ -4,9 +4,9 @@ import { Outlet, Navigate } from "react-router-dom";
 import { FC } from "react";
 
 const LoggedInRoutes: FC = () => {
-  const user = useSelector((state: RootState) => state.user.user);
+  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
 
-  return user ? <Outlet /> : <Navigate to="/login" />;
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
 };
 
 export default LoggedInRoutes;

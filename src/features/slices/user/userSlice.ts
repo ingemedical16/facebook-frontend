@@ -8,6 +8,7 @@ import {
   pendingResponse,
   rejectedResponse,
   updateCover,
+  updateDetails,
 } from "../../function";
 import { User } from "../../../types/User";
 
@@ -77,6 +78,19 @@ const userSlice = createSlice({
         state.message = action.payload.message;
       })
       .addCase(updateCover.rejected, (state, action) => {
+        rejectedResponse(state, action);
+      })
+      .addCase(updateDetails.pending, (state) => {
+        pendingResponse(state);
+      })
+      .addCase(updateDetails.fulfilled, (state, action) => {
+        resetMessageAndError(state);
+        state.loading = false;
+        state.message = action.payload.message;
+        state.user = state.user ? { ...state.user, details: action.payload.data?.details } : null;
+        
+      })
+      .addCase(updateDetails.rejected, (state, action) => {
         rejectedResponse(state, action);
       })
   },
