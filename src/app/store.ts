@@ -4,12 +4,14 @@ import userReducer from "../features/slices/user/userSlice";
 import themeReducer from "../features/slices/theme/themeSlice";
 import searchReducer from "../features/slices/search/searchSlice";
 import postsReducer from "../features/slices/posts/postsSlice";
+import profileReducer from "../features/slices/profile/profileSlice";
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     posts:postsReducer,
     user: userReducer,
+    profile:profileReducer,
     theme: themeReducer,
     search: searchReducer,
   },
