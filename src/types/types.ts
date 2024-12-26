@@ -22,6 +22,7 @@ export type SearchApiResource = {
   height: number;
   created_at: string;
   secure_url: string;
+  asset_folder:string
   url: string;
   [key: string]: any; // Allow additional fields for flexibility
 };
@@ -33,7 +34,7 @@ export type SearchApiResponse = {
 };
 
 export interface Photo {
-  folder: string;
+  asset_folder: string;
   secure_url: string;
   public_id: string;
 }
@@ -55,3 +56,4 @@ export interface Story {
   profile_name: string;
   image: string;
 }
+

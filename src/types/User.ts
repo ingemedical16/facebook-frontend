@@ -31,7 +31,7 @@ export type savedPost = {
 };
 
 export type User<T=string[]> = {
-  id: string;
+  _id: string;
   first_name: string;
   last_name: string;
   username: string;
