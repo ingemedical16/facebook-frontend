@@ -27,14 +27,17 @@ const Biography: React.FC<BiographyProps> = ({
   setShow,
   rel = false,
 }) => {
-   
+   const getValueByName = (name: string) =>{
+    const hasProprietary = infos && infos.hasOwnProperty(name)
+    return hasProprietary? infos[name] : "";
+   }
   return (
     <div className={styles.add_bio_wrap}>
       {rel ? (
         <select
           className={styles.select_rel}
           name={name}
-          value={infos.relationShip || ""}
+          value={getValueByName("relationShip") }
           onChange={handleChange}
         >
           <option value={Relationship.Single}>Single</option>
@@ -47,7 +50,7 @@ const Biography: React.FC<BiographyProps> = ({
         <textarea
           placeholder={placeholder}
           name={name}
-          value={infos && infos[name] || ""}
+          value={getValueByName(name)}
           maxLength={detail ? 25 : 100}
           className={`${styles.textarea_blue} ${styles.details_input}`}
           onChange={handleChange}
