@@ -9,7 +9,7 @@ export  type  LeftLinkProps = {
 const LeftLink:FC<LeftLinkProps> = ({linkImage, text,notification}) => {
     return (
        <div className={`${styles.left_link} hover2`}>
-      <img src={`left/${linkImage}.png`} alt="" />
+      <img src={`/left/${linkImage}.png`} alt="" />
       {notification !== undefined ? (
         <div className={styles.col}>
           <div className={styles.col_1}>{text}</div>

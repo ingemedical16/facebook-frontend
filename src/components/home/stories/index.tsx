@@ -11,7 +11,7 @@ const Stories:FC = () => {
         <div className={styles.stories}>
           <div className={styles.create_story_card}>
             <img
-              src="images/default_pic.png"
+              src="/images/default_pic.png"
               alt=""
               className={styles.create_story_img}
             />

@@ -65,21 +65,21 @@ const LeftHome:FC = () => {
             </div>
           </div>
         )}
-        <div className="splitter"></div>
-        <div className="shortcut">
-          <div className="heading">Your Shortcuts</div>
-          <div className="edit_shortcut">Edit</div>
+        <div className={styles.splitter}></div>
+        <div className={styles.shortcut}>
+          <div className={styles.heading}>Your Shortcuts</div>
+          <div className={styles.edit_shortcut}>Edit</div>
         </div>
-        <div className="shortcut_list">
+        <div className={styles.shortcut_list}>
           <Shortcut
             link="https://www.youtube.com/"
-            linkImage="images/ytb.png"
+            linkImage="/images/ytb.png"
             name="My Youtube channel"
           />
   
           <Shortcut
             link="https://www.instagram.com"
-            linkImage="images/insta.png"
+            linkImage="/images/insta.png"
             name="My Instagram "
           />
         </div>

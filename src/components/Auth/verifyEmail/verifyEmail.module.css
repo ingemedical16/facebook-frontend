@@ -1,51 +1,85 @@
 /* VerifyEmail.module.css */
 
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f9f9f9;
-    padding: 20px;
-  }
-  
-  .content {
-    text-align: center;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background: #fff;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .loadingText {
-    font-size: 1.2rem;
-    color: #555;
-  }
-  
-  .message {
-    font-size: 1.2rem;
-    color: #333;
-  }
-  
-  .mobile {
-    width: 90%;
-    font-size: 1rem;
-  }
-  
-  .desktop {
-    width: 50%;
-    font-size: 1.5rem;
+
+
+  .home {
+    min-height: 100vh;
+    background: var(--bg-secondary);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
   }
 
-  .errorText {
-    position: relative;
-    padding: 15px 10px;
-    background: #b94a48;
-    width: 100%;
-    color: #fff;
-    font-size: 13px;
-    border-radius: 5px;
-    margin-bottom: 15px;
+  .home_middle {
+    margin-top: 75px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
   }
+  /*-----Activate popup----*/
+  .popup {
+    position: relative;
+    background: var(--bg-primary);
+    box-shadow: 0 1px 2px var(--shadow-1);
+    width: 40vw;
+    height: 200px;
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 99;
+    text-align: center;
+    border-radius: 10px;
+  }
+  .popup_header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    border-bottom: 1px solid var(--bg-third);
+    padding: 15px;
+  }
+  .popup_message {
+    padding: 15px;
+    font-weight: 500;
+  }
+  /*-----Activate popup----*/
   
+  @media (max-width: 1175px) {
+    
+      .home_middle {
+        margin-left: 5%;
+      }
+    
+  }
+
+  @media (max-width: 1030px) {
+
+      .home_middle {
+        position: relative;
+        margin-left: 55px;
+      }
+  }
+  @media (max-width: 960px) {
+
+      .home_middle {
+        margin-left: 10%;
+      }
+  }
+  @media (max-width: 885px) {
+
+     .home_middle {
+        margin-left: 9%;
+      }
+  }
+  @media (max-width: 620px) {
+
+      .home_middle {
+        margin-left: 0;
+      }
+  }
+  @media (max-width: 400px) {
+    .home_middle {
+      width: 98%;
+      margin: 56px auto;
+    }
+  }

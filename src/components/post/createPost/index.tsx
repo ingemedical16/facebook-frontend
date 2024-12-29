@@ -5,7 +5,7 @@ import { Feeling, LiveVideo, Photo } from "../../svg";
 import { RootState } from "../../../app/store";
 
 export type CreatePostProps = {
-    setCreatePostPopupVisible:(isVisible:boolean) => void;
+    setCreatePostPopupVisible?:(isVisible:boolean) => void;
     profile?: boolean;
 }
 
@@ -18,7 +18,7 @@ const CreatePost:FC<CreatePostProps> = ({setCreatePostPopupVisible,profile = fal
             <div
               className={`${styles.open_post} hover2`}
               onClick={() => {
-                setCreatePostPopupVisible(true);
+                setCreatePostPopupVisible && setCreatePostPopupVisible(true);
               }}
             >
               What's on your mind, {user?.first_name}

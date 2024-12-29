@@ -1,12 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom"; 
 import { useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../app/store";
 import { verifyEmail } from "../../../features/function"; // Adjust the path to your authSlice
 import styles from "./verifyEmail.module.css";
 import { useDispatch } from "react-redux";
-import { useDesktop, useMobile } from "../../../utils/functions/breakpoints";
 import { showToast, ToastType } from "../../../utils/toast/showToast";
+import ActivateForm from "./ActivateForm";
+import Header from "../../header/Header";
+import LeftHome from "../../home/left";
+import Stories from "../../home/stories";
+import CreatePost from "../../post/createPost";
+import RightHome from "../../home/right";
 
 
 const VerifyEmail: React.FC = () => {
@@ -16,8 +21,8 @@ const VerifyEmail: React.FC = () => {
     const { loading, error, message,token } = useSelector(
         (state: RootState) => state.auth
       );
-      const isMobile = useMobile();
-      const isDesktop = useDesktop();
+      const [success, setSuccess] = useState<string>();
+      
       
       //Invalid Authentication
     useEffect(() => {
@@ -33,7 +38,7 @@ const VerifyEmail: React.FC = () => {
           const checkMail = async ()=>{
             const result = await dispatch(verifyEmail({ token, verifyToken }))
             if (verifyEmail.fulfilled.match(result)) {
-
+              setSuccess(result.payload.message)
              showToast(result.payload.message, ToastType.SUCCESS);
             }else {
                 if (typeof result.payload === "string") {
@@ -60,15 +65,31 @@ const VerifyEmail: React.FC = () => {
         }, [dispatch, navigate, token,verifyToken]);
       
         return (
-          <div className={styles.container}>
-            <div className={`${styles.content} ${isMobile ? styles.mobile : isDesktop ? styles.desktop : ""}`}>
-              {loading && (
-                <p className={styles.loadingText}>Verifying your email, please wait...</p>
-              ) }
-              {error && <p className={styles.errorText}>{error}</p> }
-              {message &&<p className={styles.message}>{message}</p> }
-            </div>
+          <div className={styles.home}>
+          {success && (
+            <ActivateForm
+              type="success"
+              header="Account verification succeded."
+              text={success}
+              loading={loading}
+            />
+          )}
+          {error && (
+            <ActivateForm
+              type="error"
+              header="Account verification failed."
+              text={error}
+              loading={loading}
+            />
+          )}
+          <Header />
+          <LeftHome />
+          <div className={styles.home_middle}>
+            <Stories />
+            <CreatePost  />
           </div>
+          <RightHome  />
+        </div>
         );
       };
       
