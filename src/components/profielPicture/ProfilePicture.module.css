@@ -118,6 +118,7 @@
 }
 .slider input[type="range"] {
   -webkit-appearance: none;
+  appearance: none;
   width: 55%;
   height: 4px;
   background: #ced0d4;

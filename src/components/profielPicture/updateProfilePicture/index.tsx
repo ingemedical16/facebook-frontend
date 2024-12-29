@@ -6,7 +6,7 @@ import PulseLoader from "react-spinners/PulseLoader";
 
 import styles from "../ProfilePicture.module.css"; // Ensure CSS module usage
 import { AppDispatch, RootState } from "../../../app/store";
-import { dataURItoBlob, getCroppedImg } from "../../../utils/functions";
+import {  getCroppedImg } from "../../../utils/functions";
 import {
   uploadFilesToCloudAPI,
   updateProfilePicture,
