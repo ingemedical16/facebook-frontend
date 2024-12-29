@@ -19,7 +19,7 @@ const PostInfo: React.FC<PostInfoProps> = ({
         {reactions?.slice(0, 3).map((react, i) => (
           <img
             className={styles.reacts_count_imgs_img}
-            src={`reacts/${react.reaction}.svg`}
+            src={`/reacts/${react.reaction}.svg`}
             alt=""
             key={i}
           />
