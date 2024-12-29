@@ -12,7 +12,7 @@ import { Profile as ProfileType } from "../../types/Profile";
 import { UserDetails } from "../../types/User";
 import {
   getProfileByUsername,
-  searchImagesInCloudAPI,
+  searchImagesInCloud,
 } from "../../features/function";
 import Header from "../header/Header";
 import CreatePostPopup from "../post/createPostPopup";
@@ -38,9 +38,10 @@ const Profile: FC = () => {
   const user = useSelector((state: RootState) => state.user.user);
   const token = useSelector((state: RootState) => state.auth.token);
   const dispatch = useDispatch<AppDispatch>();
-  const [photos, setPhotos] = useState<SearchApiResponse>();
-  const [profile, setProfile] = useState(userProfile);
+  const [photos, setPhotos] = useState<SearchApiResponse | null>(null);
+  const [profile, setProfile] = useState<ProfileType | null>(userProfile || null);
   const userName = username ?? user?.username;
+
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -52,30 +53,42 @@ const Profile: FC = () => {
           })
         );
 
-        if (res.payload?.status !== 200) navigate("/profile");
-      
-        setProfile(res.payload?.data);
-        const images = await searchImagesInCloudAPI({
-          path: `${userName}/*`,
-          max: 30,
-          sort: "desc",
-          token: token as string,
-        });
-        setPhotos(images?.data);
+        if (res.payload?.status === 200) {
+          setProfile({ ...res.payload?.data } as ProfileType);
+        } else {
+          console.error("Failed to fetch profile:", res.payload?.status);
+          navigate("/profile");
+        }
+
+        const imagesRes = await dispatch(
+          searchImagesInCloud({
+            path: `${userName}/*`,
+            max: 30,
+            sort: "desc",
+            token: token as string,
+          })
+        );
+
+        if (imagesRes.payload?.status === 200) {
+          setPhotos(imagesRes.payload?.data);
+        } else {
+          console.error("Failed to fetch images");
+        }
       } catch (error) {
-        console.error(error);
+        console.error("Error fetching profile:", error);
+        navigate("/profile");
       }
     };
 
-    fetchProfile();
+    if (userName && token) {
+      fetchProfile();
+    }
   }, [dispatch, navigate, token, userName]);
 
-
   useEffect(() => {
-    setProfile(userProfile);
-  }, [userProfile, loading]);
+    setProfile(userProfile ?? null);
+  }, [userProfile]);
 
- 
   useEffect(() => {
     setOtherName(profile?.details?.otherName ?? "");
   }, [profile]);
@@ -106,7 +119,6 @@ const Profile: FC = () => {
   }, [loading]);
 
   const isWideScreen = useMediaQuery({ query: "(min-width:901px)" });
-
   return (
     <div className={styles.profile}>
       {visible && (

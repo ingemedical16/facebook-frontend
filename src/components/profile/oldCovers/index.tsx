@@ -15,7 +15,7 @@ interface OldCoversProps {
 const OldCovers: React.FC<OldCoversProps> = ({ photos, setCoverPicture, setShow }) => {
   const user = useSelector((state: RootState) => state.user.user);
   const ref = useRef<HTMLDivElement | null>(null);
-
+console.log('OldCovers',photos)
   useClickOutside(ref, () => setShow(false));
 
   return (
@@ -37,7 +37,8 @@ const OldCovers: React.FC<OldCoversProps> = ({ photos, setCoverPicture, setShow 
         </div>
         <div className={`${styles.old_pictures_wrap} ${styles.scrollbar}`}>
           <div className={styles.old_pictures}>
-            {photos
+            {photos !== undefined && photos.length &&
+            photos
               .filter((img) => img.asset_folder === `${user?.username}/cover_pictures`)
               .map((photo) => (
                 <img
@@ -52,7 +53,8 @@ const OldCovers: React.FC<OldCoversProps> = ({ photos, setCoverPicture, setShow 
               ))}
           </div>
           <div className={styles.old_pictures}>
-            {photos
+            {photos !== undefined && photos.length &&
+            photos
               .filter((img) => img.asset_folder !== `${user?.username}/post_images`)
               .map((photo) => (
                 <img

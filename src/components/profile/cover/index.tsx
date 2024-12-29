@@ -2,12 +2,12 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import Cropper from "react-easy-crop";
 import { useSelector, useDispatch } from "react-redux";
 import PulseLoader from "react-spinners/PulseLoader";
+import classNames from 'classnames';
 import styles from "../Profile.module.css";
 import useClickOutside from "../../../hooks/useClickOutside";
 import { AppDispatch, RootState } from "../../../app/store";
 import { Photo } from "../../../types/types";
 import {
-  dataURItoBlob,
   getCroppedImg,
   handleFileUpload,
 } from "../../../utils/functions";
@@ -92,7 +92,8 @@ const Cover: React.FC<CoverProps> = ({ cover, visitor, photos }) => {
     try {
       setLoading(true);
       const img = await getCroppedImage(false);
-      const blob = dataURItoBlob(img as string);
+      if (!img) return setError("No image selected.");
+      let blob = await fetch(img).then((b) => b.blob());
       const path = `${user?.username}/cover_pictures`;
 
       const formData = new FormData();
@@ -190,13 +191,17 @@ const Cover: React.FC<CoverProps> = ({ cover, visitor, photos }) => {
       {!visitor && (
         <div className={styles.update_cover_wrapper}>
           <div
-            className={styles.open_cover_update}
+            className={classNames(styles.open_cover_update,{
+              [styles.hasCoverUpdate]:  cover
+            })}
             onClick={() => setShowCoverMenu((prev) => !prev)}
           >
             Add Cover Photo
           </div>
           {showCoverMenu && (
-            <div className={styles.open_cover_menu} ref={menuRef}>
+            <div className={classNames(styles.open_cover_menu,{
+              [styles.hasCoverMenu]: cover
+            })} ref={menuRef}>
               <div
                 className={styles.open_cover_menu_item}
                 onClick={() => setShow(true)}

@@ -81,7 +81,7 @@ export default function UpdateProfilePicture({
       const img = await getCroppedImage();
       if (!img) throw new Error("Cropped image not found");
 
-      const blob = dataURItoBlob(img as string);
+      let blob = await fetch(img).then((b) => b.blob());
 
       const path = `${user?.username}/profile_pictures`;
 
@@ -149,30 +149,30 @@ export default function UpdateProfilePicture({
   };
 
   return (
-    <div className={styles.postBox + " " + styles.updateImg}>
-      <div className={styles.boxHeader}>
+    <div className={`${styles.postBox}  ${styles.update_img} ${styles.scrollbar}`}>
+      <div className={styles.box_header}>
         <div
-          className={styles.smallCircle}
+          className={styles.small_circle}
           onClick={() => setImage("")}
           role="button"
           tabIndex={0}
         >
-          <span className={styles.exitIcon}></span>
+          <span className="exit_icon"></span>
         </div>
         <span>Update Profile Picture</span>
       </div>
-      <div className={styles.updateImageDesc}>
+      <div className={styles.update_image_desc}>
         <textarea
           placeholder="Description"
           value={description}
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
             setDescription(e.target.value)
           }
-          className={`${styles.textareaBlue} ${styles.detailsInput}`}
+          className={`${styles.textarea_blue} ${styles.details_input}`}
         ></textarea>
       </div>
 
-      <div className={styles.updateCenter}>
+      <div className={styles.update_center}>
         <div className={styles.croper}>
           <Cropper
             image={image}
@@ -188,10 +188,10 @@ export default function UpdateProfilePicture({
         </div>
         <div className={styles.slider}>
           <div
-            className={`${styles.sliderCircle} ${styles.hover1}`}
+            className={`${styles.slider_circle} hover1`}
             onClick={zoomOut}
           >
-            <span className={styles.minusIcon}></span>
+            <span className="minus_icon"></span>
           </div>
           <input
             type="range"
@@ -205,29 +205,29 @@ export default function UpdateProfilePicture({
             }
           />
           <div
-            className={`${styles.sliderCircle} ${styles.hover1}`}
+            className={`${styles.slider_circle} hover1`}
             onClick={zoomIn}
           >
-            <span className={styles.plusIcon}></span>
+            <span className="plus_icon"></span>
           </div>
         </div>
       </div>
 
-      <div className={styles.flexUp}>
+      <div className={styles.flex_up}>
         <div
-          className={styles.grayBtn}
+          className="btn btn-gray"
           onClick={() => getCroppedImage(true)}
           role="button"
           tabIndex={0}
         >
           Crop Photo
         </div>
-        <div className={styles.grayBtn}>Make Temporary</div>
+        <div className="btn btn-gray">Make Temporary</div>
       </div>
-      <div className={styles.flexPT}>Your profile picture is public</div>
-      <div className={styles.updateSubmitWrap}>
+      <div className={styles.flex_p_t}>Your profile picture is public</div>
+      <div className={styles.update_submit_wrap}>
         <div
-          className={styles.blueLink}
+          className={styles.blue_link}
           onClick={() => setImage("")}
           role="button"
           tabIndex={0}
@@ -235,7 +235,7 @@ export default function UpdateProfilePicture({
           Cancel
         </div>
         <button
-          className={styles.blueBtn}
+          className="btn btn-primary"
           disabled={loading}
           onClick={updateProfilePictureHandler}
         >

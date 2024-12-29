@@ -14,22 +14,22 @@ interface PhotosProps {
 
 const Photos: React.FC<PhotosProps> = ({  photos }) => {
   return (
-    <div className={styles.profileCard}>
-      <div className={styles.profileCardHeader}>
+    <div className={styles.profile_card}>
+      <div className={styles.profile_card_header}>
         Photos
-        <div className={styles.profileHeaderLink}>See all photos</div>
+        <div className={styles.profile_header_link}>See all photos</div>
       </div>
-      <div className={styles.profileCardCount}>
+      <div className={styles.profile_card_count}>
         {photos.total_count === 0
           ? ""
           : photos.total_count === 1
           ? "1 Photo"
           : `${photos.total_count} photos`}
       </div>
-      <div className={styles.profileCardGrid}>
+      <div className={styles.profile_card_grid}>
         {photos.resources &&
           photos.resources.slice(0, 9).map((img) => (
-            <div className={styles.profilePhotoCard} key={img.public_id}>
+            <div className={styles.profile_photo_card} key={img.public_id}>
               <img src={img.secure_url} alt="" />
             </div>
           ))}

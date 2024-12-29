@@ -46,6 +46,14 @@
   transform: scale(0.9);
   margin-top: 4px;
 }
+.hasCoverUpdate {
+  position: relative;
+  top: -34px;
+ left: 180px;
+}
+.hasCoverMenu {
+  bottom: -60px;
+}
 .open_cover_menu {
   background: var(--bg-primary);
   position: absolute;

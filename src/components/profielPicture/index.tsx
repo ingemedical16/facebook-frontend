@@ -37,6 +37,7 @@ export default function ProfilePicture({
 
   return (
     <div className="blur">
+      <div className={styles.updateProfilePicture}>
       <input
         type="file"
         ref={refInput}
@@ -45,42 +46,43 @@ export default function ProfilePicture({
         accept="image/jpeg,image/png,image/webp,image/gif"
       />
       <div className={styles.postBox} ref={popup}>
-        <div className={styles.boxHeader}>
+        <div className={styles.box_header}>
           <div
-            className={styles.smallCircle}
+            className={styles.small_circle}
             onClick={() => setShow(false)}
           ></div>
           <span>Update profile picture</span>
         </div>
-        <div className={styles.updatePictureWrap}>
-          <div className={styles.updatePictureButtons}>
+        <div className={styles.update_picture_wrap}>
+          <div className={styles.update_picture_buttons}>
             <button
-              className={styles.lightBlueBtn}
+              className="btn btn-light_blue"
               onClick={() => refInput.current?.click()}
             >
-              <span className={styles.plusIcon}></span>
-              Upload photo
+              <span className="plus_icon"></span>
+              <span>Upload photo</span>
+              
             </button>
-            <button className={styles.grayBtn}>
-              <span className={styles.frameIcon}></span>
+            <button className="btn btn-gray">
+              <span className="frame_icon"></span>
               Add frame
             </button>
           </div>
         </div>
         {error && (
-          <div className={styles.postError}>
-            <div className={styles.postErrorMessage}>{error}</div>
+          <div className={styles.post_error}>
+            <div className={styles.post_error_message}>{error}</div>
             <button
-              className={styles.blueBtn}
+              className="btn btn-primary"
               onClick={() => setError("")}
             >
               Try again
             </button>
           </div>
         )}
-        <div className={styles.oldPicturesWrap}>
+        <div className={styles.old_pictures_wrap}>
           <h4>Your profile pictures</h4>
-          <div className={styles.oldPictures}>
+          <div className={styles.old_pictures}>
             {photos
               .filter(
                 (img) => img.asset_folder === `${user?.username}/profile_pictures`
@@ -91,12 +93,12 @@ export default function ProfilePicture({
                   key={photo.public_id}
                   alt=""
                   onClick={() => setImage(photo.secure_url)}
-                  className={styles.oldPicture}
+                  className={styles.old_picture}
                 />
               ))}
           </div>
           <h4>Other pictures</h4>
-          <div className={styles.oldPictures}>
+          <div className={styles.old_pictures}>
             {photos
               .filter(
                 (img) => img.asset_folder !== `${user?.username}/profile_pictures`
@@ -107,7 +109,7 @@ export default function ProfilePicture({
                   key={photo.public_id}
                   alt=""
                   onClick={() => setImage(photo.secure_url)}
-                  className={styles.oldPicture}
+                  className={styles.old_picture}
                 />
               ))}
           </div>
@@ -122,6 +124,7 @@ export default function ProfilePicture({
           pRef={pRef}
         />
       )}
+      </div>
     </div>
   );
 }
