@@ -3,12 +3,13 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../../api/axios";
 import { AxiosResponse } from "axios";
 import { ResponseActionPayload } from "../../../types/types";
+import { FriendsType } from "../../../types/Friends";
 
 type UserData = { token: string };
 
 // Async thunk for email verification
 const getFriendsPageInfos = createAsyncThunk<
-  ResponseActionPayload,
+  ResponseActionPayload<FriendsType>,
   UserData,
   { rejectValue: ResponseActionPayload }
 >(
