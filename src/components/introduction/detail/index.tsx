@@ -35,7 +35,7 @@ const Detail: React.FC<DetailProps> = ({
       >
         {value ? (
           <div className={styles.info_profile}>
-            <img src={`icons/${img}.png`} alt="icon" />
+            <img src={`/icons/${img}.png`} alt="icon" />
             {value}
           </div>
         ) : (

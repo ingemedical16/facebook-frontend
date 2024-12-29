@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "../Introduction.module.css";
+import { Relationship } from "../../../types/User";
 
 interface BiographyProps {
   infos: Record<string, string>;
@@ -26,26 +27,27 @@ const Biography: React.FC<BiographyProps> = ({
   setShow,
   rel = false,
 }) => {
-    
+   
   return (
     <div className={styles.add_bio_wrap}>
       {rel ? (
         <select
           className={styles.select_rel}
           name={name}
-          value={infos.relationship || ""}
+          value={infos.relationShip || ""}
           onChange={handleChange}
         >
-          <option value="Single">Single</option>
-          <option value="In a relationship">In a relationship</option>
-          <option value="Married">Married</option>
-          <option value="Divorced">Divorced</option>
+          <option value={Relationship.Single}>Single</option>
+          <option value={Relationship.Widowed}>Widowed</option>
+          <option value={Relationship.Married}>Married</option>
+          <option value={Relationship.Divorced}>Divorced</option>
+          <option value={Relationship.Other}>Other</option>
         </select>
       ) : (
         <textarea
           placeholder={placeholder}
           name={name}
-          value={infos[name] || ""}
+          value={infos && infos[name] || ""}
           maxLength={detail ? 25 : 100}
           className={`${styles.textarea_blue} ${styles.details_input}`}
           onChange={handleChange}
@@ -56,13 +58,13 @@ const Biography: React.FC<BiographyProps> = ({
         <div className={styles.flex_left}>Public</div>
         <div className={styles.flex_right}>
           <button
-            className={styles.gray_btn}
+            className="btn btn-gray"
             onClick={() => (!detail && setShowBiography ? setShowBiography(false) : setShow && setShow(false))}
           >
             Cancel
           </button>
           <button
-            className={styles.blue_btn}
+            className="btn btn-primary"
             onClick={() => {
               updateDetails();
               setShow && setShow(false);

@@ -24,11 +24,11 @@ const EditDetails: React.FC<EditDetailsProps> = ({
   useClickOutside(modal, () => setVisible(false));
 
   return (
-    <div className={styles.blur}>
+    <div className="blur">
       <div className={`${styles.postBox} ${styles.infosBox}`} ref={modal}>
         <div className={styles.box_header}>
           <div className={styles.small_circle} onClick={() => setVisible(false)}>
-            <span className={styles.exit_icon}></span>
+            <span className="exit_icon"></span>
           </div>
           <span>Edit Details</span>
         </div>
@@ -62,9 +62,9 @@ const EditDetails: React.FC<EditDetailsProps> = ({
           <Detail
             value={details?.workPlace as string}
             img="job"
-            placeholder="Add a workplace"
-            name="workplace"
-            text="workplace"
+            placeholder="Add a workPlace"
+            name="workPlace"
+            text="workPlace"
             handleChange={handleChange}
             updateDetails={updateDetails}
             infos={infos}
@@ -105,9 +105,9 @@ const EditDetails: React.FC<EditDetailsProps> = ({
           <Detail
             value={details?.homeTown as string}
             img="home"
-            placeholder="Add hometown"
-            name="hometown"
-            text="hometown"
+            placeholder="Add homeTown"
+            name="homeTown"
+            text="homeTown"
             handleChange={handleChange}
             updateDetails={updateDetails}
             infos={infos}
@@ -116,9 +116,9 @@ const EditDetails: React.FC<EditDetailsProps> = ({
           <Detail
             value={details?.relationShip as string}
             img="relationship"
-            placeholder="Add instagram"
-            name="relationship"
-            text="relationship"
+            placeholder="Add relationShip"
+            name="relationShip"
+            text="relationShip"
             handleChange={handleChange}
             updateDetails={updateDetails}
             infos={infos}
