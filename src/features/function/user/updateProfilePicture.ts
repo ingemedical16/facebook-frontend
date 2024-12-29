@@ -5,10 +5,13 @@ import { AxiosResponse } from "axios";
 import { ResponseActionPayload } from "../../../types/types";
 
 type UserData = { token: string; url: string };
+type ResponseData = {
+  picture: string;
+}
 
 // Async thunk for email verification
 const updateProfilePicture = createAsyncThunk<
-  ResponseActionPayload,
+  ResponseActionPayload<ResponseData>,
   UserData,
   { rejectValue: ResponseActionPayload }
 >(

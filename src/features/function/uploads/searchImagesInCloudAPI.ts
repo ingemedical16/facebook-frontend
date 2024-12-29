@@ -14,7 +14,7 @@ const searchImagesInCloudAPI = async (
 ): Promise<ResponseActionPayload<SearchApiResponse>> => {
   try {
     const response: AxiosResponse = await axiosInstance.post(
-      "/uploads/uploadFilesToCloud",
+      "/uploads/listImages",
       {
         path: userData.path,
         sort: userData.sort,

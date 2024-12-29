@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getUserFromCookies } from "../../../utils/token/getUserFromCookies";
 import { clearUserFromCookies } from "../../../utils/token";
 import {
@@ -9,8 +9,10 @@ import {
   rejectedResponse,
   updateCover,
   updateDetails,
+  updateProfilePicture,
 } from "../../function";
 import { User } from "../../../types/User";
+import { ResponseActionPayload } from "../../../types/types";
 
 interface userState {
   user: User | null;
@@ -93,6 +95,23 @@ const userSlice = createSlice({
       .addCase(updateDetails.rejected, (state, action) => {
         rejectedResponse(state, action);
       })
+      .addCase(updateProfilePicture.pending, (state) => {
+        pendingResponse(state);
+      })
+      .addCase(
+        updateProfilePicture.fulfilled,
+        (state, action: PayloadAction<ResponseActionPayload<{picture:string;}> | undefined>) => {
+          resetMessageAndError(state);
+          state.loading = false;
+          state.user = { ...state.user as User, picture: action.payload?.data?.picture as string };
+        }
+      )
+      .addCase(
+        updateProfilePicture.rejected,
+        (state, action: PayloadAction<ResponseActionPayload | undefined>) => {
+          rejectedResponse(state, action);
+        }
+      )
   },
 });
 

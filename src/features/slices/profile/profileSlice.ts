@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getProfileByUsername, pendingResponse, rejectedResponse, resetMessageAndError } from "../../function";
-import { ResponseActionPayload } from "../../../types/types";
+import { createPost, getProfileByUsername, pendingResponse, rejectedResponse, resetMessageAndError, searchImagesInCloud, updateCover, updateProfilePicture } from "../../function";
+import { ResponseActionPayload, SearchApiResource } from "../../../types/types";
 import { Profile } from "../../../types/Profile";
 
 // Define types for user data
 export type ProfileState = {
   profile?: Profile;
+  resources: SearchApiResource[];
   loading: boolean;
   error: string | null;
   message: string | null;
@@ -13,6 +14,7 @@ export type ProfileState = {
 
 const initialState: ProfileState = {
   loading: false,
+  resources:[],
   error: null,
   message: null,
 };
@@ -38,8 +40,8 @@ const profileSlice = createSlice({
         getProfileByUsername.fulfilled,
         (state, action: PayloadAction<ResponseActionPayload | undefined>) => {
           resetMessageAndError(state);
-          state.loading = false;
           state.profile = action.payload?.data.profile;
+          state.loading = false;
         }
       )
       .addCase(
@@ -48,6 +50,66 @@ const profileSlice = createSlice({
           rejectedResponse(state, action);
         }
       )
+      .addCase(updateCover.pending, (state) => {
+        pendingResponse(state);
+      })
+      .addCase(
+        updateCover.fulfilled,
+        (state, action: PayloadAction<ResponseActionPayload<{cover:string;}> | undefined>) => {
+          resetMessageAndError(state);
+          state.loading = false;
+          state.profile = { ...state.profile as Profile, cover: action.payload?.data?.cover as string };
+        }
+      )
+      .addCase(
+        updateCover.rejected,
+        (state, action: PayloadAction<ResponseActionPayload | undefined>) => {
+          rejectedResponse(state, action);
+        }
+      )
+      .addCase(updateProfilePicture.pending, (state) => {
+        pendingResponse(state);
+      })
+      .addCase(
+        updateProfilePicture.fulfilled,
+        (state, action: PayloadAction<ResponseActionPayload<{picture:string;}> | undefined>) => {
+          resetMessageAndError(state);
+          state.loading = false;
+          state.profile = { ...state.profile as Profile, picture: action.payload?.data?.picture as string };
+        }
+      )
+      .addCase(
+        updateProfilePicture.rejected,
+        (state, action: PayloadAction<ResponseActionPayload | undefined>) => {
+          rejectedResponse(state, action);
+        }
+      )
+      .addCase(createPost.pending, (state) => {
+        pendingResponse(state);
+      })
+      .addCase(createPost.fulfilled, (state, action) => {
+        resetMessageAndError(state);
+        if (action.payload.data && action.payload.data.isProfile) {
+          state.loading = false;
+          state.profile?.posts.push(action.payload.data?.post);
+          state.message = action.payload.message;
+        }
+      })
+      .addCase(createPost.rejected, (state, action) => {
+        rejectedResponse(state, action);
+      })
+      .addCase(searchImagesInCloud.pending, (state) => {
+        pendingResponse(state);
+      })
+      .addCase(searchImagesInCloud.fulfilled, (state, action) => {
+        resetMessageAndError(state);
+        state.loading = false;
+        state.message = action.payload.message;
+        state.resources = action.payload.data?.resources || [];
+      })
+      .addCase(searchImagesInCloud.rejected, (state, action) => {
+        rejectedResponse(state, action);
+      })
 
       
   },
