@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "./app/store";
 import CreatePostPopup from "./components/post/createPostPopup";
 import ProfilePage from "./pages/profile";
+import FriendsPage from "./pages/friends";
 
 const App: React.FC = () => {
   const [createPostPopupVisible, setCreatePostPopupVisible] = useState(false);
@@ -34,6 +35,8 @@ const App: React.FC = () => {
             />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/profile/:username" element={<ProfilePage />} />
+            <Route path="/friends" element={<FriendsPage />} />
+            <Route path="/friends/:type" element={<FriendsPage />} />
             <Route
               path="/"
               element={
