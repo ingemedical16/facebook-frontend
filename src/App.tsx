@@ -12,6 +12,7 @@ import { RootState } from "./app/store";
 import CreatePostPopup from "./components/post/createPostPopup";
 import ProfilePage from "./pages/profile";
 import FriendsPage from "./pages/friends";
+import ResetPage from "./pages/reset";
 
 const App: React.FC = () => {
   const [createPostPopupVisible, setCreatePostPopupVisible] = useState(false);
@@ -48,6 +49,7 @@ const App: React.FC = () => {
           <Route element={<NotLoggedInRoutes />}>
             <Route path="/login" element={<Login />} />
           </Route>
+          <Route path="/reset" element={<ResetPage />} />
         </Routes>
         <ToastContainer
           position="top-right"

@@ -3,15 +3,16 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../../api/axios";
 import { AxiosResponse } from "axios";
 import { ResponseActionPayload } from "../../../types/types";
+import { DefaultUser } from "../../../types/Post";
 
 type UserData = { email: string };
 const searchUserByEmail = createAsyncThunk<
-  ResponseActionPayload,
+  ResponseActionPayload<DefaultUser>,
   UserData,
   { rejectValue: ResponseActionPayload }
 >("users/search-user", async (userData: UserData, { rejectWithValue }) => {
   try {
-    const response: AxiosResponse = await axiosInstance.post(
+    const response: AxiosResponse<ResponseActionPayload<DefaultUser>> = await axiosInstance.post(
       "/users/search-user",
       userData
     );
