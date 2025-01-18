@@ -3,6 +3,7 @@ import { axiosInstance } from "../../../api/axios";
 import { AxiosResponse } from "axios";
 import { ResponseActionPayload } from "../../../types/types";
 import { Chat } from "../../../types/Chat";
+import { DefaultUser } from "../../../types/Post";
 
 // Request body type
 type AddMemberPayload = {
@@ -11,7 +12,7 @@ type AddMemberPayload = {
 };
 
 // Response type
-type AddMemberResponse = Chat;
+type AddMemberResponse = Chat<DefaultUser>;
 
 // Async thunk for adding a member to a chat
 const addMemberToChat = createAsyncThunk<

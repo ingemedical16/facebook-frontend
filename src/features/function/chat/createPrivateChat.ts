@@ -3,6 +3,7 @@ import { axiosInstance } from "../../../api/axios";
 import { AxiosResponse } from "axios";
 import { ResponseActionPayload } from "../../../types/types";
 import { Chat } from "../../../types/Chat";
+import { DefaultUser } from "../../../types/Post";
 
 
 // Request body type
@@ -14,7 +15,7 @@ type CreatePrivateChatPayload = {
 
 // Async thunk for creating a private chat
 const createPrivateChat = createAsyncThunk<
-  ResponseActionPayload<Chat>,
+  ResponseActionPayload<Chat<DefaultUser>>,
   CreatePrivateChatPayload,
   { rejectValue: ResponseActionPayload }
 >("chat/createPrivateChat", async (data, { rejectWithValue }) => {
