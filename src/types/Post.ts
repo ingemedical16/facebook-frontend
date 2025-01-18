@@ -2,7 +2,7 @@ export type DefaultUser = {
   _id?: string;
   first_name: string;
   last_name: string;
-  username: string;
+  username?: string;
   email?: string;
   picture?: string;
   gender?: "male" | "female" | "other";
