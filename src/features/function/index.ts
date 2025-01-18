@@ -53,6 +53,15 @@ import {
   searchImagesInCloudAPI
 } from "./uploads";
 
+import {
+  createPrivateChat,
+  sendMessage,
+  addMemberToChat,
+  removeMemberFromChat,
+  getChatDetails,
+  
+  } from "./chat";
+
 // Export all modules for easy importing in other parts of your application that require
 export {
   register,
@@ -99,4 +108,10 @@ export {
   getReactionsAPI,
   handlePostReactionsByPostIdAPI,
   searchImagesInCloudAPI,
+  createPrivateChat,
+  sendMessage,
+  addMemberToChat,
+  removeMemberFromChat,
+  getChatDetails,
+  
 };
