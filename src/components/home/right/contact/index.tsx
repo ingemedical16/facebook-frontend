@@ -1,6 +1,4 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../../app/store";
 import styles from "../RightHome.module.css";
 
 export type ContactProps = {

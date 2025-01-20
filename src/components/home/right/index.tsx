@@ -1,5 +1,4 @@
 import { FC } from "react";
-import Contact from "./contact";
 import { Dots, NewRoom, Search } from "../../svg";
 import styles from "./RightHome.module.css";
 import ContactsList from "./contactsList";
