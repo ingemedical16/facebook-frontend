@@ -13,7 +13,7 @@ const AddFriendSmallCard: React.FC<AddFriendSmallCardProps> = ({ item }) => {
   return (
     <div className={ styles.addfriendCard}>
       <div className={ styles.addfriend_imgsmall}>
-        <img src={`/${item.profile_picture}`} alt={`${item.profile_name}'s profile`} />
+        <img src={`${item.profile_picture}`} alt={`${item.profile_name}'s profile`} />
         <div className={ styles.addfriend_infos}>
           <div className={ styles.addfriend_name}>
             {truncateName(item.profile_name, 11)}
