@@ -1,19 +1,33 @@
-import { FC, useEffect } from "react";
+import { FC, useCallback, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../../app/store";
+import { AppDispatch, RootState } from "../../../../app/store";
 import Contact from "../contact";
 import styles from "../RightHome.module.css";
+import { useDispatch } from "react-redux";
+import { getFriendsPageInfos } from "../../../../features/functions";
 
 const ContactsList: FC = () => {
-  const { friends, loading } = useSelector((state: RootState) => state.friends);
-  useEffect(() => {
-    if (loading) {
-      console.log("Loading....",loading);
-    }else{
-      console.log("Not Loading....",loading);
+  const dispatch = useDispatch<AppDispatch>();
+  const token = useSelector((state: RootState) => state.auth.token);
+  const { friends } = useSelector((state: RootState) => state.friends);
+  const getData = useCallback(async () => {
+    try {
+      const res = await dispatch(
+        getFriendsPageInfos({ token: token as string })
+      );
+      if (res.payload?.status === 200) {
+        console.log("Friends...");
+      } else {
+        console.error("An error occurred while fetching data.");
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
     }
+  }, [dispatch, token]);
 
-  }, [loading]);
+  useEffect(() => {
+    getData();
+  }, [getData]);
   return (
     <div className={styles.contacts_list}>
       {friends.map((friend) => (
