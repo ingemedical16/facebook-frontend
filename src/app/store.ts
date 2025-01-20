@@ -6,6 +6,7 @@ import searchReducer from "../features/slices/search/searchSlice";
 import postsReducer from "../features/slices/posts/postsSlice";
 import profileReducer from "../features/slices/profile/profileSlice";
 import friendsReducer from "../features/slices/friends/friendsSlice";
+import chatReducer from "../features/slices/chat/chatSlice";
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     profile:profileReducer,
     theme: themeReducer,
     search: searchReducer,
+    chat: chatReducer,
   },
 });
 
