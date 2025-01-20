@@ -1,11 +1,16 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../app/store";
 import Contact from "../contact";
 import styles from "../RightHome.module.css";
 
 const ContactsList: FC = () => {
-  const { friends } = useSelector((state: RootState) => state.friends);
+  const { friends, loading } = useSelector((state: RootState) => state.friends);
+  useEffect(() => {
+    if (loading) {
+      console.log("Loading");
+    }
+  }, [loading]);
   return (
     <div className={styles.contacts_list}>
       {friends.map((friend) => (
