@@ -1,19 +1,25 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../app/store";
-import styles from "../RightHome.module.css"
+import styles from "../RightHome.module.css";
 
-
-const Contact: React.FC = () => {
-  const { user } = useSelector((state: RootState) => state.user);
+export type ContactProps = {
+  first_name: string;
+  last_name: string;
+  picture: string;
+};
+const Contact: React.FC<ContactProps> = ({first_name,last_name,picture}) => {
  
   return (
     <div className={`${styles.contact} hover3`}>
       <div className={styles.contact_img}>
-        <img src={user?.picture} alt={`${user?.first_name} ${user?.last_name}`} />
+        <img
+          src={picture}
+          alt={`${first_name} ${last_name}`}
+        />
       </div>
       <span>
-        {user?.first_name} {user?.last_name}
+        {first_name} {last_name}
       </span>
     </div>
   );

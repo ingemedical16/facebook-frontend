@@ -2,6 +2,7 @@ import { FC } from "react";
 import Contact from "./contact";
 import { Dots, NewRoom, Search } from "../../svg";
 import styles from "./RightHome.module.css";
+import ContactsList from "./contactsList";
 
 const RightHome: FC = () => {
   const color = "#65676b";
@@ -24,9 +25,8 @@ const RightHome: FC = () => {
             </div>
           </div>
         </div>
-        <div className={styles.contacts_list}>
-          <Contact />
-        </div>
+
+        <ContactsList />
       </div>
     </div>
   );
