@@ -11,6 +11,7 @@ export type Message = {
   }
 
   export type Chat<T=string[]> =  {
+    _id?: string;
     type: ChatType;
     name?: string; // Optional for groups
     owner:string
