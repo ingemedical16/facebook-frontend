@@ -8,8 +8,11 @@ const ContactsList: FC = () => {
   const { friends, loading } = useSelector((state: RootState) => state.friends);
   useEffect(() => {
     if (loading) {
-      console.log("Loading");
+      console.log("Loading....",loading);
+    }else{
+      console.log("Not Loading....",loading);
     }
+
   }, [loading]);
   return (
     <div className={styles.contacts_list}>
