@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import styles from "./SendVerification.module.css";
 import { AppDispatch, RootState } from "../../../app/store";
-import { sendVerification } from "../../../features/function";
+import { sendVerification } from "../../../features/functions";
 
 const SendVerification: FC = () => {
   const { token, error, message } = useSelector(
@@ -11,14 +11,13 @@ const SendVerification: FC = () => {
   );
   const dispatch = useDispatch<AppDispatch>();
   const sendVerificationLink = async () => {
-   
-    if(token){
-        const result = await dispatch(sendVerification({token}));
-    if (sendVerification.fulfilled.match(result)) {
-      // Show success message
-    } else {
-      // Show error message
-    }
+    if (token) {
+      const result = await dispatch(sendVerification({ token }));
+      if (sendVerification.fulfilled.match(result)) {
+        // Show success message
+      } else {
+        // Show error message
+      }
     }
   };
   return (
@@ -27,8 +26,9 @@ const SendVerification: FC = () => {
         Your account is not verified,verify your account before it gets deleted
         after a month from creating.
       </span>
-      
-      <p className={styles.sendVerificationButton}
+
+      <p
+        className={styles.sendVerificationButton}
         onClick={() => {
           sendVerificationLink();
         }}

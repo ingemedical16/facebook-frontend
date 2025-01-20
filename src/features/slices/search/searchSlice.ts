@@ -1,9 +1,14 @@
-import { createSlice, PayloadAction,  } from "@reduxjs/toolkit";
-import { addToSearchHistory, getSearchHistory, pendingResponse, rejectedResponse, removeFromSearchHistory, resetMessageAndError, search } from "../../function";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  addToSearchHistory,
+  getSearchHistory,
+  pendingResponse,
+  rejectedResponse,
+  removeFromSearchHistory,
+  resetMessageAndError,
+  search,
+} from "../../functions";
 import { ResponseActionPayload } from "../../../types/types";
-
-
-
 
 export type SearchResult = {
   _id: string;
@@ -20,7 +25,6 @@ export type SearchState = {
   error: string | null;
   message: string | null;
 };
-
 
 const initialState: SearchState = {
   search: [],
@@ -43,55 +47,79 @@ const searchSlice = createSlice({
     builder
       // getSearchHistory cases
       .addCase(getSearchHistory.pending, (state) => {
-        pendingResponse(state)
+        pendingResponse(state);
       })
-      .addCase(getSearchHistory.fulfilled, (state, action: PayloadAction<ResponseActionPayload| undefined>) => {
-        resetMessageAndError(state);
-        state.loading = false;
-        state.search = action.payload?.data.search;
-      })
-      .addCase(getSearchHistory.rejected, (state, action: PayloadAction<ResponseActionPayload| undefined>) => {
-        rejectedResponse(state, action)
-      })
-      
+      .addCase(
+        getSearchHistory.fulfilled,
+        (state, action: PayloadAction<ResponseActionPayload | undefined>) => {
+          resetMessageAndError(state);
+          state.loading = false;
+          state.search = action.payload?.data.search;
+        }
+      )
+      .addCase(
+        getSearchHistory.rejected,
+        (state, action: PayloadAction<ResponseActionPayload | undefined>) => {
+          rejectedResponse(state, action);
+        }
+      )
+
       // addToSearchHistory cases
       .addCase(addToSearchHistory.pending, (state) => {
-        pendingResponse(state)
+        pendingResponse(state);
       })
-      .addCase(addToSearchHistory.fulfilled, (state, action: PayloadAction<ResponseActionPayload| undefined>) => {
-        resetMessageAndError(state);
-        state.loading = false;
-        state.message = action.payload?.message || null;
-        state.search = action.payload?.data.search;
-      })
-      .addCase(addToSearchHistory.rejected, (state, action: PayloadAction<ResponseActionPayload| undefined>) => {
-        rejectedResponse(state, action)
-      })
+      .addCase(
+        addToSearchHistory.fulfilled,
+        (state, action: PayloadAction<ResponseActionPayload | undefined>) => {
+          resetMessageAndError(state);
+          state.loading = false;
+          state.message = action.payload?.message || null;
+          state.search = action.payload?.data.search;
+        }
+      )
+      .addCase(
+        addToSearchHistory.rejected,
+        (state, action: PayloadAction<ResponseActionPayload | undefined>) => {
+          rejectedResponse(state, action);
+        }
+      )
       // removeFromSearchHistory cases
       .addCase(removeFromSearchHistory.pending, (state) => {
-        pendingResponse(state)
+        pendingResponse(state);
       })
-      .addCase(removeFromSearchHistory.fulfilled, (state, action: PayloadAction<ResponseActionPayload| undefined>) => {
-        resetMessageAndError(state);
-        state.loading = false;
-        state.message = action.payload?.message || null;
-        state.search = action.payload?.data.search;
-      })
-      .addCase(removeFromSearchHistory.rejected, (state, action: PayloadAction<ResponseActionPayload| undefined>) => {
-        rejectedResponse(state, action)
-      })
+      .addCase(
+        removeFromSearchHistory.fulfilled,
+        (state, action: PayloadAction<ResponseActionPayload | undefined>) => {
+          resetMessageAndError(state);
+          state.loading = false;
+          state.message = action.payload?.message || null;
+          state.search = action.payload?.data.search;
+        }
+      )
+      .addCase(
+        removeFromSearchHistory.rejected,
+        (state, action: PayloadAction<ResponseActionPayload | undefined>) => {
+          rejectedResponse(state, action);
+        }
+      )
       // search cases
       .addCase(search.pending, (state) => {
-        pendingResponse(state)
+        pendingResponse(state);
       })
-      .addCase(search.fulfilled, (state, action: PayloadAction<ResponseActionPayload| undefined>) => {
-        resetMessageAndError(state);
-        state.loading = false;
-        state.searchResult = action.payload?.data.searchResult;
-      })
-      .addCase(search.rejected, (state, action: PayloadAction<ResponseActionPayload| undefined>) => {
-        rejectedResponse(state, action)
-      });
+      .addCase(
+        search.fulfilled,
+        (state, action: PayloadAction<ResponseActionPayload | undefined>) => {
+          resetMessageAndError(state);
+          state.loading = false;
+          state.searchResult = action.payload?.data.searchResult;
+        }
+      )
+      .addCase(
+        search.rejected,
+        (state, action: PayloadAction<ResponseActionPayload | undefined>) => {
+          rejectedResponse(state, action);
+        }
+      );
   },
 });
 // Export actions

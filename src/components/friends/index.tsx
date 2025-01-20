@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import styles from "./Friends.module.css";
 import { AppDispatch, RootState } from "../../app/store";
 import { FriendsType } from "../../types/Friends";
-import { getFriendsPageInfos } from "../../features/function";
+import { getFriendsPageInfos } from "../../features/functions";
 import Card from "./card";
 
 const Friends: React.FC = () => {
@@ -21,14 +21,15 @@ const Friends: React.FC = () => {
   // useCallback to memoize the function
   const getData = useCallback(async () => {
     try {
-      const res = await dispatch(getFriendsPageInfos({ token: token as string }));
+      const res = await dispatch(
+        getFriendsPageInfos({ token: token as string })
+      );
       if (res.payload?.status === 200) {
         setData({
           requests: res.payload.data.requests,
           sentRequests: res.payload.data.sentRequests,
           friends: res.payload.data.friends,
         });
-        
       } else {
         console.error("An error occurred while fetching data.");
       }
@@ -53,13 +54,15 @@ const Friends: React.FC = () => {
         <div className={styles.friends_left_wrap}>
           <Link
             to="/friends"
-            className={`${styles.mmenu_item} hover3 ${type === undefined ? styles.active_friends : ""}`}
+            className={`${styles.mmenu_item} hover3 ${
+              type === undefined ? styles.active_friends : ""
+            }`}
           >
             <div className={styles.itemIcon}>
-            <div className={styles.small_circle}>
-              <i className="friends_home_icon"></i>
-            </div>
-            <span>Home</span>
+              <div className={styles.small_circle}>
+                <i className="friends_home_icon"></i>
+              </div>
+              <span>Home</span>
             </div>
             <div className={styles.rArrow}>
               <i className="right_icon"></i>
@@ -67,13 +70,15 @@ const Friends: React.FC = () => {
           </Link>
           <Link
             to="/friends/requests"
-            className={`${styles.mmenu_item} hover3 ${type === "requests" ? styles.active_friends : ""}`}
+            className={`${styles.mmenu_item} hover3 ${
+              type === "requests" ? styles.active_friends : ""
+            }`}
           >
             <div className={styles.itemIcon}>
-            <div className={styles.small_circle}>
-              <i className="friends_requests_icon"></i>
-            </div>
-            <span>Friend Requests</span>
+              <div className={styles.small_circle}>
+                <i className="friends_requests_icon"></i>
+              </div>
+              <span>Friend Requests</span>
             </div>
             <div className={styles.rArrow}>
               <i className="right_icon"></i>
@@ -81,24 +86,26 @@ const Friends: React.FC = () => {
           </Link>
           <Link
             to="/friends/sent"
-            className={`${styles.mmenu_item} hover3 ${type === "sent" ? styles.active_friends : ""}`}
+            className={`${styles.mmenu_item} hover3 ${
+              type === "sent" ? styles.active_friends : ""
+            }`}
           >
             <div className={styles.itemIcon}>
-            <div className={styles.small_circle}>
-              <i className="friends_requests_icon"></i>
-            </div>
-            <span>Sent Requests</span>
+              <div className={styles.small_circle}>
+                <i className="friends_requests_icon"></i>
+              </div>
+              <span>Sent Requests</span>
             </div>
             <div className={styles.rArrow}>
               <i className="right_icon"></i>
             </div>
           </Link>
           <div className={`${styles.mmenu_item} hover3`}>
-          <div className={styles.itemIcon}>
-            <div className={styles.small_circle}>
-              <i className="friends_suggestions_icon"></i>
-            </div>
-            <span>Suggestions</span>
+            <div className={styles.itemIcon}>
+              <div className={styles.small_circle}>
+                <i className="friends_suggestions_icon"></i>
+              </div>
+              <span>Suggestions</span>
             </div>
             <div className={styles.rArrow}>
               <i className="right_icon"></i>
@@ -106,13 +113,15 @@ const Friends: React.FC = () => {
           </div>
           <Link
             to="/friends/all"
-            className={`${styles.mmenu_item} hover3 ${type === "all" ? styles.active_friends : ""}`}
+            className={`${styles.mmenu_item} hover3 ${
+              type === "all" ? styles.active_friends : ""
+            }`}
           >
             <div className={styles.itemIcon}>
-            <div className={styles.small_circle}>
-              <i className="all_friends_icon"></i>
-            </div>
-            <span>All Friends</span>
+              <div className={styles.small_circle}>
+                <i className="all_friends_icon"></i>
+              </div>
+              <span>All Friends</span>
             </div>
             <div className={styles.rArrow}>
               <i className="right_icon"></i>
@@ -133,7 +142,12 @@ const Friends: React.FC = () => {
             </div>
             <div className={styles.flex_wrap}>
               {data.requests.map((user) => (
-                <Card key={user._id} user={user} type="request" getData={getData} />
+                <Card
+                  key={user._id}
+                  user={user}
+                  type="request"
+                  getData={getData}
+                />
               ))}
             </div>
           </div>
@@ -150,7 +164,12 @@ const Friends: React.FC = () => {
             </div>
             <div className={styles.flex_wrap}>
               {data.sentRequests.map((user) => (
-                <Card key={user._id} user={user} type="sent" getData={getData} />
+                <Card
+                  key={user._id}
+                  user={user}
+                  type="sent"
+                  getData={getData}
+                />
               ))}
             </div>
           </div>
@@ -167,7 +186,12 @@ const Friends: React.FC = () => {
             </div>
             <div className={styles.flex_wrap}>
               {data.friends.map((user) => (
-                <Card key={user._id} user={user} type="friends" getData={getData} />
+                <Card
+                  key={user._id}
+                  user={user}
+                  type="friends"
+                  getData={getData}
+                />
               ))}
             </div>
           </div>

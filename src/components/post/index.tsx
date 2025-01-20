@@ -4,7 +4,7 @@ import styles from "./Post.module.css";
 import {
   getReactionsAPI,
   handlePostReactionsByPostIdAPI,
-} from "../../features/function";
+} from "../../features/functions";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
 import { ReactionCount, ReactionEnum } from "../../types/Reaction";

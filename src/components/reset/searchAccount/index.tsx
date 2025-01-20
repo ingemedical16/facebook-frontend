@@ -6,7 +6,7 @@ import Input from "../../UI/input/Input";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../app/store";
-import { searchUserByEmail } from "../../../features/function";
+import { searchUserByEmail } from "../../../features/functions";
 import { DefaultUser } from "../../../types/Post";
 
 interface MyFormValues {
@@ -46,14 +46,13 @@ const SearchAccount: FC<SearchAccountProps> = ({
     try {
       setLoading(true);
       const { email } = values;
-      
+
       const result = await dispatch(searchUserByEmail({ email }));
-      if (result.payload?.status !== 200)
-        {
-          setLoading(false);
-          return setError(result.payload?.message as string);
-        }
-        setEmail(email)
+      if (result.payload?.status !== 200) {
+        setLoading(false);
+        return setError(result.payload?.message as string);
+      }
+      setEmail(email);
       setUserInfos(result.payload?.data);
       setVisible(1);
       setError("");

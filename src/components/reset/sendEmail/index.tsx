@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../app/store";
-import { sendResetPasswordCode } from "../../../features/function";
+import { sendResetPasswordCode } from "../../../features/functions";
 import styles from "../Reset.module.css";
 
 interface UserInfos {
@@ -36,11 +36,10 @@ const SendEmail: React.FC<SendEmailProps> = ({
     try {
       setLoading(true);
       const result = await dispatch(sendResetPasswordCode({ email }));
-      if (result.payload?.status !== 200)
-        {
-          setLoading(false);
-          return setError(result.payload?.message as string);
-        }
+      if (result.payload?.status !== 200) {
+        setLoading(false);
+        return setError(result.payload?.message as string);
+      }
       setError("");
       setVisible(2);
       setLoading(false);

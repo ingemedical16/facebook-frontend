@@ -5,7 +5,7 @@ import useClickOutside from "../../../hooks/useClickOutside";
 import { Post } from "../../../types/Post";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../app/store";
-import { deletePostAPI, toggleSavePostAPI } from "../../../features/function";
+import { deletePostAPI, toggleSavePostAPI } from "../../../features/functions";
 import styles from "./PostMenu.module.css";
 
 interface PostMenuProps {

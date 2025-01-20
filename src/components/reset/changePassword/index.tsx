@@ -7,7 +7,7 @@ import Input from "../../UI/input/Input";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../app/store";
-import { changePassword } from "../../../features/function";
+import { changePassword } from "../../../features/functions";
 
 interface MyFormValues {
   password: string;

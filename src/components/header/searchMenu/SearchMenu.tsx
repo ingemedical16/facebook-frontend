@@ -6,7 +6,12 @@ import useClickOutside from "../../../hooks/useClickOutside";
 import { Return, Search } from "../../svg";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { addToSearchHistory, getSearchHistory, removeFromSearchHistory, search as searchFun } from "../../../features/function";
+import {
+  addToSearchHistory,
+  getSearchHistory,
+  removeFromSearchHistory,
+  search as searchFun,
+} from "../../../features/functions";
 import { clearSearchResult } from "../../../features/slices/search/searchSlice";
 
 export type SearchMenuProps = {
@@ -17,8 +22,10 @@ export type SearchMenuProps = {
 const SearchMenu: FC<SearchMenuProps> = ({ color, setShowSearchMenu }) => {
   const token = useSelector((state: RootState) => state.auth.token);
   const dispatch = useDispatch<AppDispatch>();
-  const {search,searchResult} = useSelector((state: RootState) => state.search);
-  
+  const { search, searchResult } = useSelector(
+    (state: RootState) => state.search
+  );
+
   const [iconVisible, setIconVisible] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const menu = useRef(null);
@@ -27,28 +34,27 @@ const SearchMenu: FC<SearchMenuProps> = ({ color, setShowSearchMenu }) => {
     setShowSearchMenu(false);
   });
   useEffect(() => {
-   token && dispatch(getSearchHistory({token}))
+    token && dispatch(getSearchHistory({ token }));
   }, [dispatch, token]);
   useEffect(() => {
     input.current?.focus();
   }, []);
   const searchHandler = async () => {
     if (searchTerm === "") {
-      dispatch(clearSearchResult())
+      dispatch(clearSearchResult());
     } else {
-    token &&  dispatch(searchFun({searchTerm,token}))
+      token && dispatch(searchFun({ searchTerm, token }));
     }
   };
   const addToSearchHistoryHandler = async (searchUser: string) => {
-    token && await dispatch(addToSearchHistory({searchTerm:searchUser, token}))
-    dispatch(clearSearchResult())
-    setSearchTerm("")
-    setIconVisible(true)
-  
+    token &&
+      (await dispatch(addToSearchHistory({ searchTerm: searchUser, token })));
+    dispatch(clearSearchResult());
+    setSearchTerm("");
+    setIconVisible(true);
   };
   const handleRemove = async (searchUserId: string) => {
-    token && await dispatch(removeFromSearchHistory({searchUserId, token}))
-    
+    token && (await dispatch(removeFromSearchHistory({ searchUserId, token })));
   };
   return (
     <div
@@ -103,27 +109,26 @@ const SearchMenu: FC<SearchMenuProps> = ({ color, setShowSearchMenu }) => {
       <div className={`${styles.search_history} ${styles.scrollbar}`}>
         {search &&
           searchResult.length === 0 &&
-          search
-            .map((user) => (
-              <div className={`${styles.search_user_item} hover1`} key={user._id}>
-                <Link
-                  className={styles.flex}
-                  to={`/profile/${user.username}`}
-                  onClick={() => addToSearchHistoryHandler(user._id)}
-                >
-                  <img src={user.picture} alt="" className={styles.circle_icon}/>
-                  <span>
-                    {user.first_name} {user.last_name}
-                  </span>
-                </Link>
-                <i
-                  className="exit_icon"
-                  onClick={() => {
-                    handleRemove(user._id);
-                  }}
-                ></i>
-              </div>
-            ))}
+          search.map((user) => (
+            <div className={`${styles.search_user_item} hover1`} key={user._id}>
+              <Link
+                className={styles.flex}
+                to={`/profile/${user.username}`}
+                onClick={() => addToSearchHistoryHandler(user._id)}
+              >
+                <img src={user.picture} alt="" className={styles.circle_icon} />
+                <span>
+                  {user.first_name} {user.last_name}
+                </span>
+              </Link>
+              <i
+                className="exit_icon"
+                onClick={() => {
+                  handleRemove(user._id);
+                }}
+              ></i>
+            </div>
+          ))}
       </div>
       <div className={`${styles.search_results} ${styles.scrollbar}`}>
         {searchResult &&
@@ -144,4 +149,4 @@ const SearchMenu: FC<SearchMenuProps> = ({ color, setShowSearchMenu }) => {
     </div>
   );
 };
-export default SearchMenu
+export default SearchMenu;

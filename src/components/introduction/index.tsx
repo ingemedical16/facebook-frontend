@@ -4,7 +4,7 @@ import styles from "./Introduction.module.css";
 import { AppDispatch, RootState } from "../../app/store";
 import { UserDetails } from "../../types/User";
 import { useDispatch } from "react-redux";
-import { updateDetails } from "../../features/function";
+import { updateDetails } from "../../features/functions";
 import EditDetails from "./editDetails";
 import Biography from "./biography";
 
@@ -126,7 +126,7 @@ export default function Introduction({
       {details?.relationShip && (
         <div className={styles.info_profile}>
           <img src="/icons/relationship.png" alt="Relationship" />
-          {details.relationShip }
+          {details.relationShip}
         </div>
       )}
       {details?.college && (

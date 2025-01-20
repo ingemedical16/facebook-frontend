@@ -7,7 +7,7 @@ import styles from "./Login.module.css";
 import Input from "../../UI/input/Input";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../app/store";
-import { login } from "../../../features/function";
+import { login } from "../../../features/functions";
 import { showToast, ToastType } from "../../../utils/toast/showToast";
 
 // Define form field values interface

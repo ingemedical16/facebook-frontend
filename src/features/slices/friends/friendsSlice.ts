@@ -1,18 +1,19 @@
-import { createSlice, PayloadAction,  } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ResponseActionPayload } from "../../../types/types";
-import { getFriendsPageInfos, pendingResponse, rejectedResponse, resetMessageAndError } from "../../function";
+import {
+  getFriendsPageInfos,
+  pendingResponse,
+  rejectedResponse,
+  resetMessageAndError,
+} from "../../functions";
 import { FriendsType } from "../../../types/Friends";
 
-
-
-
 // Define types for user data
-export type FriendsState =FriendsType & {
+export type FriendsState = FriendsType & {
   loading: boolean;
   error: string | null;
   message: string | null;
 };
-
 
 const initialState: FriendsState = {
   friends: [],
@@ -41,20 +42,24 @@ const friendsSlice = createSlice({
     builder
       // getFriendsHistory cases
       .addCase(getFriendsPageInfos.pending, (state) => {
-        pendingResponse(state)
+        pendingResponse(state);
       })
-      .addCase(getFriendsPageInfos.fulfilled, (state, action: PayloadAction<ResponseActionPayload| undefined>) => {
-        resetMessageAndError(state);
-        state.loading = false;
-        state.friends = action.payload?.data.friends;
-        state.requests = action.payload?.data.requests;
-        state.sentRequests = action.payload?.data.sentRequests;
-      })
-      .addCase(getFriendsPageInfos.rejected, (state, action: PayloadAction<ResponseActionPayload| undefined>) => {
-        rejectedResponse(state, action)
-      })
-      
-      
+      .addCase(
+        getFriendsPageInfos.fulfilled,
+        (state, action: PayloadAction<ResponseActionPayload | undefined>) => {
+          resetMessageAndError(state);
+          state.loading = false;
+          state.friends = action.payload?.data.friends;
+          state.requests = action.payload?.data.requests;
+          state.sentRequests = action.payload?.data.sentRequests;
+        }
+      )
+      .addCase(
+        getFriendsPageInfos.rejected,
+        (state, action: PayloadAction<ResponseActionPayload | undefined>) => {
+          rejectedResponse(state, action);
+        }
+      );
   },
 });
 // Export actions

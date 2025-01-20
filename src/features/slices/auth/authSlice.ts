@@ -9,7 +9,7 @@ import {
   resetMessageAndError,
   pendingResponse,
   rejectedResponse,
-} from "../../function";
+} from "../../functions";
 import { ResponseActionPayload } from "../../../types/types";
 
 interface AuthState {

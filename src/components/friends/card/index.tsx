@@ -2,7 +2,11 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { AppDispatch, RootState } from "../../../app/store";
-import { acceptRequest, cancelRequest, deleteRequest } from "../../../features/function";
+import {
+  acceptRequest,
+  cancelRequest,
+  deleteRequest,
+} from "../../../features/functions";
 import styles from "../Friends.module.css";
 import { DefaultUser } from "../../../types/Post";
 
@@ -18,7 +22,9 @@ const Card: React.FC<CardProps> = ({ user, type, getData }) => {
 
   const cancelRequestHandler = async (userId: string) => {
     try {
-      const res = await dispatch(cancelRequest({ id: userId, token: token ?? "" }));
+      const res = await dispatch(
+        cancelRequest({ id: userId, token: token ?? "" })
+      );
       if (res.payload?.status === 200) {
         getData();
       }
@@ -29,7 +35,9 @@ const Card: React.FC<CardProps> = ({ user, type, getData }) => {
 
   const confirmHandler = async (userId: string) => {
     try {
-      const res = await dispatch(acceptRequest({ id: userId, token: token ?? "" }));
+      const res = await dispatch(
+        acceptRequest({ id: userId, token: token ?? "" })
+      );
       if (res.payload?.status === 200) {
         getData();
       }
@@ -40,7 +48,9 @@ const Card: React.FC<CardProps> = ({ user, type, getData }) => {
 
   const deleteHandler = async (userId: string) => {
     try {
-      const res = await dispatch(deleteRequest({ id: userId, token: token ?? "" }));
+      const res = await dispatch(
+        deleteRequest({ id: userId, token: token ?? "" })
+      );
       if (res.payload?.status === 200) {
         getData();
       }

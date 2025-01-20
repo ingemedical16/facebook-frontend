@@ -2,7 +2,7 @@ import { FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DotLoader from "react-spinners/DotLoader";
 import { AppDispatch, RootState } from "../../../app/store";
-import { register } from "../../../features/function";
+import { register } from "../../../features/functions";
 import * as Yup from "yup";
 import { Formik, Form, FormikHelpers } from "formik";
 import styles from "./Register.module.css";

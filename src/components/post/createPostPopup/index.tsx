@@ -13,7 +13,7 @@ import {
   createPost,
   getImagesUrl,
   uploadFilesToCloudAPI,
-} from "../../../features/function";
+} from "../../../features/functions";
 import { dataURItoBlob } from "../../../utils/functions";
 
 export type CreatePostPopupProps = {

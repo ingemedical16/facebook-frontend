@@ -7,7 +7,7 @@ import {
   pendingResponse,
   rejectedResponse,
   resetMessageAndError,
-} from "../../function";
+} from "../../functions";
 
 interface postsState {
   posts: Post[] | null; // the following posts and user posts

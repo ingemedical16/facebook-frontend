@@ -6,12 +6,12 @@ import PulseLoader from "react-spinners/PulseLoader";
 
 import styles from "../ProfilePicture.module.css"; // Ensure CSS module usage
 import { AppDispatch, RootState } from "../../../app/store";
-import {  getCroppedImg } from "../../../utils/functions";
+import { getCroppedImg } from "../../../utils/functions";
 import {
   uploadFilesToCloudAPI,
   updateProfilePicture,
   createPost,
-} from "../../../features/function";
+} from "../../../features/functions";
 
 interface UpdateProfilePictureProps {
   setImage: (image: string) => void;
@@ -149,7 +149,9 @@ export default function UpdateProfilePicture({
   };
 
   return (
-    <div className={`${styles.postBox}  ${styles.update_img} ${styles.scrollbar}`}>
+    <div
+      className={`${styles.postBox}  ${styles.update_img} ${styles.scrollbar}`}
+    >
       <div className={styles.box_header}>
         <div
           className={styles.small_circle}
@@ -187,10 +189,7 @@ export default function UpdateProfilePicture({
           />
         </div>
         <div className={styles.slider}>
-          <div
-            className={`${styles.slider_circle} hover1`}
-            onClick={zoomOut}
-          >
+          <div className={`${styles.slider_circle} hover1`} onClick={zoomOut}>
             <span className="minus_icon"></span>
           </div>
           <input
@@ -204,10 +203,7 @@ export default function UpdateProfilePicture({
               setZoom(Number(e.target.value))
             }
           />
-          <div
-            className={`${styles.slider_circle} hover1`}
-            onClick={zoomIn}
-          >
+          <div className={`${styles.slider_circle} hover1`} onClick={zoomIn}>
             <span className="plus_icon"></span>
           </div>
         </div>

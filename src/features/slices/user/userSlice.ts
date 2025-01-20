@@ -10,7 +10,7 @@ import {
   updateCover,
   updateDetails,
   updateProfilePicture,
-} from "../../function";
+} from "../../functions";
 import { User } from "../../../types/User";
 import { ResponseActionPayload } from "../../../types/types";
 
@@ -76,7 +76,9 @@ const userSlice = createSlice({
       .addCase(updateCover.fulfilled, (state, action) => {
         resetMessageAndError(state);
         state.loading = false;
-        state.user = state.user ? { ...state.user, cover: action.payload.data?.cover } : null;
+        state.user = state.user
+          ? { ...state.user, cover: action.payload.data?.cover }
+          : null;
         state.message = action.payload.message;
       })
       .addCase(updateCover.rejected, (state, action) => {
@@ -89,8 +91,9 @@ const userSlice = createSlice({
         resetMessageAndError(state);
         state.loading = false;
         state.message = action.payload.message;
-        state.user = state.user ? { ...state.user, details: action.payload.data?.details } : null;
-        
+        state.user = state.user
+          ? { ...state.user, details: action.payload.data?.details }
+          : null;
       })
       .addCase(updateDetails.rejected, (state, action) => {
         rejectedResponse(state, action);
@@ -100,10 +103,18 @@ const userSlice = createSlice({
       })
       .addCase(
         updateProfilePicture.fulfilled,
-        (state, action: PayloadAction<ResponseActionPayload<{picture:string;}> | undefined>) => {
+        (
+          state,
+          action: PayloadAction<
+            ResponseActionPayload<{ picture: string }> | undefined
+          >
+        ) => {
           resetMessageAndError(state);
           state.loading = false;
-          state.user = { ...state.user as User, picture: action.payload?.data?.picture as string };
+          state.user = {
+            ...(state.user as User),
+            picture: action.payload?.data?.picture as string,
+          };
         }
       )
       .addCase(
@@ -111,7 +122,7 @@ const userSlice = createSlice({
         (state, action: PayloadAction<ResponseActionPayload | undefined>) => {
           rejectedResponse(state, action);
         }
-      )
+      );
   },
 });
 

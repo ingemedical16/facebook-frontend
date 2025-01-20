@@ -13,7 +13,7 @@ import { UserDetails } from "../../types/User";
 import {
   getProfileByUsername,
   searchImagesInCloud,
-} from "../../features/function";
+} from "../../features/functions";
 import Header from "../header/Header";
 import CreatePostPopup from "../post/createPostPopup";
 import Cover from "./cover";
@@ -39,9 +39,10 @@ const Profile: FC = () => {
   const token = useSelector((state: RootState) => state.auth.token);
   const dispatch = useDispatch<AppDispatch>();
   const [photos, setPhotos] = useState<SearchApiResponse | null>(null);
-  const [profile, setProfile] = useState<ProfileType | null>(userProfile || null);
+  const [profile, setProfile] = useState<ProfileType | null>(
+    userProfile || null
+  );
   const userName = username ?? user?.username;
-
 
   useEffect(() => {
     const fetchProfile = async () => {

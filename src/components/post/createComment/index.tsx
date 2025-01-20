@@ -4,7 +4,7 @@ import { ClipLoader } from "react-spinners";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../app/store";
 import { dataURItoBlob } from "../../../utils/functions";
-import { comment, uploadFilesToCloudAPI } from "../../../features/function";
+import { comment, uploadFilesToCloudAPI } from "../../../features/functions";
 import styles from "./CreateComment.module.css";
 
 // Define the props interface
@@ -91,7 +91,7 @@ const CreateComment: FC<CreateCommentProps> = ({ postId }) => {
 
           imgCommentUrl = (await imgCommentResponse).data?.files[0].url ?? "";
         }
-       
+
         const result = await dispatch(
           comment({
             postId,

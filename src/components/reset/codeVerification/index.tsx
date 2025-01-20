@@ -6,7 +6,7 @@ import Input from "../../UI/input/Input";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../app/store";
-import {  validateResetCode } from "../../../features/function";
+import { validateResetCode } from "../../../features/functions";
 
 interface MyFormValues {
   code: string;
@@ -35,9 +35,8 @@ const CodeVerification: FC<CodeVerificationProps> = ({
   loading,
   setLoading,
   userInfos,
-  email
+  email,
 }) => {
-
   const dispatch = useDispatch<AppDispatch>();
   const verifyCodeHandler = async (
     values: MyFormValues,
@@ -46,18 +45,17 @@ const CodeVerification: FC<CodeVerificationProps> = ({
     try {
       setLoading(true);
       const { code } = values;
-     
+
       if (code.length !== 5) setError("Code must be 5 characters.");
       const result = await dispatch(
         validateResetCode({ email: userInfos.email, code })
       );
-      if (result.payload?.status !== 200)
-        {
-          console.error(result.payload?.message)
-          console.log(userInfos)
-          setLoading(false);
-          return setError(result.payload?.message as string);
-        }
+      if (result.payload?.status !== 200) {
+        console.error(result.payload?.message);
+        console.log(userInfos);
+        setLoading(false);
+        return setError(result.payload?.message as string);
+      }
       setVisible(3);
       setError("");
       setLoading(false);
@@ -70,7 +68,10 @@ const CodeVerification: FC<CodeVerificationProps> = ({
   return (
     <div className={styles.reset_form} style={{ height: "310px" }}>
       <div className={styles.reset_form_header}>Code verification</div>
-      <div className={styles.reset_form_text}> Please enter code that been sent to your email.</div>
+      <div className={styles.reset_form_text}>
+        {" "}
+        Please enter code that been sent to your email.
+      </div>
       <Formik
         initialValues={initialValues}
         validationSchema={CodeVerificationSchema}

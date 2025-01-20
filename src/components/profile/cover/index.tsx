@@ -2,20 +2,17 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import Cropper from "react-easy-crop";
 import { useSelector, useDispatch } from "react-redux";
 import PulseLoader from "react-spinners/PulseLoader";
-import classNames from 'classnames';
+import classNames from "classnames";
 import styles from "../Profile.module.css";
 import useClickOutside from "../../../hooks/useClickOutside";
 import { AppDispatch, RootState } from "../../../app/store";
 import { Photo } from "../../../types/types";
-import {
-  getCroppedImg,
-  handleFileUpload,
-} from "../../../utils/functions";
+import { getCroppedImg, handleFileUpload } from "../../../utils/functions";
 import {
   createPost,
   updateCover,
   uploadFilesToCloudAPI,
-} from "../../../features/function";
+} from "../../../features/functions";
 import OldCovers from "../oldCovers";
 
 interface CoverProps {
@@ -49,7 +46,7 @@ const Cover: React.FC<CoverProps> = ({ cover, visitor, photos }) => {
     if (coverRef.current) {
       setWidth(coverRef.current.clientWidth);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [window.innerWidth]);
 
   const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -104,30 +101,36 @@ const Cover: React.FC<CoverProps> = ({ cover, visitor, photos }) => {
         formData,
         token: token as string,
       });
-      if(res.status !== 200) return setError(res.message);
-      
+      if (res.status !== 200) return setError(res.message);
+
       const coverImageUrl = res.data?.files[0].secure_url ?? "";
-      const updatedPicture = await dispatch(updateCover({
-        url: coverImageUrl,
-        token: token as string,
-      }));
-      if (updatedPicture.payload?.status !== 200) return setError(updatedPicture.payload?.message ?? "An error has occurred");
-     
-        const newPost = await dispatch(createPost({
+      const updatedPicture = await dispatch(
+        updateCover({
+          url: coverImageUrl,
+          token: token as string,
+        })
+      );
+      if (updatedPicture.payload?.status !== 200)
+        return setError(
+          updatedPicture.payload?.message ?? "An error has occurred"
+        );
+
+      const newPost = await dispatch(
+        createPost({
           type: "coverPicture",
           images: [coverImageUrl],
           user: user?._id as string,
           token: token as string,
           comments: [],
           isProfile: false,
-        }));
-        if (newPost.payload?.status !== 200) return setError(newPost.payload?.message ?? "An error has occurred")
-          setLoading(false);
-          setCoverPicture("");
-          if (cRef.current) cRef.current.src = coverImageUrl;
-        
-        
-    
+        })
+      );
+      if (newPost.payload?.status !== 200)
+        return setError(newPost.payload?.message ?? "An error has occurred");
+      setLoading(false);
+      setCoverPicture("");
+      if (cRef.current) cRef.current.src = coverImageUrl;
+
       setLoading(false);
     } catch (error: any) {
       setLoading(false);
@@ -165,7 +168,10 @@ const Cover: React.FC<CoverProps> = ({ cover, visitor, photos }) => {
       {error && (
         <div className={styles.postError}>
           <div>{error}</div>
-          <button className={`btn btn-primary ${styles.blue_btn}`} onClick={() => setError("")}>
+          <button
+            className={`btn btn-primary ${styles.blue_btn}`}
+            onClick={() => setError("")}
+          >
             Try again
           </button>
         </div>
@@ -191,17 +197,20 @@ const Cover: React.FC<CoverProps> = ({ cover, visitor, photos }) => {
       {!visitor && (
         <div className={styles.update_cover_wrapper}>
           <div
-            className={classNames(styles.open_cover_update,{
-              [styles.hasCoverUpdate]:  cover
+            className={classNames(styles.open_cover_update, {
+              [styles.hasCoverUpdate]: cover,
             })}
             onClick={() => setShowCoverMenu((prev) => !prev)}
           >
             Add Cover Photo
           </div>
           {showCoverMenu && (
-            <div className={classNames(styles.open_cover_menu,{
-              [styles.hasCoverMenu]: cover
-            })} ref={menuRef}>
+            <div
+              className={classNames(styles.open_cover_menu, {
+                [styles.hasCoverMenu]: cover,
+              })}
+              ref={menuRef}
+            >
               <div
                 className={styles.open_cover_menu_item}
                 onClick={() => setShow(true)}

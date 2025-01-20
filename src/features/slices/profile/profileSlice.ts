@@ -1,5 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { createPost, getProfileByUsername, pendingResponse, rejectedResponse, resetMessageAndError, searchImagesInCloud, updateCover, updateProfilePicture } from "../../function";
+import {
+  createPost,
+  getProfileByUsername,
+  pendingResponse,
+  rejectedResponse,
+  resetMessageAndError,
+  searchImagesInCloud,
+  updateCover,
+  updateProfilePicture,
+} from "../../functions";
 import { ResponseActionPayload, SearchApiResource } from "../../../types/types";
 import { Profile } from "../../../types/Profile";
 
@@ -14,7 +23,7 @@ export type ProfileState = {
 
 const initialState: ProfileState = {
   loading: false,
-  resources:[],
+  resources: [],
   error: null,
   message: null,
 };
@@ -55,10 +64,18 @@ const profileSlice = createSlice({
       })
       .addCase(
         updateCover.fulfilled,
-        (state, action: PayloadAction<ResponseActionPayload<{cover:string;}> | undefined>) => {
+        (
+          state,
+          action: PayloadAction<
+            ResponseActionPayload<{ cover: string }> | undefined
+          >
+        ) => {
           resetMessageAndError(state);
           state.loading = false;
-          state.profile = { ...state.profile as Profile, cover: action.payload?.data?.cover as string };
+          state.profile = {
+            ...(state.profile as Profile),
+            cover: action.payload?.data?.cover as string,
+          };
         }
       )
       .addCase(
@@ -72,10 +89,18 @@ const profileSlice = createSlice({
       })
       .addCase(
         updateProfilePicture.fulfilled,
-        (state, action: PayloadAction<ResponseActionPayload<{picture:string;}> | undefined>) => {
+        (
+          state,
+          action: PayloadAction<
+            ResponseActionPayload<{ picture: string }> | undefined
+          >
+        ) => {
           resetMessageAndError(state);
           state.loading = false;
-          state.profile = { ...state.profile as Profile, picture: action.payload?.data?.picture as string };
+          state.profile = {
+            ...(state.profile as Profile),
+            picture: action.payload?.data?.picture as string,
+          };
         }
       )
       .addCase(
@@ -109,9 +134,7 @@ const profileSlice = createSlice({
       })
       .addCase(searchImagesInCloud.rejected, (state, action) => {
         rejectedResponse(state, action);
-      })
-
-      
+      });
   },
 });
 // Export actions

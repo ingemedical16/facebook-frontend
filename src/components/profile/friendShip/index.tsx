@@ -12,7 +12,7 @@ import {
   follow,
   unfollow,
   unfriend,
-} from "../../../features/function";
+} from "../../../features/functions";
 
 type FriendshipProps = {
   friendships: FriendshipStatus;
@@ -94,10 +94,7 @@ const Friendship: React.FC<FriendshipProps> = ({ friendships, profileId }) => {
     <div className={styles.friendship}>
       {friendship?.friends ? (
         <div className={styles.friends_menu_wrap}>
-          <button
-            className="btn btn-gray"
-            onClick={() => setFriendsMenu(true)}
-          >
+          <button className="btn btn-gray" onClick={() => setFriendsMenu(true)}>
             <img src="/icons/friends.png" alt="Friends" />
             <span>Friends</span>
           </button>
