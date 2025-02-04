@@ -17,7 +17,7 @@ const VerifyEmail: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { verifyToken } = useParams<{ verifyToken: string }>(); // Get token from URL params
-  const { loading, error, message, token } = useSelector(
+  const { loading, error, token } = useSelector(
     (state: RootState) => state.auth
   );
   const [success, setSuccess] = useState<string>();
