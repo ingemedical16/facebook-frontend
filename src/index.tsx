@@ -6,7 +6,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import { store } from "./app/store";
-import { ChatProvider } from "./components/chat/ChatProvider";
+import { ChatProvider } from "./components/chat/chatProvider/ChatProvider";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -14,7 +14,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <Provider store={store}>
     <ChatProvider>
-    <App />
+      <App />
     </ChatProvider>
   </Provider>
 );

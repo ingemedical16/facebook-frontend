@@ -5,11 +5,11 @@ import {
   chatCreated,
   memberAdded,
   memberRemoved,
-} from "../../features/slices/chat/chatSlice";
+} from "../../../features/slices/chat/chatSlice";
 import {
   initializeSocket,
   disconnectSocket,
-} from "../../services/socketService";
+} from "../../../services/socketService";
 import { Socket } from "socket.io-client";
 
 interface ChatProviderProps {
