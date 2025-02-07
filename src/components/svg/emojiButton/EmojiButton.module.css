@@ -1,0 +1,24 @@
+.emojiButtonContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-left: 10px;
+    padding: 5px;
+    border-radius: 50%;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  .emojiButtonContainer:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  .emojiIcon {
+    fill: currentColor;
+  }
+
+  .emojiButtonMask {
+    position: absolute;
+    inset: 0;
+  }
+  

@@ -12,8 +12,8 @@ interface VideoCallButtonProps {
 const VideoCallButton: React.FC<VideoCallButtonProps> = ({
   onClick,
   ariaLabel = "Start a video call",
-  size = 40,
-  iconSize = 16,
+  size = 32,
+  iconSize = 15,
   className = "",
 }) => {
   return (

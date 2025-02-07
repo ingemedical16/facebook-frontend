@@ -12,7 +12,7 @@ interface VoiceCallButtonProps {
 const VoiceCallButton: React.FC<VoiceCallButtonProps> = ({
   onClick,
   ariaLabel = "Start a voice call",
-  size = 40,
+  size = 32,
   iconSize = 16,
   className = "",
 }) => {

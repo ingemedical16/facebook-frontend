@@ -1,0 +1,17 @@
+.thumbsUpButtonContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  .thumbsUpButtonContainer:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  .thumbsUpButtonIcon {
+    fill: currentColor;
+  }
+  

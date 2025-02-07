@@ -12,8 +12,8 @@ interface CloseButtonProps {
 const CloseButton: React.FC<CloseButtonProps> = ({
   onClick,
   ariaLabel = "Close",
-  size = 40,
-  iconSize = 20,
+  size = 32,
+  iconSize = 15,
   className = "",
 }) => {
   return (

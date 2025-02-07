@@ -12,8 +12,8 @@ interface MinimizeButtonProps {
 const MinimizeButton: React.FC<MinimizeButtonProps> = ({
   onClick,
   ariaLabel = "Minimize",
-  size = 40,
-  iconSize = 20,
+  size = 32,
+  iconSize = 15,
   className = "",
 }) => {
   return (
