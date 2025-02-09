@@ -16,8 +16,3 @@
     fill: currentColor;
   }
   
-  .plusButtonMask {
-    position: absolute;
-    inset: 0;
-  }
-  

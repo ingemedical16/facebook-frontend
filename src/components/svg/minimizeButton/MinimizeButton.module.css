@@ -16,8 +16,5 @@
     fill: currentColor;
   }
   
-  .minimizeButtonMask {
-    position: absolute;
-    inset: 0;
-  }
+
   

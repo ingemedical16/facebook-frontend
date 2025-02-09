@@ -12,8 +12,8 @@ interface AttachFileButtonProps {
 const AttachFileButton: React.FC<AttachFileButtonProps> = ({
   onClick,
   ariaLabel = "Attach a file up to 100 MB",
-  size = 32,
-  iconSize = 20,
+  size = 24,
+  iconSize = 15,
   className = "",
 }) => {
   return (
@@ -49,7 +49,7 @@ const AttachFileButton: React.FC<AttachFileButtonProps> = ({
           />
         </g>
       </svg>
-      <div className={styles.attachFileButtonMask}></div>
+     
     </div>
   );
 };

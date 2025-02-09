@@ -12,8 +12,8 @@ interface PlusButtonProps {
 const PlusButton: React.FC<PlusButtonProps> = ({
   onClick,
   ariaLabel = "Start a video call",
-  size = 32,
-  iconSize = 20,
+  size = 24,
+  iconSize = 15,
   className = "",
 }) => {
   return (
@@ -40,7 +40,7 @@ const PlusButton: React.FC<PlusButtonProps> = ({
           />
         </g>
       </svg>
-      <div className={styles.plusButtonMask}></div>
+   
     </div>
   );
 };

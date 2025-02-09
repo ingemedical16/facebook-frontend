@@ -12,8 +12,8 @@ interface EmojiButtonProps {
 const EmojiButton: React.FC<EmojiButtonProps> = ({
   onClick,
   ariaLabel = "Choose an emoji",
-  size = 32,
-  iconSize = 20,
+  size = 24,
+  iconSize = 15,
   className = "",
 }) => {
   return (
@@ -31,7 +31,7 @@ const EmojiButton: React.FC<EmojiButtonProps> = ({
         width={iconSize}
         viewBox="0 0 38 38"
       >
-        <g fill="none" fill-rule="evenodd">
+        <g fill="none" fillRule="evenodd">
           <g transform="translate(-893.000000, -701.000000)">
             <g transform="translate(709.000000, 314.000000)">
               <g>
@@ -44,7 +44,7 @@ const EmojiButton: React.FC<EmojiButtonProps> = ({
           </g>
         </g>
       </svg>
-      <div className={styles.emojiButtonMask}></div>
+      
     </div>
   );
 };

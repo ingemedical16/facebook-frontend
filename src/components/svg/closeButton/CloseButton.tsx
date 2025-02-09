@@ -45,7 +45,7 @@ const CloseButton: React.FC<CloseButtonProps> = ({
           </g>
         </g>
       </svg>
-      <div className={styles.closeButtonMask}></div>
+      
     </div>
   );
 };

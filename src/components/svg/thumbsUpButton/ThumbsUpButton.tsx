@@ -12,8 +12,8 @@ interface ThumbsUpButtonProps {
 const ThumbsUpButton: React.FC<ThumbsUpButtonProps> = ({
   onClick,
   ariaLabel = "Send a thumbs up",
-  size = 32,
-  iconSize = 20,
+  size = 24,
+  iconSize = 15,
   className = "",
 }) => {
   return (

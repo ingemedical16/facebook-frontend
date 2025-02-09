@@ -12,8 +12,8 @@ interface StickerButtonProps {
 const StickerButton: React.FC<StickerButtonProps> = ({
   onClick,
   ariaLabel = "Choose a sticker",
-  size = 32,
-  iconSize = 20,
+  size = 24,
+  iconSize = 15,
   className = "",
 }) => {
   return (
@@ -49,7 +49,7 @@ const StickerButton: React.FC<StickerButtonProps> = ({
           ></path>
         </g>
       </svg>
-      <div className={styles.stickerButtonMask}></div>
+     
     </div>
   );
 };

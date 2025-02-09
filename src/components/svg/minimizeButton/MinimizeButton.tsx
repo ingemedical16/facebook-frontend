@@ -39,7 +39,7 @@ const MinimizeButton: React.FC<MinimizeButtonProps> = ({
           ></path>
         </g>
       </svg>
-      <div className={styles.minimizeButtonMask}></div>
+    
     </div>
   );
 };

@@ -12,8 +12,8 @@ interface GifButtonProps {
 const GifButton: React.FC<GifButtonProps> = ({
   onClick,
   ariaLabel = "Choose a GIF",
-  size = 32,
-  iconSize = 20,
+  size = 24,
+  iconSize = 15,
   className = "",
 }) => {
   return (
@@ -37,7 +37,7 @@ const GifButton: React.FC<GifButtonProps> = ({
           fillRule="nonzero"
         ></path>
       </svg>
-      <div className={styles.gifButtonMask}></div>
+      
     </div>
   );
 };
