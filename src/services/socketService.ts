@@ -5,7 +5,7 @@ let socket: Socket | null = null;
 
 export const initializeSocket = (): Socket => {
   if (!socket) {
-    socket = io("http://localhost:4000"); // Replace with your server URL
+    socket = io( process.env.IO_URL ||"https://facebook-backend-2f6a.onrender.com"); 
   }
   return socket;
 };
