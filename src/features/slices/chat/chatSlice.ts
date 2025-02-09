@@ -1,176 +1,132 @@
-// features/slices/chat/chatSlice.ts
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {
-  createPrivateChat,
-  sendMessage,
-  addMemberToChat,
-  removeMemberFromChat,
-  getChatDetails,
-  pendingResponse,
-  resetMessageAndError,
-  rejectedResponse,
-} from "../../functions";
-import { ResponseActionPayload } from "../../../types/types";
-import { Chat, Message } from "../../../types/Chat";
+  import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+  import {
+    createPrivateChat,
+    sendMessage,
+    addMemberToChat,
+    removeMemberFromChat,
+    getChatDetails,
+    pendingResponse,
+    resetMessageAndError,
+    rejectedResponse,
+  } from "../../functions";
+  import { ResponseActionPayload } from "../../../types/types";
+  import { Chat, Message } from "../../../types/Chat";
+  import { DefaultUser } from "../../../types/Post";
 
-interface ChatState {
-  chats: Chat[];
-  currentChat: any | null;
-  loading: boolean;
-  error: string | null;
-  message: string | null;
-}
+  interface ChatState {
+    chats: Chat<DefaultUser>[];
+    loading: boolean;
+    error: string | null;
+    message: string | null;
+  }
 
-const initialState: ChatState = {
-  chats: [],
-  currentChat: null,
-  loading: false,
-  error: null,
-  message: null,
-};
+  const initialState: ChatState = {
+    chats: [],
+    loading: false,
+    error: null,
+    message: null,
+  };
 
-// Slice
-const chatSlice = createSlice({
-  name: "chat",
-  initialState,
-  reducers: {
-    clearChatState: (state) => {
-      state.chats = [];
-      state.currentChat = null;
-      state.error = null;
-      state.message = null;
+  const addChatIfNotExists = (state: ChatState, chat: Chat<DefaultUser>) => {
+    if (!state.chats.some((c) => c._id === chat._id)) {
+      state.chats.push(chat);
+    }
+  };
+
+  // Slice
+  const chatSlice = createSlice({
+    name: "chat",
+    initialState,
+    reducers: {
+      clearChatState: (state) => {
+        state.chats = [];
+        state.error = null;
+        state.message = null;
+      },
+      chatCreated: (state, action: PayloadAction<Chat<DefaultUser>>) => {
+        addChatIfNotExists(state, action.payload);
+      },
+      chatUpdated: (state, action: PayloadAction<Chat<DefaultUser>>) => {
+        const updatedChat = action.payload;
+        const chatIndex = state.chats.findIndex((c) => c._id === updatedChat._id);
+        if (chatIndex > -1) {
+          state.chats[chatIndex] = updatedChat;
+        }
+      },
     },
-    messageSent: (state, action: PayloadAction<Message & {chatId:string}>) => {
-        const { chatId, ...message } = action.payload;
-        const chat = state.chats.find((c) => c._id === chatId);
-        if (chat) {
-          chat.messages.push(message);
-        }
-      },
-      chatCreated: (state, action: PayloadAction<Chat>) => {
-        state.chats.push(action.payload);
-      },
-      memberAdded: (state, action: PayloadAction<Chat>) => {
-        const updatedChat = action.payload;
-        const chatIndex = state.chats.findIndex((c) => c._id === updatedChat._id);
-        if (chatIndex > -1) {
-          state.chats[chatIndex] = updatedChat;
-        }
-      },
-      memberRemoved: (state, action: PayloadAction<Chat>) => {
-        const updatedChat = action.payload;
-        const chatIndex = state.chats.findIndex((c) => c._id === updatedChat._id);
-        if (chatIndex > -1) {
-          state.chats[chatIndex] = updatedChat;
-        }
-      },
-  },
-  extraReducers: (builder) => {
-    builder
-      // Create private chat
-      .addCase(createPrivateChat.pending, (state) => {
-        pendingResponse(state);
-      })
-      .addCase(
-        createPrivateChat.fulfilled,
-        (state, action: PayloadAction<ResponseActionPayload | undefined>) => {
-          resetMessageAndError(state);
-          state.loading = false;
-          state.chats.push(action.payload?.data.chat);
-          state.message = action.payload?.message || null;
-        }
-      )
-      .addCase(
-        createPrivateChat.rejected,
-        (state, action: PayloadAction<ResponseActionPayload | undefined>) => {
-          rejectedResponse(state, action);
-        }
-      )
-      // Send message
-      .addCase(sendMessage.pending, (state) => {
-        pendingResponse(state);
-      })
-      .addCase(
-        sendMessage.fulfilled,
-        (state, action: PayloadAction<ResponseActionPayload | undefined>) => {
-          resetMessageAndError(state);
-          state.loading = false;
-          if (state.currentChat) {
-            state.currentChat.messages.push(action.payload?.data.message);
+    extraReducers: (builder) => {
+      builder
+        // Create private chat
+        .addCase(createPrivateChat.pending, (state) => {
+          pendingResponse(state);
+        })
+        .addCase(
+          createPrivateChat.fulfilled,
+          (state, action: PayloadAction<ResponseActionPayload | undefined>) => {
+            resetMessageAndError(state);
+            state.loading = false;
+            if (action.payload?.data) {
+              addChatIfNotExists(state, action.payload.data);
+            }
+            state.message = action.payload?.message || null;
           }
-          state.message = action.payload?.message || null;
-        }
-      )
-      .addCase(
-        sendMessage.rejected,
-        (state, action: PayloadAction<ResponseActionPayload | undefined>) => {
-          rejectedResponse(state, action);
-        }
-      )
-      // Add member to chat
-      .addCase(addMemberToChat.pending, (state) => {
-        pendingResponse(state);
-      })
-      .addCase(
-        addMemberToChat.fulfilled,
-        (state, action: PayloadAction<ResponseActionPayload | undefined>) => {
-          resetMessageAndError(state);
-          state.loading = false;
-          state.message = action.payload?.message || null;
-          if (state.currentChat) {
-            state.currentChat.members = action.payload?.data.members;
+        )
+        .addCase(
+          createPrivateChat.rejected,
+          (state, action: PayloadAction<ResponseActionPayload | undefined>) => {
+            rejectedResponse(state, action);
           }
-        }
-      )
-      .addCase(
-        addMemberToChat.rejected,
-        (state, action: PayloadAction<ResponseActionPayload | undefined>) => {
-          rejectedResponse(state, action);
-        }
-      )
-      // Remove member from chat
-      .addCase(removeMemberFromChat.pending, (state) => {
-        pendingResponse(state);
-      })
-      .addCase(
-        removeMemberFromChat.fulfilled,
-        (state, action: PayloadAction<ResponseActionPayload | undefined>) => {
-          resetMessageAndError(state);
-          state.loading = false;
-          state.message = action.payload?.message || null;
-          if (state.currentChat) {
-            state.currentChat.members = action.payload?.data.members;
+        )
+        // Send message
+        .addCase(sendMessage.pending, (state) => {
+          pendingResponse(state);
+        })
+        .addCase(
+          sendMessage.fulfilled,
+          (state, action: PayloadAction<ResponseActionPayload | undefined>) => {
+            resetMessageAndError(state);
+            state.loading = false;
+            const chat = state.chats.find((c) => c._id === action.payload?.data.chatId);
+            if (chat) {
+              chat.messages.push(action.payload?.data.message);
+            }
+            state.message = action.payload?.message || null;
           }
-        }
-      )
-      .addCase(
-        removeMemberFromChat.rejected,
-        (state, action: PayloadAction<ResponseActionPayload | undefined>) => {
-          rejectedResponse(state, action);
-        }
-      )
-      // Get chat details
-      .addCase(getChatDetails.pending, (state) => {
-        pendingResponse(state);
-      })
-      .addCase(
-        getChatDetails.fulfilled,
-        (state, action: PayloadAction<ResponseActionPayload | undefined>) => {
+        )
+        .addCase(
+          sendMessage.rejected,
+          (state, action: PayloadAction<ResponseActionPayload | undefined>) => {
+            rejectedResponse(state, action);
+          }
+        )
+        // Add & Remove members
+        .addCase(addMemberToChat.fulfilled, (state, action:PayloadAction<ResponseActionPayload | undefined>) => {
           resetMessageAndError(state);
           state.loading = false;
-          state.currentChat = action.payload?.data.chat;
           state.message = action.payload?.message || null;
-        }
-      )
-      .addCase(
-        getChatDetails.rejected,
-        (state, action: PayloadAction<ResponseActionPayload | undefined>) => {
-          rejectedResponse(state, action);
-        }
-      );
-  },
-});
+          const chat = state.chats.find((c) => c._id === action.payload?.data?._id);
+          if (chat && chat !== undefined) {
+            chat.members = action.payload?.data?.members;
+          }
+        })
+        .addCase(removeMemberFromChat.fulfilled, (state, action:PayloadAction<ResponseActionPayload | undefined>) => {
+          resetMessageAndError(state);
+          state.loading = false;
+          state.message = action.payload?.message || null;
+          const chat = state.chats.find((c) => c._id === action.payload?.data._id);
+          if (chat) {
+            chat.members = action.payload?.data.members;
+          }
+        })
+        // Get chat details
+        .addCase(getChatDetails.fulfilled, (state, action) => {
+          resetMessageAndError(state);
+          state.loading = false;
+          addChatIfNotExists(state, action.payload?.data as Chat<DefaultUser>);
+          state.message = action.payload?.message || null;
+        });
+    },
+  });
 
-export const { clearChatState,  messageSent, chatCreated, memberAdded, memberRemoved } = chatSlice.actions;
-const chatReducer = chatSlice.reducer
-export default chatReducer;
+  export const { clearChatState, chatCreated, chatUpdated } = chatSlice.actions;
+  export default chatSlice.reducer;
