@@ -3,7 +3,6 @@ import styles from "./ChatHeader.module.css";
 import DropdownIcon from "../../../svg/dropdownIcon/DropdownIcon";
 import ChatHeaderControls from "../chatHeaderControls/ChatHeaderControls";
 import Moment from "react-moment";
-import { ChatBox } from "../..";
 
 interface ChatHeaderProps {
   userName: string;

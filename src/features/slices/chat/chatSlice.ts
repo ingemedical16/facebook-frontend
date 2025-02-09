@@ -10,7 +10,7 @@
     rejectedResponse,
   } from "../../functions";
   import { ResponseActionPayload } from "../../../types/types";
-  import { Chat, Message } from "../../../types/Chat";
+  import { Chat } from "../../../types/Chat";
   import { DefaultUser } from "../../../types/Post";
 
   interface ChatState {

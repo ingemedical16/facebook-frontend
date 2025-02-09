@@ -2,7 +2,6 @@ import { FC } from "react";
 import styles from "./Chat.module.css";
 import ChatSearch from "./chatSearch/ChatSearch";
 import ChatMessager from "./chatMessager/ChatMessager";
-import NewMessageButton from "./chatMenu/newMessageButton/NewMessageButton";
 import ChatMenu from "./chatMenu/ChatMenu";
 export type ChatBox = {
   userId?: string; // id of the user the chat is with

@@ -1,5 +1,4 @@
 import { FC, useEffect, useState } from "react";
-import { ChatBox } from "../..";
 import ChatButton from "./chatButton/ChatButton";
 import { useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../app/store";

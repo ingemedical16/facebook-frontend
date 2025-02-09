@@ -4,7 +4,7 @@ import { DefaultUser } from "../../../../types/Post";
 import MessagesConversation from "./messagesConversation/MessagesConversation";
 import { useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../app/store";
-import { Chat, Message } from "../../../../types/Chat";
+import { Chat } from "../../../../types/Chat";
 import RecipientProfile from "./recipientProfile/RecipientProfile";
 import ThreadComposer from "./threadComposer/ThreadComposer";
 import { useDispatch } from "react-redux";

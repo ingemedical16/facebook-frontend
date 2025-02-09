@@ -4,7 +4,7 @@ import { AxiosResponse } from "axios";
 import { ResponseActionPayload } from "../../../types/types";
 import { Chat } from "../../../types/Chat";
 import { DefaultUser } from "../../../types/Post";
-import { generateToken } from '../../../../../facebook-backend/src/helpers/token';
+
 
 // Request body type
 type AddMemberPayload = {
