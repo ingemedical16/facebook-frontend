@@ -15,11 +15,13 @@ import deleteRequest from './deleteRequest';
 import follow from './follow';
 import unfollow from './unfollow';
 import unfriend from './unfriend';
+import searchUsers from './searchUsers';
 
 
 export {
     searchUserByEmail,
     search,
+    searchUsers,
     addToSearchHistory,
     getSearchHistory,
     removeFromSearchHistory,

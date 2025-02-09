@@ -16,6 +16,7 @@ import {
 import {
   searchUserByEmail,
   search,
+  searchUsers,
   addToSearchHistory,
   getSearchHistory,
   removeFromSearchHistory,
@@ -113,5 +114,6 @@ export {
   addMemberToChat,
   removeMemberFromChat,
   getChatDetails,
+  searchUsers,
   
 };

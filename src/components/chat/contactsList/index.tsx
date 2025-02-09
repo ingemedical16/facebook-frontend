@@ -5,8 +5,18 @@ import Contact, { ContactClick } from "../contact";
 import styles from "../Chat.module.css";
 import { useDispatch } from "react-redux";
 import { getFriendsPageInfos } from "../../../features/functions";
+import { ChatBox } from "..";
+import { DefaultUser } from "../../../types/Post";
 
-const ContactsList: FC<ContactClick> = ({onContactClick}) => {
+type ContactsListProps = {
+  onContactClick: (box: ChatBox) => void;
+  searchResult?: DefaultUser[];
+};
+
+const ContactsList: FC<ContactsListProps> = ({
+  onContactClick,
+  searchResult = [],
+}) => {
   const dispatch = useDispatch<AppDispatch>();
   const token = useSelector((state: RootState) => state.auth.token);
   const { friends } = useSelector((state: RootState) => state.friends);
@@ -30,16 +40,34 @@ const ContactsList: FC<ContactClick> = ({onContactClick}) => {
   }, [getData]);
   return (
     <div className={styles.contacts_list}>
-      {friends.map((friend) => (
-        <Contact
-          key={friend._id}
-          first_name={friend.first_name}
-          last_name={friend.last_name}
-          picture={friend.picture as string}
-          userId={friend._id as string}
-          onContactClick={onContactClick}
-        />
-      ))}
+      {searchResult.length > 0 ? (
+        <>
+          <h2>Search Results</h2>
+          {searchResult.map((friend) => (
+            <Contact
+              key={friend._id}
+              first_name={friend.first_name}
+              last_name={friend.last_name}
+              picture={friend.picture as string}
+              userId={friend._id as string}
+              onContactClick={onContactClick}
+            />
+          ))}
+        </>
+      ) : (
+        <>
+          {friends.map((friend) => (
+            <Contact
+              key={friend._id}
+              first_name={friend.first_name}
+              last_name={friend.last_name}
+              picture={friend.picture as string}
+              userId={friend._id as string}
+              onContactClick={onContactClick}
+            />
+          ))}
+        </>
+      )}
     </div>
   );
 };
