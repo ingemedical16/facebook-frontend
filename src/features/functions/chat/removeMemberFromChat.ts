@@ -9,6 +9,7 @@ import { DefaultUser } from "../../../types/Post";
 type RemoveMemberPayload = {
   chatId: string;
   memberId: string;
+  token: string;
 };
 
 // Response type
@@ -19,11 +20,16 @@ const removeMemberFromChat = createAsyncThunk<
   ResponseActionPayload<RemoveMemberResponse>,
   RemoveMemberPayload,
   { rejectValue: ResponseActionPayload }
->("chat/removeMemberFromChat", async ({ chatId, memberId }, { rejectWithValue }) => {
+>("chat/removeMemberFromChat", async ({ chatId, memberId,token }, { rejectWithValue }) => {
   try {
-    const response: AxiosResponse = await axiosInstance.delete(
+    const response: AxiosResponse = await axiosInstance.put(
       `/chat/${chatId}/member`,
-      { data: { memberId } }
+      { data: { memberId } },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      }
     );
     return { ...response.data, status: response.status };
   } catch (error: any) {

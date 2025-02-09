@@ -4,11 +4,13 @@ import { AxiosResponse } from "axios";
 import { ResponseActionPayload } from "../../../types/types";
 import { Chat } from "../../../types/Chat";
 import { DefaultUser } from "../../../types/Post";
+import { generateToken } from '../../../../../facebook-backend/src/helpers/token';
 
 // Request body type
 type AddMemberPayload = {
   chatId: string;
   memberId: string;
+  token: string;
 };
 
 // Response type
@@ -19,11 +21,16 @@ const addMemberToChat = createAsyncThunk<
   ResponseActionPayload<AddMemberResponse>,
   AddMemberPayload,
   { rejectValue: ResponseActionPayload }
->("chat/addMemberToChat", async ({ chatId, memberId }, { rejectWithValue }) => {
+>("chat/addMemberToChat", async ({ chatId, memberId, token }, { rejectWithValue }) => {
   try {
     const response: AxiosResponse = await axiosInstance.post(
       `/chat/${chatId}/member`,
-      { memberId }
+      { memberId },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
     return { ...response.data, status: response.status };
   } catch (error: any) {

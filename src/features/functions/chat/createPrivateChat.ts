@@ -9,6 +9,7 @@ import { DefaultUser } from "../../../types/Post";
 // Request body type
 type CreatePrivateChatPayload = {
   recipientId: string;
+  token: string;
 };
 
 
@@ -18,11 +19,16 @@ const createPrivateChat = createAsyncThunk<
   ResponseActionPayload<Chat<DefaultUser>>,
   CreatePrivateChatPayload,
   { rejectValue: ResponseActionPayload }
->("chat/createPrivateChat", async (data, { rejectWithValue }) => {
+>("chat/createPrivateChat", async (userData, { rejectWithValue }) => {
   try {
-    const response: AxiosResponse = await axiosInstance.post(
+    const response: AxiosResponse<ResponseActionPayload<Chat<DefaultUser>>> = await axiosInstance.post(
       "/chat/private",
-      data
+      {recipientId:userData.recipientId},
+      {
+        headers: {
+          Authorization: `Bearer ${userData.token}`,
+        },
+      }
     );
     return { ...response.data, status: response.status };
   } catch (error: any) {

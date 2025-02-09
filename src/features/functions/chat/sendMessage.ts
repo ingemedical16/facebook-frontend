@@ -8,6 +8,7 @@ import { Message } from "../../../types/Chat";
 type SendMessagePayload = {
   chatId: string;
   content: string;
+  token: string;
 };
 
 // Response type
@@ -18,12 +19,17 @@ const sendMessage = createAsyncThunk<
   ResponseActionPayload<SendMessageResponse>,
   SendMessagePayload,
   { rejectValue: ResponseActionPayload }
->("chat/sendMessage", async ({ chatId, content }, { rejectWithValue }) => {
+>("chat/sendMessage", async ({ chatId, content,token }, { rejectWithValue }) => {
   try {
     const response: AxiosResponse = await axiosInstance.post(
       `/chat/${chatId}/message`,
-      { content }
-    );
+      { content },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+   
     return { ...response.data, status: response.status };
   } catch (error: any) {
     return rejectWithValue(
