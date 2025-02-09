@@ -1,0 +1,40 @@
+.messageInputContainer {
+  display: flex;
+  align-items: flex-start;
+  background: #fff;
+  border-radius: 20px;
+  width: 185px;
+}
+
+.inputWrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  width: 100%;
+  
+}
+
+.inputBox {
+  background-color: #ccc;
+  border-radius: 15px;
+  flex: 1;
+  min-height: 20px;
+  max-height: 100px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  padding: 3px 8px;
+  outline: none;
+  border: none;
+  font-size: 16px;
+}
+
+.inputBox:placeholder-shown {
+  color: gray;
+  pointer-events: none;
+}
+.emojiButton {
+  position: relative;
+  left: -35px;
+}

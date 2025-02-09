@@ -1,0 +1,22 @@
+.wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    flex-shrink: 1;
+    width: 328px;
+    height: 455px;
+    max-height: calc(100vh - 56px);
+    margin-left: 10px;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #fff;
+    color: #1c1e21;
+    font-size: 0.9375rem;
+    line-height: 1.3333;
+    font-family: inherit;
+    box-shadow: 0 12px 28px 0 rgba(0, 0, 0, 0.1), 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    overflow: hidden;
+  }

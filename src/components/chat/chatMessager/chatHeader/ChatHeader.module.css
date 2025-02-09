@@ -1,0 +1,138 @@
+.chatHeader {
+  font-size: 0.9375rem;
+  line-height: 1.3333;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 -1px rgba(0, 0, 0, 0.1) inset,
+    0 2px 1px -1px rgba(255, 255, 255, 0.5) inset;
+  background-color: #fff;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  height: 60px;
+  padding: 10px;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.chatSettings {
+  width: 200px;
+  font-size: 0.9375rem;
+  line-height: 1.3333;
+  cursor: pointer;
+  flex-grow: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #385898;
+  cursor: pointer;
+ 
+}
+
+.userContainer {
+  font-size: 0.9375rem;
+  line-height: 1.3333;
+  cursor: pointer;
+  flex-grow: 1;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+}
+
+.profileLink {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  align-items: center;
+}
+.imageWrapper {
+  font-size: 0.9375rem;
+  line-height: 1.3333;
+  color: #385898;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.profileImageContainer {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f0f0;
+}
+
+.profileImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.userDetails{
+ width: 100%;
+}
+
+.userInfo {
+  font-size: .9375rem;
+    line-height: 1.3333;
+    -webkit-tap-highlight-color: transparent;
+    list-style: none;
+    cursor: pointer;
+    -webkit-user-select: none;
+    padding-left: 2px;
+    flex-grow: 1;
+    z-index: 0;
+    position: relative;
+    flex-basis: 0px;
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: column;
+    flex-shrink: 1;
+    padding-right: 6px;
+    padding-bottom: 6px;
+    max-width: 100%;
+    padding-top: 6px;
+    min-width: 0;
+  }
+
+
+.userName {
+  font-weight: bold;
+  font-size: .9375rem;
+  line-height: 1.3333;
+  -webkit-tap-highlight-color: transparent;
+  list-style: none;
+  cursor: pointer;
+  -webkit-user-select: none;
+  align-items: center;
+  display: flex;
+  max-width: 100%;
+}
+
+.userStatus {
+  font-size: .9375rem;
+  line-height: 1.3333;
+  -webkit-tap-highlight-color: transparent;
+  list-style: none;
+  text-align: inherit;
+  cursor: pointer;
+  -webkit-user-select: none;
+  margin-right: 0;
+  margin-left: 0;
+  padding-right: 0;
+  align-items: center;
+  display: flex;
+  padding-left: 0;
+  padding-bottom: 0;
+  max-width: 100%;
+  margin-bottom: 0;
+  margin-top: 0;
+  padding-top: 0;
+}

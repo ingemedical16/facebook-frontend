@@ -1,0 +1,9 @@
+.search {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: #fff;
+    font-size: 0.9375rem;
+    line-height: 1.3333;
+    font-family: inherit;
+  }

@@ -1,0 +1,16 @@
+/* ChatHeaderControls.module.css */
+.chatHeaderControls {
+  width: 140px;
+    display: flex;
+    align-items: center;
+    gap: 0.5px;
+    color: #aa00ff99;
+  }
+  
+  .controlButton {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  

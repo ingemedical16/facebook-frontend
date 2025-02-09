@@ -1,0 +1,89 @@
+.container {
+    color: #1c1e21;
+    direction: ltr;
+    line-height: 1.34;
+    font-size: 12px;
+    -webkit-font-smoothing: antialiased;
+    flex-shrink: inherit;
+    align-self: inherit;
+    flex-grow: inherit;
+    flex-basis: inherit;
+    min-width: inherit;
+    flex-direction: inherit;
+    align-items: inherit;
+    align-content: inherit;
+    justify-content: inherit;
+    display: inherit;
+    max-width: inherit;
+    width: inherit;
+    min-height: inherit;
+    height: inherit;
+    max-height: inherit;
+    font-family: inherit;
+    margin-bottom: 10px;
+  }
+  
+  .openChatButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    cursor: pointer;
+    border: none;
+    transform: translateY(-58px);
+  }
+  
+  .profileWrapper {
+    position: relative;
+    height: 48px;
+    width: 48px;
+  }
+  
+  .profileImage {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .statusIndicator {
+    position: absolute;
+    bottom: 7px;
+    right: 7px;
+    width: 12px;
+    height: 12px;
+    background-color: green;
+    border-radius: 50%;
+    transform: translate(50%, 50%);
+  }
+  
+  .closeChatButton {
+   
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    cursor: pointer;
+    border: none;
+    position: relative;
+    top:-100px;
+    right:-19px ;
+    display: flex;
+    
+  }
+  .closeChatButton:hover {
+    display: flex;
+  }
+  
+  .closeIcon {
+    background-image: url("https://static.xx.fbcdn.net/rsrc.php/v4/yR/r/U2vkbnDDB38.png");
+    background-position: 0px -699px;
+    background-size: 25px 738px;
+    width: 12px;
+    height: 12px;
+    background-repeat: no-repeat;
+    display: inline-block;
+  }
+ 
+  
+ 
+  

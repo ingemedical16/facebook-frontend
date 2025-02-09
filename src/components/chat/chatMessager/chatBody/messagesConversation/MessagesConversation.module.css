@@ -1,0 +1,49 @@
+/* MessagesConversation.module.css */
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    overflow-y: auto;
+    max-height: 400px;
+    padding-bottom: 60px;
+  }
+  
+  .currentUserMessage {
+    align-self: flex-end;
+    background-color: #0078ff;
+    width: 80%;
+    text-align: right;
+    color: white;
+    padding: 6px;
+    border-radius: 12px;
+    max-width: 100%;
+    word-wrap: break-word;
+  }
+  
+  .otherUserMessage {
+    align-self: flex-start;
+    background-color: #f1f1f1;
+    color: black;
+    width: 80%;
+    text-align: left;
+    padding: 6px;
+    border-radius: 12px;
+    max-width: 100%;
+    word-wrap: break-word;
+  }
+  
+  .messageText {
+    margin: 0;
+    font-size: 14px;
+  }
+  
+  .timestamp {
+    display: block;
+    font-size: 12px;
+    color: gray;
+    text-align: inherit;
+    margin-top: 4px;
+  }
+  
